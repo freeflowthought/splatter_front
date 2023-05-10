@@ -1,0 +1,126 @@
+// @forward "base";
+// @forward "default-settings";
+// @forward "mixins";
+// @forward "personal-classes";
+// @forward "responsive";
+// @forward "variables";
+// @use "mixins" as *;
+// @use "variables" as *;
+@import "base";
+@import "default-settings";
+@import "mixins";
+@import "personal-classes";
+@import "responsive";
+@import "variables";
+
+
+
+///////////////////// global ///////////////////////
+
+
+//- controls -//
+.controls {
+  // font-size: var(--resizer);
+  
+  :not(label.plain) {font-family: 'Inter', sans-serif}
+  .v-btn {
+    --b: 1px solid var(--clr-line)
+  }
+  & + * {min-height: 25em}
+  
+  > aside:first-of-type {
+    @include media(max, 500px) {
+      align-items: flex-start;
+      column-gap: 0 !important;
+    }
+  }
+  
+  .v-input, .v-tabs {
+    --fs: max(14px, 1em) !important;
+  }
+  
+  .v-input, .v-tabs, .v-btn {
+    --h: 46px !important;
+    @include media(max, small) {--h: 52px !important}
+  }
+  
+  @include media(max, small) {
+    .tab2 {--fs: 13px !important}
+    
+    .v-tabs {
+      --c: var(--accent) !important;
+      --b: none !important;
+      --p: 8px !important;
+    }
+  }
+}
+
+//- dual tokens -//
+.dual-tokens.v-sheet {
+  --h-sheet: 50.86px;
+  --b-img: 1px solid var(--clr-line);
+  --p-img: calc(var(--h-sheet) / 4.5);
+
+  width: max-content !important;
+  height: var(--h-sheet) !important;
+  aspect-ratio: 2 / 1;
+  position: relative;
+  & > img {
+    --w: calc(var(--h-sheet) + 6px);
+    --of: cover;
+    --p: var(--p-img);
+    --br: 50%;
+    --b: var(--b-img);
+    --bg: var(--clr-card);
+    
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    &:first-of-type {
+      left: 0;
+      z-index: 1;
+    }
+    &:last-of-type {
+      right: 0;
+      z-index: 0;
+    }
+  }
+}
+
+//- tooltip -//
+.v-tooltip__content {
+  line-height: 1 !important;
+  padding: 10px !important;
+  isolation: isolate;
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: fixed;
+    left: calc(var(--x-tooltip) - 12px);
+    top: calc(var(--y-tooltip) + 6px);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    
+    border-bottom: 10px solid #574F42;
+    z-index: -1;
+  }
+}
+
+//- custome input -//
+.custome.v-input.v-text-field--solo {
+  .v-input__slot {margin-bottom: 0}
+  .v-text-field__details {flex-direction: column-reverse}
+}
+
+//- container options -//
+.container-options {
+  label {
+    --fs: 14px !important;
+    --fw: 400 !important;
+    --c: var(--clr) !important;
+  }
+  & > div {width: 100%}
+}

@@ -1,0 +1,129 @@
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+// // // charts // // // 
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+.charts {
+  &-header {
+    & > div {
+      gap: 4px;
+      span:not(span + span, div > div > span) {
+        --fw: 700;
+        --c: #F6F6F6;
+        font-size: 16px;
+      }
+    }
+    span + span {
+      font-weight: 700;
+      font-size: 21px;
+      color: #CCCCCC;
+      letter-spacing: .1ch;
+    }
+    div > span {font-size: 18px}
+  }
+
+  .apexcharts-canvas {
+    width: 100% !important;
+    > svg {width: 100% !important}
+    [class*="tooltip"] {
+      padding: 12px;
+      border-radius: 5px;
+      background-color: #17191C !important;
+      border: none !important;
+      box-shadow: none !important;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      [class*="title"] {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important
+      }
+    }
+    .apexcharts-xaxistooltip {display: none !important}
+    // .apexcharts-yaxistooltip {display: none !important} // <--- probar
+  }
+
+  &-footer {
+    background-color: transparent !important;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    .v-btn {
+      --w: 28px;
+      --h: 24.65px;
+      border-radius: 5px !important;
+      background-color: #17191C !important;
+      width: var(--w) !important;
+      max-width: var(--w) !important;
+      min-width: var(--w) !important;
+      height: var(--h) !important;
+      min-height: var(--h) !important;
+      max-height: var(--h) !important;
+      border: none !important;
+      span {
+        color: #3A3C43 !important;
+        font-size: 16px;
+        font-weight: 400;
+      }
+      &[class*="active"] {
+        background-color: var(--success) !important;
+        span {color: #fff !important}
+      }
+    }
+  }
+  
+}
+
+#swap-chart {
+  .apexcharts-canvas path {
+    stroke: var(--c-trend) !important;
+  }
+}
+
+#pools-chart {
+  .controls {
+    .v-tabs {
+      --h: max(30px, 3.375em) !important;
+      --bg-active: hsl(43 100% 65% / .5);
+      --g: 5px;
+      --c: var(--accent);
+      @include media(max, small) {
+        --h: max(30px, 3.2em) !important;
+        --b: 1px solid #2D291D !important;
+        --p: 1px !important;
+        --p-tab: 0 5px !important;
+      }
+    }
+    .v-input {
+      font-size: var(--resizer) !important;
+      --w: 7.75em;
+      --h: 3.5em !important;
+      --p: 0 1.25em;
+      --bg: #292724;
+      --br: 10px;
+      --tt: capitalize;
+      --fw: 400;
+      @include media(max, small) {
+        --h: 3em !important;
+        --p: 0 5px;
+      }
+    }
+    @include media(max, small) {
+      .v-input, .v-tabs {
+        --fs: max(10px, 1em) !important;
+        --br: 4.85967px;
+      }
+    }
+
+    > div > span {
+      --fs: 28px;
+      @include media(max, 500px) {--fs: max(16px, 1.75em)}
+    }
+    > div > span + label {
+      --fs: 14px;
+      @include media(max, 500px) {--fs: max(10px, .875em)}
+    }
+  }
+  
+  .apexcharts-canvas:not(:has(.apexcharts-tooltip-box)) .apexcharts-tooltip {
+    display: none !important;
+  }
+}

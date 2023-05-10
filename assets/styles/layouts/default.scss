@@ -1,0 +1,64 @@
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+// // // layout // // // 
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+#layout {
+  // overflow: hidden;
+  //- responsive font size -//
+  .v-main {
+    & > * {
+      @include media(max,small) {
+        font-size: var(--resizer-mobile)
+      }
+    }
+  }
+  // footer margin modifiable
+  & .with {
+    padding-block: calc(var(--h-navbar) + 60px) var(--h-footer, 80px) !important;
+    @include media(max, small) {padding-block: var(--h-navbar) var(--h-footer, 80px) !important}
+  }
+  & .without {
+    padding-block: calc(var(--h-navbar) + 60px) 0 !important;
+    @include media(max, small) {padding-block: var(--h-navbar) 0 !important}
+  }
+
+  #swap-floating-button {
+    --w: 10.0625em;
+    --br: 30px 30px 15px 15px / 30px 30px 30px 30px;
+    --c: #574F42 !important;
+    --fw: 700;
+    --fs: max(16px, 1.3125em);
+    --t: rotate(-90deg);
+    --g: 0;
+    --p: clamp(.5em, calc(1vw + .75em), .75em);
+    position: fixed;
+    right: -3.4em;
+    top: 20%;
+    z-index: 10;
+    .v-btn__content {
+      display: flex;
+      flex-direction: column;
+      span:not(span + span) {font-family: 'Segoe UI', sans-serif !important}
+    }
+  }
+
+  #account-floating-button {
+    --w: max-content;
+    --h: 49px;
+    --br: 100px;
+    --bg: #1A1917;
+    --b: 1px solid #2D291D;
+    --c: #ffffff !important;
+    --fw: 700;
+    --fs: max(16px, 1em);
+    --g: 5px;
+    --p: 14px 16px;
+    font-family: var(--font2) !important;
+    position: fixed;
+    left: var(--margin-global);
+    bottom: 10%;
+    z-index: 10;
+  }
+}
+
+// #walletconnect-wrapper {
+// }

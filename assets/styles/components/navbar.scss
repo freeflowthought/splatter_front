@@ -1,0 +1,67 @@
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+// // // navbar // // // 
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+#navbar {
+  font-size: var(--resizer);
+  height: var(--h-navbar) !important;
+  animation: movedown .5s $ease-return;
+  transition: 0.4s ease-in-out;
+  // &::before {
+  //   content: "";
+  //   position: absolute;
+  //   inset: 0;
+  //   background: var(--clr-btn);
+  //   transition: 0.4s ease-in-out;
+  // }
+  // &.hide::before {opacity: 0}
+  .v-toolbar__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    @include parent;
+    padding-inline: var(--margin-global);
+    height: var(--h-navbar) !important;
+    // overflow: hidden;
+    // line
+    @include media(min, small) {
+      &::after {
+        content: "";
+        @include absolute(0,auto,0,0);
+        width: calc(100% - var(--margin-global) * 2);
+        height: 1px;
+        background-color: var(--clr-line);
+      }
+    }
+    .middle {
+      display: flex;
+      gap: 2em;
+      a {
+        --c: var(--accent);
+        --fw: 700;
+        font-size: 1.3125em;
+        transition: .5s $ease;
+        &.active {--c: #fff}
+      }
+    }
+    .right {
+      display: flex;
+      gap: 1em;
+      .v-btn {
+        --p: clamp(.8em, 1vw, 1em);
+      }
+    }
+  }
+
+  // // if swap route
+  // &.if-swap-route .v-toolbar__content {
+  //   @include media(max, small) {
+  //     max-width: calc(300px + 1em) !important;
+  //     padding-inline: 1em !important;
+  //   }
+  // }
+}
+
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+// // // menu navbar // // // 
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /

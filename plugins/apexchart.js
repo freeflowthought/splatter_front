@@ -1,0 +1,7 @@
+import VueApexCharts from 'vue-apexcharts'
+import Vue from 'vue'
+
+Vue.use(VueApexCharts)
+Vue.component('VueApexCharts', VueApexCharts)
+
+export default ('VueApexCharts', VueApexCharts);
