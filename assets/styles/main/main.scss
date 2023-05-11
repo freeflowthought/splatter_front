@@ -6,12 +6,15 @@
 // @forward "variables";
 // @use "mixins" as *;
 // @use "variables" as *;
-@import "base";
 @import "default-settings";
+@import "vuetify-settings";
 @import "mixins";
+@import "custom-mixins";
 @import "personal-classes";
 @import "responsive";
 @import "variables";
+@import "fonts";
+@import "typography";
 
 
 

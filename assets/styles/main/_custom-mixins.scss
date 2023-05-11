@@ -1,0 +1,227 @@
+//========== custome mixins ==========//
+
+//- parent -//
+@mixin parent() {
+  max-width: var(--parent) !important;
+  width: 100%;
+  margin-inline: auto;
+}
+
+//- subparent -//
+@mixin subparent() {
+  max-width: var(--subparent) !important;
+  width: 100%;
+  margin-inline: auto;
+}
+
+//- pixel border -//
+@mixin pixelBorder() {
+  --c-size: 4.5px;
+  
+  padding: var(--c-size);
+  position: relative;
+  isolation: isolate;
+  clip-path: $clip-path;
+  
+  &::before, &::after {
+    content: "" !important;
+    position: absolute !important;
+    opacity: 1 !important;
+    z-index: -1 !important;
+    clip-path: $clip-path;
+    inset: 0;
+  }
+  
+  // border
+  &::before {
+    background-color: var(--accent) !important;
+  }
+  
+  // body
+  &::after {
+    inset: var(--c-size);
+    background-color: var(--bg);
+  }
+}
+
+//- buttons -//
+@mixin btn() {
+  --bg: var(--primary);
+  --c: #000000 !important;
+  --b: initial;
+  --p: 12px;
+  --w: initial;
+  --max-w: none;
+  --min-w: none;
+  --h: initial;
+  --max-h: none;
+  --min-h: 36px;
+  --g: 5px;
+  --br: 30px;
+  --bs: none;
+  --fs: max(13px, 1em);
+  --fw: 700;
+  --tt: capitalize !important;
+  --ls: normal;
+  --lh: 1;
+  --f: initial;
+  --t: initial;
+  
+  background: var(--bg) !important;
+  color: var(--c) !important;
+  box-shadow: var(--bs) !important;
+  border-radius: var(--br) !important;
+  font-size: var(--fs);
+  padding: var(--p) !important;
+  width: var(--w) !important;
+  max-width: var(--max-w) !important;
+  min-width: var(--min-w) !important;
+  height: var(--h) !important;
+  max-height: var(--max-h) !important;
+  min-height: var(--min-h) !important;
+  border: var(--b);
+  transform: var(--t);
+  filter: var(--f);
+  & :is(span, img, i) {
+    color: var(--c);
+    font-size: 1em;
+    font-weight: var(--fw);
+    text-transform: var(--tt, initial);
+    letter-spacing: var(--ls);
+    line-height: var(--lh);
+  }
+  // margin
+  &, > .v-btn__content {
+    display: flex;
+    gap: var(--g);
+  }
+
+  &.stylish {
+    --bg: linear-gradient(109.68deg, #F7931A 5.56%, #FFCD4D 85.08%);
+    --fs: 21px;
+    --h: 51px;
+    @include media(max, small) {--c: #fff !important}
+  }
+}
+
+@mixin btn2() {
+  --bg: var(--clr-card);
+  --c: #ffffff !important;
+  --b: initial;
+  --p: 9px;
+  --w: initial;
+  --max-w: none;
+  --min-w: none;
+  --h: initial;
+  --max-h: none;
+  --min-h: 33px;
+  --g: 5px;
+  --br: 30px;
+  &:has(> .v-btn__content > :only-child) {--br: 10px};
+  --bs: none;
+  --fs: max(13px, 1em);
+  --fw: 400;
+  --ls: normal;
+  --lh: 1;
+  --tt: capitalize;
+  --f: initial;
+  --t: initial;
+  
+  background: var(--bg) !important;
+  color: var(--c) !important;
+  box-shadow: var(--bs) !important;
+  border-radius: var(--br) !important;
+  font-size: var(--fs);
+  padding: var(--p) !important;
+  width: var(--w) !important;
+  max-width: var(--max-w) !important;
+  min-width: var(--min-w) !important;
+  height: var(--h) !important;
+  max-height: var(--max-h) !important;
+  min-height: var(--min-h) !important;
+  border: var(--b);
+  transform: var(--t);
+  filter: var(--f);
+  & :is(span, img, i) {
+    color: var(--c);
+    font-size: 1em;
+    font-weight: var(--fw);
+    text-transform: var(--tt, initial);
+    letter-spacing: var(--ls);
+    line-height: var(--lh);
+  }
+  // margin
+  &, > .v-btn__content {
+    display: flex;
+    gap: var(--g);
+  }
+}
+
+//- cards -//
+@mixin card() {
+  --w: initial;
+  --max-w: none;
+  --min-w: none;
+  --h: initial;
+  --max-h: none;
+  --min-h: none;
+  --bg: var(--clr-card);
+  --c: var(--clr);
+  --b: initial;
+  --p: 1.5em;
+  --br: 30px;
+  --bs: none;
+  --f: initial;
+  --t: initial;
+
+  width: var(--w) !important;
+  max-width: var(--max-w) !important;
+  min-width: var(--min-w) !important;
+  height: var(--h) !important;
+  max-height: var(--max-h) !important;
+  min-height: var(--min-h) !important;
+  background: var(--bg) !important;
+  color: var(--c) !important;
+  box-shadow: var(--bs) !important;
+  border-radius: var(--br) !important;
+  padding: var(--p);
+  border: var(--b) !important;
+  transform: var(--t);
+  filter: var(--f);
+}
+
+
+
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+//========== custome classes ==========//
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+
+//- limit size -//
+.parent {
+  @include parent;
+}
+.subparent {
+  @include subparent;
+}
+.margin_global {
+  padding-inline: var(--margin-global);
+}
+.margin_globalmobile {
+  @include media(max, small) {padding-inline: var(--margin-global) !important}
+}
+
+
+//- buttons -//
+.btn {
+  @include btn;
+}
+.btn2 {
+  @include btn2;
+}
+
+
+//- cards -//
+.card {
+  @include card;
+}
+

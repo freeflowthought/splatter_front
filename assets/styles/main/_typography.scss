@@ -1,0 +1,60 @@
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+/* // // typography // // */ 
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+:is(span, p, a, h1, h2, h3, h4, h5, h6, button, label, ul, img, button i, div i, input, textarea, th, td, .v-list-item__title,
+.v-tab, .v-input .v-input__slot *, .v-data-footer__select, .v-data-footer__pagination, .v-data-footer__icons::before):not(.not_typography, .not) {
+  font-weight: var(--fw);
+}
+#__layout > * {font-family: var(--font1)} // default font family
+* {font-family: inherit}
+button:not(.not_typography, .not) {
+  &::first-letter, & ::first-letter {
+    text-transform: var(--tt-first, uppercase)
+  }
+}
+:is(a, span, h1, h2, h3, h4, h5, h6):not(.not_typography, .not) {line-height: 1}
+h1:not(.not_typography, .not) {
+  font-weight: var(--fw, 700);
+  font-family: var(--font2);
+  font-size: var(--fs, max(16px, 2.2em));
+  letter-spacing: 0.03em;
+}
+h2:not(.not_typography, .not) {
+  font-weight: var(--fw, 400);
+  font-family: var(--font1);
+  font-size: var(--fs, max(16px, 1.3125em));
+  letter-spacing: 0.03em;
+}
+h3:not(.not_typography, .not) {
+  font-weight: var(--fw, 400);
+  font-family: var(--font1);
+  font-size: var(--fs, max(16px, 1.2em));
+  letter-spacing: 0.03em;
+}
+p:not(.not_typography, .not) {
+  font-weight: var(--fw, 400);
+  font-family: var(--font1);
+  font-size: var(--fs, max(13px, 1.05em));
+  line-height: 1.1;
+}
+a:not(.not_typography, .not) {
+  text-decoration: none;
+  font-weight: var(--fw, 400);
+  font-family: var(--font1);
+  font-size: var(--fs, max(13px, 1em));
+}
+label:not(.v-input .v-label, .not_typography, .not) {
+  --c: var(--accent);
+  
+  font-weight: var(--fw, 700);
+  font-family: var(--font2);
+  font-size: var(--fs, max(12.8px, 0.8em));
+  &.plain {
+    font-size: var(--fs, 16px);
+    --c: #fff;
+  }
+}
+.hspan {
+  font-size: var(--fs, 16px);
+  text-decoration: var(--under, initial);
+}

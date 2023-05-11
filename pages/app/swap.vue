@@ -17,9 +17,7 @@
           <label>Drag your token to swap</label>
         </div>
         
-        <div
-          class="grid" style="gap: inherit"
-          @dragstart="dragstart($event)" @dragend="dragend($event)">
+        <div class="grid" style="gap: inherit">
           <div v-for="(item, i) in dataTokens" :key="i" class="divcol center">
             <v-img class="aspect" style="--w: 50px">
               <template #default>
@@ -39,12 +37,10 @@
 </template>
 
 <script>
-import computeds from '~/mixins/computeds'
 // import isMobile from '~/mixins/isMobile'
 
 export default {
   name: "SwapPage",
-  mixins: [computeds],
   data() {
     return {
       heightChart: undefined,
@@ -89,22 +85,6 @@ export default {
       title,
     }
   },
-  computed: {
-    observerTokensFrom() {
-      return this.swapFrom.name
-    },
-  },
-  watch: {
-    observerTokensFrom(current, old) {
-      if (current !== old) {
-        // height cards
-        const
-          page = document.querySelector("#swap"),
-          cardLeft = page.querySelector("aside#swapFrom");
-        setTimeout(() => page.style.setProperty("--h-cards", `${cardLeft.getBoundingClientRect().height}px`), 100);
-      }
-    },
-  },
   mounted() {
     this.styles()
     window.addEventListener("resize", this.styles)
@@ -127,29 +107,6 @@ export default {
     switchTokens() {
       [this.swapFrom.img, this.swapFrom.name, this.swapTo.img, this.swapTo.name]
       = [this.swapTo.img, this.swapTo.name, this.swapFrom.img, this.swapFrom.name]
-    },
-    dragstart(event) {
-      if (event.target?.alt) {
-        document.querySelector(".v-form.middle").classList.add("focus");
-        this.currentDrag = event.target
-      }
-    },
-    dragend(event) {
-      if (event.target?.alt) {
-        document.querySelector(".v-form.middle").classList.remove("focus");
-      }
-    },
-    dropToken(event) {
-      const
-        data = [this.swapFrom, this.swapTo],
-        token = this[event.path.find(e => e.className.includes("target_drag")).id],
-        [otherToken] = data.filter(el => el.name !== token.name && el.img !== token.img);
-
-      if (otherToken?.name === this.currentDrag?.alt?.split(" token")[0]) { this.switchTokens() }
-      else {
-        token.img = this.currentDrag.src
-        token.name = this.currentDrag.alt.split(" token")[0]
-      }
     },
     calcPriceTo(event) {
       const item = this.swapFrom
