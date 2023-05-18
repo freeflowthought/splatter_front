@@ -9,11 +9,13 @@ export default {
     user() {
       return this.$store.state.dataUser
     },
+    appIsLaunched() {
+      return localStorage.getItem("appIsLaunched")
+    },
   },
   methods: {
     basePath(url, prefix = "/app") {
-      const appIsLaunched = localStorage.getItem("appIsLaunched");
-      return this.localePath(`${appIsLaunched ? prefix : ''}${url}`)
+      return this.localePath(`${this.appIsLaunched ? prefix : ''}${url}`)
     },
   }
 }

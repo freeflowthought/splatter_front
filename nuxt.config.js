@@ -173,6 +173,12 @@ export default {
   router: {
     base: development ? '/honeypot-dex/' : '/',
     // middleware: ['route-validator'],
+    extendRoutes(routes, resolve) {
+      routes.push({
+        path: '/',
+        component: resolve(__dirname, 'pages/landing/index.vue')
+      });
+    }
   },
 
   server: {

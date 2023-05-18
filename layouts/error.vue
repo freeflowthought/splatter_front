@@ -5,7 +5,7 @@
         <!-- content -->
         <h1 class="p bold">{{error.statusCode === 404 ? 404 : 'Error'}}</h1>
         <span class="h5_em bold">{{error.statusCode === 404 ? $t('pageNotFound') : $t('otherError')}}</span>
-        <v-btn :to="basePath('/')" class="h7_em bold">{{$t('buttonTitle')}}</v-btn>
+        <v-btn :to="basePath(appIsLaunched ? '/swap' : '/')" class="h7_em bold">{{$t('buttonTitle')}}</v-btn>
       </v-col>
     </v-row>
   </v-container>
