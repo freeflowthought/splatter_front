@@ -16,7 +16,7 @@ export default {
     title: 'Home',
     htmlAttrs: {
       lang: 'en',
-      class: 'dark',
+      class: 'light',
     },
     meta: [
       { charset: 'utf-8' },

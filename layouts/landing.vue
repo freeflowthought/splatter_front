@@ -47,7 +47,7 @@
       <!-- routes -->
       <nuxt-child />
     </v-main>
-    <!-- <Footer ref="footer"></Footer> -->
+    <Footer ref="footer"></Footer>
   </v-app>
 </template>
 

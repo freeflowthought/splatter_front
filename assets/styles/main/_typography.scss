@@ -20,10 +20,12 @@ h1:not(.not_typography, .not) {
   letter-spacing: 0.03em;
 }
 h2:not(.not_typography, .not) {
-  font-weight: var(--fw, 400);
-  font-family: var(--font1);
-  font-size: var(--fs, max(16px, 1.3125em));
+  font-weight: var(--fw, 500);
+  font-family: var(--font7);
+  font-size: var(--fs, 32px);
+  line-height: var(--lh, 119%);
   letter-spacing: 0.03em;
+  color: #000000;
 }
 h3:not(.not_typography, .not) {
   font-weight: var(--fw, 400);

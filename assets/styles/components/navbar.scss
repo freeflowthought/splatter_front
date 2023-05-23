@@ -37,11 +37,15 @@
       display: flex;
       gap: 2em;
       a {
-        --c: var(--accent);
         --fw: 700;
         font-size: 1.3125em;
         transition: .5s $ease;
-        &.active {--c: #fff}
+        &.active {
+          background: linear-gradient(99.45deg, #A093F0 7.5%, #5A9FF7 94.48%) !important;
+          -webkit-background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+          background-clip: text !important;
+        }
       }
     }
     .right {
@@ -52,14 +56,6 @@
       }
     }
   }
-
-  // // if swap route
-  // &.if-swap-route .v-toolbar__content {
-  //   @include media(max, small) {
-  //     max-width: calc(300px + 1em) !important;
-  //     padding-inline: 1em !important;
-  //   }
-  // }
 }
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /

@@ -44,10 +44,15 @@
   }
 }
 
+//- icon buttons -//
+@mixin iconBtn() {
+  // TODO do this class
+}
+
 //- buttons -//
 @mixin btn() {
   --bg: var(--primary);
-  --c: #000000 !important;
+  --c: #fff !important;
   --b: initial;
   --p: 12px;
   --w: initial;
@@ -55,15 +60,14 @@
   --min-w: none;
   --h: initial;
   --max-h: none;
-  --min-h: 36px;
+  --min-h: 46.21px;
   --g: 5px;
-  --br: 30px;
+  --br: 14.2183px;
   --bs: none;
-  --fs: max(13px, 1em);
   --fw: 700;
   --tt: capitalize !important;
   --ls: normal;
-  --lh: 1;
+  --lh: 26px;
   --f: initial;
   --t: initial;
   
@@ -83,12 +87,14 @@
   transform: var(--t);
   filter: var(--f);
   & :is(span, img, i) {
+    font-family: var(--ff, var(--font1));
     color: var(--c);
-    font-size: 1em;
+    font-size: var(--fs, 14.2183px);
     font-weight: var(--fw);
     text-transform: var(--tt, initial);
     letter-spacing: var(--ls);
     line-height: var(--lh);
+    font-feature-settings: 'pnum' on, 'lnum' on;
   }
   // margin
   &, > .v-btn__content {
@@ -105,50 +111,41 @@
 }
 
 @mixin btn2() {
-  --bg: var(--clr-card);
-  --c: #ffffff !important;
-  --b: initial;
-  --p: 9px;
-  --w: initial;
-  --max-w: none;
-  --min-w: none;
-  --h: initial;
-  --max-h: none;
-  --min-h: 33px;
-  --g: 5px;
-  --br: 30px;
-  &:has(> .v-btn__content > :only-child) {--br: 10px};
-  --bs: none;
-  --fs: max(13px, 1em);
-  --fw: 400;
-  --ls: normal;
-  --lh: 1;
-  --tt: capitalize;
-  --f: initial;
-  --t: initial;
+  padding: 5px;
+  min-width: 119px;
+  min-height: 37px;
+  border-radius: 30px;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  isolation: isolate;
   
-  background: var(--bg) !important;
-  color: var(--c) !important;
-  box-shadow: var(--bs) !important;
-  border-radius: var(--br) !important;
-  font-size: var(--fs);
-  padding: var(--p) !important;
-  width: var(--w) !important;
-  max-width: var(--max-w) !important;
-  min-width: var(--min-w) !important;
-  height: var(--h) !important;
-  max-height: var(--max-h) !important;
-  min-height: var(--min-h) !important;
-  border: var(--b);
-  transform: var(--t);
-  filter: var(--f);
+  &::before {
+    content: "" !important;
+    position: absolute !important;
+    opacity: 1 !important;
+    display: block !important;
+    inset: 0 !important;
+    border-radius: inherit !important;
+    background-color: transparent !important;
+    
+    border-left: 2px solid var(--quaternary) !important;
+    border-right: 2px solid var(--tertiary) !important;
+    background-image:
+      linear-gradient(90deg, var(--quaternary) 30%, var(--tertiary)),
+      linear-gradient(90deg, var(--quaternary) 30%, var(--tertiary)) !important;
+    background-size: 100% 1.5px !important;
+    background-position: 0 0, 0 100% !important;
+  }
+
   & :is(span, img, i) {
-    color: var(--c);
-    font-size: 1em;
-    font-weight: var(--fw);
-    text-transform: var(--tt, initial);
-    letter-spacing: var(--ls);
-    line-height: var(--lh);
+    font-family: 'Open Sans', sans-serif !important;
+    font-weight: var(--fw, 700) !important;
+    font-size: var(--fs, 16px) !important;
+    line-height: var(--lh, 140%) !important;
+    background: linear-gradient(99.45deg, #A093F0 7.5%, #5A9FF7 94.48%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
   }
   // margin
   &, > .v-btn__content {
@@ -167,7 +164,7 @@
   --min-h: none;
   --bg: var(--clr-card);
   --c: var(--clr);
-  --b: initial;
+  --b: 0.877506px solid var(--line);
   --p: 1.5em;
   --br: 30px;
   --bs: none;
@@ -208,6 +205,12 @@
 }
 .margin_globalmobile {
   @include media(max, small) {padding-inline: var(--margin-global) !important}
+}
+
+
+//- icon buttons -//
+.iconBtn {
+  @include iconBtn;
 }
 
 
