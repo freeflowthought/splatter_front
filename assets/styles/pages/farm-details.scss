@@ -91,15 +91,110 @@
         --bg: hsl(43, 100%, 65%, .5);
         --c: #FFD566 !important;
       }
-      @include media(max, small) {
-        --bg: hsl(43, 100%, 65%, .13) !important;
-        --c: #FFD566 !important;
-      }
     }
+  }
+
+  .input-data-table{
+    background-color: var(--card);
+    border-radius: 20px;
+    border: 1px solid #000;
+    max-width: 250px;
+    padding-inline: 10px;
+    padding-block: 10px;
+    height: 55px;
+
+    ::placeholder{
+      font-family: var(--font3);
+      font-weight: 500;
+      color: #767A89;
+    }
+
+    i{
+      color: #767A89;
+    }
+  }
+
+
+  .tooggle{
+    background-color: transparent;
+    border-radius: 10px;
+  }
+
+  .btn-toggle{
+    height: 55px!important;
+    min-height: 55px!important;
+    width: 75px!important;
+    min-width: 65px!important;
+    background-color: var(--card);
+    border: 1px solid #000!important;
   }
 
   .v-data-table tbody tr:has(.nopevents) {
     background-color: transparent !important;
-    td {padding: 40px !important}
+    td {padding: 40px !important;}
   }
+
+  .v-data-table tbody tr{
+    background-color: var(--card) !important;
+    border: solid 1px #000000!important;
+  }
+
+  .v-data-table td{
+    background-color: var(--card) !important;
+    border-radius: 0px!important;
+    border-top: solid 1px #000000!important;
+    border-bottom: solid 1px #000000!important;
+  }
+
+  .v-data-table tbody tr td:first-child{
+    border-left: solid 1px #000000!important;
+    border-top-left-radius: 25px!important;
+    border-bottom-left-radius: 25px!important;
+
+    @include media(max, 840px){
+      border-top-left-radius: 0px!important;
+      border-bottom-left-radius: 0px!important;
+    }
+  }
+
+  .v-data-table tbody tr td:nth-child(6){
+    border-right: solid 1px #000000!important;
+    border-top-right-radius: 25px!important;
+    border-bottom-right-radius: 25px!important;
+
+    @include media(max, 840px){
+      border-top-right-radius: 0px!important;
+      border-bottom-right-radius: 0px!important;
+    }
+  }
+
+  .v-data-table th{
+    --fm:var(--font2); 
+    --c: #767A89; 
+    font-weight: 700!important; 
+    font-size: 16px;
+  }
+
+  .mobile-fields{
+    @include media(max, 700px){
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+    }
+  }
+}
+
+
+////////Barrita transversal del input/////////
+//////////////////////////////////////////////
+
+
+.v-input__slot:before{
+  border-color: #fff!important;
+}
+
+.v-text-field > .v-input__control > .v-input__slot:before, 
+.v-text-field > .v-input__control > .v-input__slot:after {
+  width: 0%;
 }

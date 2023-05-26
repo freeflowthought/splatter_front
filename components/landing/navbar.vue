@@ -17,7 +17,7 @@
         <a
           v-for="(item, i) in dataNavbar" :key="i"
           :class="{active: $route.path.includes(item.to)}"
-          @click="item.name !== 'portfolio' ? $router.push(basePath2(item.to)) : ''">
+          @click="$router.push(item.to)">
           {{item.name}}
         </a>
       </aside>
@@ -78,11 +78,11 @@ export default {
       dataNavbar: [
         {
           name: "swap",
-          to: "/swap"
+          to: "app/swap"
         },
         {
           name: "earn",
-          to: "/farm-details"
+          to: "app/farm-details"
         },
         {
           name: "placeholder",

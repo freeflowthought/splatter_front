@@ -2,7 +2,7 @@
   <div id="swap-chart" class="charts fill" :style="`--c-trend: ${isTrendUp ? 'var(--success)' : 'var(--error)'}`">
     <section class="charts-header jspace">
       <div class="divcol font2">
-        <span>HNY/POT</span>
+        <span style="--c:#000; font-weight:700!important;">HNY/POT</span>
         <span>{{currentPrice ? `$${currentPrice}` : ''}}</span>
         <div class="acenter">
           <v-icon :color="isTrendUp ? 'var(--success)' : 'var(--error)'">mdi-trending-{{isTrendUp ? 'up' : 'down'}}</v-icon>
@@ -12,7 +12,7 @@
 
       <v-btn
         icon width="32px" height="32px" class="aspect" title="expand chart" style="top: -10px"
-        @click="$emit('model')">
+        >
         <img v-if="!closable" src="~/assets/sources/icons/expand.svg" alt="expand chart" class="aspect" style="--w: 16px">
         <v-icon v-else>mdi-close</v-icon>
       </v-btn>

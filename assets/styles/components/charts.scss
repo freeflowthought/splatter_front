@@ -26,8 +26,8 @@
     [class*="tooltip"] {
       padding: 12px;
       border-radius: 5px;
-      background-color: #17191C !important;
-      border: none !important;
+      background-color: var(--card) !important;
+      border: 1px solid #000000 !important;
       box-shadow: none !important;
       display: flex;
       flex-direction: column;

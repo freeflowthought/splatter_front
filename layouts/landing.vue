@@ -3,16 +3,17 @@
     <Alerts ref="alerts" />
     <ModalsConnect ref="connect" />
     <ModalsSwapModal ref="swap" />
-    <Navbar ref="navbar" />
+    <LandingNavbar ref="navbar" />
+    <!-- <LandingFooter ref="footer" /> -->
     
     <v-main :class="wrapperSpace?'with':'without'" class="parent">
       <!-- floating swap button -->
-      <v-btn
+      <!-- <v-btn
         v-show="!$route.path.includes('/swap')" id="swap-floating-button" class="btn" @click="$refs.swap.modalSwap = true"
         @mousedown="customeDragOnly($event)" @touchstart="customeDragOnly($event)">
         <v-icon>mdi-chevron-up</v-icon>
         <span>Swap</span>
-      </v-btn>
+      </v-btn> -->
 
       <!-- connect button -->
       <v-menu top offset-y>

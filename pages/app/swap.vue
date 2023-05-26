@@ -3,35 +3,88 @@
     <ModalsSwap ref="modal"></ModalsSwap>
     <ModalsTokens ref="tokens" :from="swapFrom" :to="swapTo"></ModalsTokens>
 
-    <section id="swap-content" class="fwrap center">
-      <!-- left -->
-      <v-card ref="target_swap_chart" class="left card">
-        <AppChartsSwapChart ref="chart" :height="heightChart" @model="$refs.modal.modalChart = true"></AppChartsSwapChart>
-      </v-card>
-
-
-      <!-- right -->
-      <v-card class="right card divcol" style="max-width: 318px !important; gap: 14px 0">
-        <div class="divcol center" style="gap: 6px">
-          <h3 class="p" style="--fw: 700">Trending Coins</h3>
-          <label>Drag your token to swap</label>
-        </div>
-        
-        <div class="grid" style="gap: inherit">
-          <div v-for="(item, i) in dataTokens" :key="i" class="divcol center">
-            <v-img class="aspect" style="--w: 50px">
-              <template #default>
-                <img
-                  v-show="item.img" :src="item.img" :alt="`${item.name} token`" style="--w: 100%; --of: cover">
+    <section id="swap-content" class="fwrap center divcol">
+      <h1 class="swap-title">Swap tokens</h1>
+      <div class="divrow mobile-column" style="gap:20px;">
+        <!-- left -->
+        <v-card class="swap-card divcol center jspace">
+            <v-btn class="menu-btn">
+              <img src="~/assets/sources/icons/menu-circle.svg" alt="menu">
+            </v-btn>
+            <span class="dm-400">
+              From
+            </span>
+            <div class="swap-container">
+              <v-autocomplete
+                v-model="selectedItem"
+                :items="items"
+                item-text="text"
+                item-value="value"
+                class="input-auto"
+              >
+              <template #item="{ item }">
+                <v-img :src="item.icon" style="max-width: 20px;"></v-img>
+                <span style="margin-left: 10px;">{{ item.text }}</span>
               </template>
-              <template #placeholder>
-                <v-skeleton-loader type="avatar" />
+              <template #selection="{ item }">
+                <v-img v-if="item" :src="item.icon" style="max-width: 20px;"></v-img>
+                <span v-if="item" style="margin-left: 10px;">{{ item.text }}</span>
               </template>
-            </v-img>
-            <label class="tup">{{item.name}}</label>
-          </div>
-        </div>
-      </v-card>
+              </v-autocomplete>
+
+              <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
+              ></v-text-field>
+
+              <v-btn class="btn-max" @click="setMaxValue">max</v-btn>  
+            </div>
+
+            <div class="divrow center jspace mobile-btn" style="width:350px;">
+              <v-icon>mdi-swap-vertical</v-icon>
+              <span class="dm-light">ETH > SPTL = 1290.03 UDC </span>
+            </div>
+
+            <span class="dm-400">
+              To
+            </span>
+
+            <div class="swap-container">
+              <v-autocomplete
+                v-model="selectedItem"
+                :items="items"
+                item-text="text"
+                item-value="value"
+                class="input-auto"
+              >
+              <template #item="{ item }">
+                <v-img :src="item.icon" style="max-width: 20px;"></v-img>
+                <span style="margin-left: 10px;">{{ item.text }}</span>
+              </template>
+              <template #selection="{ item }">
+                <v-img v-if="item" :src="item.icon" style="max-width: 20px;"></v-img>
+                <span v-if="item" style="margin-left: 10px;">{{ item.text }}</span>
+              </template>
+              </v-autocomplete>
+
+              <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
+              ></v-text-field>
+
+              <v-btn class="btn-max" @click="setMaxValue">max</v-btn>  
+            </div>
+
+            <v-btn class="btn mobile-btn" style="width: 350px!important; height: 60px!important; margin-top: 15px;">Swap</v-btn>
+
+            <a href="" class="atag">Add Splatter To Wallet</a>
+        </v-card>
+
+        <!-- right -->
+        <v-card ref="target_swap_chart" class="right card">
+          <AppChartsSwapChart ref="chart" :height="heightChart" @model="$refs.modal.modalChart = true"></AppChartsSwapChart>
+        </v-card>
+      </div>
+
+      <div class="img-container">
+        <img src="~/assets/sources/images/circleBottom.png" alt="Circle" class="circle-bottom">
+      </div>
     </section>
   </div>
 </template>
@@ -43,6 +96,12 @@ export default {
   name: "SwapPage",
   data() {
     return {
+      selectedItem: null,
+      inputNumber: 1,
+      items: [
+        { text: 'Ethereum', value: 1, icon: require('~/assets/sources/icons/Ellipse.svg') },
+        { text: 'Splatter', value: 2, icon: require('~/assets/sources/icons/Ellipse.svg') },
+      ],
       heightChart: undefined,
       swapFrom: {
         img: require('~/assets/sources/tokens/database.svg'),
@@ -93,6 +152,10 @@ export default {
     window.removeEventListener("resize", this.styles)
   },
   methods: {
+    setMaxValue() {
+      this.inputNumber = 9999;
+    },
+
     styles() {
       // height chart calculator
       const

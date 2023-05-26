@@ -17,5 +17,9 @@ export default {
     basePath(url, prefix = "/app") {
       return this.localePath(`${this.appIsLaunched ? prefix : ''}${url}`)
     },
+
+    basePath2(url, prefix = "/app") {
+      return this.localePath(`${prefix}${url}`);
+    }
   }
 }

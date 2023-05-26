@@ -407,7 +407,12 @@
 }
 .resizer {font-size: var(--resizer) !important}
 
-
+.right-absolute {
+  --t: 10px; --r: 25px;
+  position: absolute !important;
+  top: var(--t, 10px) !important;
+  right: var(--r, 30px) !important;
+}
 
 
 

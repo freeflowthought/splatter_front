@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="modalConnect" content-class="modal-connect divcol relative isolate">
     <aside class="space">
-      <span class="h9_em">Connect Wallet</span>
+      <span class="h8_em">Connect Wallet</span>
       
-      <v-btn icon @click="modalConnect = false">
+      <v-btn style="background: hsl(0 0% 0% / .2)!important;" icon @click="modalConnect = false">
         <v-icon size="1.5em">mdi-close</v-icon>
       </v-btn>
     </aside>
@@ -42,7 +42,7 @@ export default {
   --min-w: 330px;
   --w: max-content;
   --br: 30px;
-  --bg: #272727;
+  --bg: var(--card);
   --p: 30px;
   --tt: capitalize;
   gap: 20px;
@@ -59,7 +59,7 @@ export default {
     z-index: -1;
   }
 
-  i {color: hsl(225 225% 225% / .5) !important}
+  i {color: #000000 !important;}
 
   .v-sheet.grid {
     @include media(min, 500px) {--gtc: 1fr 1fr}
@@ -83,7 +83,8 @@ export default {
           --of: cover;
         }
         span + span {
-          --c: hsl(225 225% 225% / .5);
+          --c: #0000000;
+          font-weight:700!important;
         }
       }
     }
