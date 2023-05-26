@@ -20,14 +20,14 @@
           v-for="(item, i) in cardsInfo" :key="i"
           class="card divcol relative"
           style=" --w: 100%; gap: 20px">
-          <v-btn class="right-absolute btn">
+          <v-btn class="right-absolute btn bold" style="width: 60px!important;height:35px!important; min-height: 35px!important; border-radius: 5px!important;">
             New
           </v-btn>
 
           <aside class="divcol align" style="gap: 10px">
             <v-sheet class="dual-tokens" color="transparent">
-              <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:5px;">
-              <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:5px;">
+              <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:35px; margin-left: 22px;">
+              <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 22px;">
             </v-sheet>
             
             <h3 class="p tup" style="--fm:var(--font2); font-weight:700!important;">{{item.tokenA}}-{{item.tokenB}}</h3>
@@ -36,14 +36,14 @@
           <aside class="jspace divcol" style="gap: 10px">
             <div class="divrow jspace" style="gap: 5px; padding-inline: 20px;">
               <label style="--fm:var(--font2); --c: #767A89; font-weight:700!important; --fs:16px;">APR</label>
-              <h3 class="p" style="--c:var(--quaternary); font-weight: 700!important;font-family:var(--font1)!important;">{{`${item.apr}%`}}</h3>
+              <h3 class="gradient-text">{{`${item.apr}%`}}</h3>
             </div>
             
             <div class="divrow jspace acenter" style="gap: 5px; padding-inline: 20px;">
               <label style="--fm:var(--font2); --c: #767A89; font-weight:700!important; --fs:16px;">Rewards</label>
               <div class="divrow">
-                <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:40px;">
-                <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:40px;">
+                <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:35px; margin-right: -10px;z-index: 99;">
+                <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 0px;">
               </div>
             </div>
             
@@ -53,8 +53,8 @@
             </div>
           </aside>
           
-          <aside class="fwrap space" style="gap: 10px; --max-w-child: 110px">
-            <v-btn class="btn">Deposit</v-btn>
+          <aside class="fwrap space bold" style="gap: 10px; --max-w-child: 110px;">
+            <v-btn class="btn" style="border:1px solid #000000;">Deposit</v-btn>
           </aside>
         </v-card>
       </section>
@@ -66,7 +66,7 @@
 
       <div style="margin-top:50px;">
         <div class="jspace acenter mobile-fields">
-          <v-btn-toggle class="tooggle">
+          <v-btn-toggle mandatory class="tooggle">
             <v-btn class="btn-toggle">Pairs</v-btn>
             <v-btn class="btn-toggle">Pools</v-btn>
           </v-btn-toggle>
@@ -75,12 +75,12 @@
             <v-text-field
               v-model="search"
               prepend-icon="mdi-magnify"
-              placeholder="Buscar"
+              placeholder="Search"
               hide-details
               class="input-data-table"
             ></v-text-field>
 
-            <v-btn class="btn" style="--w:150px; border:solid 1px #000; --h: 55px;">
+            <v-btn class="btn bold" style="--w:150px; border:solid 1px #000; --h: 55px; border-radius: 10px!important;">
               Create Pool
             </v-btn>
           </div>

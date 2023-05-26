@@ -34,9 +34,11 @@
           <template #activator="{ on, attrs }">
             <v-btn
               class="btn2"
+              style="min-width:125px!important;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
-              @click="!isLogged ? $store.dispatch('modalConnect') : ''">
+              @click="!isLogged ? $store.dispatch('modalConnect') : ''"
+              >
               <template v-if="isLogged">
                 <span>{{user.accountId}}</span>
                 <v-icon>mdi-chevron-down</v-icon>

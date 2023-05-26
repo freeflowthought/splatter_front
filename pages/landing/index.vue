@@ -18,7 +18,7 @@
       <div class="div-swap-card">
 
         <v-card class="grey-card"></v-card>
-        <v-card class="blur-card"></v-card>
+        <img src="~/assets/sources/images/blur.png" alt="Blur" class="blur-img">
 
         <v-card class="swap-card divcol center jspace">
           <span class="swap-text">

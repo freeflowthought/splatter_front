@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AppMenuNavbar ref="menu"></AppMenuNavbar>
+    <LandingMenuNavbar ref="menu"></LandingMenuNavbar>
     
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
@@ -34,6 +34,7 @@
           <template #activator="{ on, attrs }">
             <v-btn
               class="btn2"
+              style="min-width:125px!important;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
               @click="!isLogged ? $store.dispatch('modalConnect') : ''">
@@ -83,6 +84,23 @@ export default {
         {
           name: "earn",
           to: "app/farm-details"
+        },
+        {
+          name: "placeholder",
+        },
+        {
+          name: "placeholder",
+        },
+      ],
+
+      dataNavbarMobile: [
+        {
+          name: "swap",
+          to: "/swap"
+        },
+        {
+          name: "earn",
+          to: "/farm-details"
         },
         {
           name: "placeholder",

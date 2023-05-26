@@ -108,6 +108,11 @@
         color:rgba(#000000, 0.5)!important;
       }
   
+      .swap-container2{
+        justify-content: flex-start!important;
+        gap: 35px!important;
+      }
+
       .swap-container{
         background-color: #E1D8D0;
         border: 1px solid #000000;
@@ -145,7 +150,7 @@
           min-width: 25px!important;
           border: 1px solid #000000;
           border-radius: 5px;
-          background-color: #A2C5FA;
+          background-color: #A194F1;
           
           span{
             font-weight: 700!important;

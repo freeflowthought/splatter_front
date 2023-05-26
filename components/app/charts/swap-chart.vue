@@ -2,7 +2,7 @@
   <div id="swap-chart" class="charts fill" :style="`--c-trend: ${isTrendUp ? 'var(--success)' : 'var(--error)'}`">
     <section class="charts-header jspace">
       <div class="divcol font2">
-        <span style="--c:#000; font-weight:700!important;">HNY/POT</span>
+        <span style="--c:#000; font-weight:700!important;">SPLT/ USDC</span>
         <span>{{currentPrice ? `$${currentPrice}` : ''}}</span>
         <div class="acenter">
           <v-icon :color="isTrendUp ? 'var(--success)' : 'var(--error)'">mdi-trending-{{isTrendUp ? 'up' : 'down'}}</v-icon>

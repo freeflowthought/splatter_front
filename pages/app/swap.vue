@@ -47,7 +47,7 @@
               To
             </span>
 
-            <div class="swap-container">
+            <div class="swap-container swap-container2">
               <v-autocomplete
                 v-model="selectedItem"
                 :items="items"
@@ -67,8 +67,6 @@
 
               <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
               ></v-text-field>
-
-              <v-btn class="btn-max" @click="setMaxValue">max</v-btn>  
             </div>
 
             <v-btn class="btn mobile-btn" style="width: 350px!important; height: 60px!important; margin-top: 15px;">Swap</v-btn>

@@ -10,9 +10,17 @@
 
   .circle{
     position: absolute;
-    left: -200px;
+    left: calc(0px - var(--margin-global));
+    margin-left: -12px;
+    max-width: 80%;
+    top: calc(0px - var(--navbar-height));
     z-index: -1;
+
+    @include media(max,1700px){
+      left: 0;
+    }
   }
+  
   
   @include media(max,920px){
     display: flex;
@@ -86,12 +94,7 @@
       }
     }
 
-    .blur-card{
-      background: linear-gradient(#A093F0, #5A9FF7);     
-      border-radius: 15px;
-      height: 360px;
-      max-width: 380px;
-      width: 380px;
+    .blur-img{
       top: 0px;
       right: 0px;
       left: 0px;
@@ -99,7 +102,10 @@
       margin: auto;
       transform: rotate(13deg);
       position: absolute;
-      z-index: 97;
+      height: 400px;
+      max-width: 400px;
+      width: 400px;
+      z-index: 98;
 
       @include media (max, 520px){
         max-width: 300px!important;
