@@ -17,7 +17,7 @@
 
       <!-- connect button -->
       <v-menu top offset-y>
-        <template #activator="{ on, attrs }">
+        <!-- <template #activator="{ on, attrs }">
           <v-btn
             id="account-floating-button" class="btn showmobile"
             v-bind="isLogged ? attrs : ''"
@@ -32,7 +32,7 @@
             
             <template v-else>Connect wallet</template>
           </v-btn>
-        </template>
+        </template> -->
 
         <v-list class="font2" color="var(--secondary)" style="--c:#fff">
           <v-list-item-group active-class="activeClass">

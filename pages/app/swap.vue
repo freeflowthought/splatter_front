@@ -15,7 +15,7 @@
               From
             </span>
             <div class="swap-container">
-              <v-autocomplete
+              <v-select
                 v-model="selectedItem"
                 :items="items"
                 item-text="text"
@@ -30,7 +30,7 @@
                 <v-img v-if="item" :src="item.icon" style="max-width: 20px;"></v-img>
                 <span v-if="item" style="margin-left: 10px;">{{ item.text }}</span>
               </template>
-              </v-autocomplete>
+              </v-select>
 
               <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
               ></v-text-field>
@@ -48,7 +48,7 @@
             </span>
 
             <div class="swap-container swap-container2">
-              <v-autocomplete
+              <v-select
                 v-model="selectedItem"
                 :items="items"
                 item-text="text"
@@ -63,7 +63,7 @@
                 <v-img v-if="item" :src="item.icon" style="max-width: 20px;"></v-img>
                 <span v-if="item" style="margin-left: 10px;">{{ item.text }}</span>
               </template>
-              </v-autocomplete>
+              </v-select>
 
               <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
               ></v-text-field>
@@ -78,6 +78,17 @@
         <v-card ref="target_swap_chart" class="right card">
           <AppChartsSwapChart ref="chart" :height="heightChart" @model="$refs.modal.modalChart = true"></AppChartsSwapChart>
         </v-card>
+
+        <v-btn
+        class="showmobile connect-btn bold"
+        @click="!isLogged ? $store.dispatch('modalConnect') : ''"
+        >
+        <template v-if="isLogged">
+          {{user.accountId}}
+        </template>
+        
+        <template v-else>Connect wallet</template>
+        </v-btn>
       </div>
 
       <div class="img-container">

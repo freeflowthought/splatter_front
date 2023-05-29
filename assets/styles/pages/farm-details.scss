@@ -136,7 +136,13 @@
     width: 75px!important;
     min-width: 65px!important;
     background-color: var(--card);
-    border: 1px solid #000!important;
+    border-top: 1px solid #000000!important;
+    border-bottom: 1px solid #000000!important;
+    border-right: 1px solid #000000!important;
+  }
+
+  .btn-toggle:first-child{
+    border-left: 1px solid #000000!important;
   }
 
   .v-data-table tbody tr:has(.nopevents) {

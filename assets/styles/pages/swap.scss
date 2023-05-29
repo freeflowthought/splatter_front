@@ -26,7 +26,7 @@
     }
 
     .mobile-column{
-      @include media(max,850px){
+      @include media(max,880px){
         flex-direction: column;
         gap: 90px!important;
         justify-content: center;
@@ -179,6 +179,15 @@
         right: 10px;
         border-radius: 11px;
       }
+    }
+
+    .connect-btn{
+      background-color: #000000;
+      width: 100%;
+      min-height: 50px!important;
+      --c: #fff!important;
+      margin-top: -40px;
+      border-radius: 10px;
     }
   // }
 }

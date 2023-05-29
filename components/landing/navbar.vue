@@ -4,11 +4,11 @@
     
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
-      <nuxt-link class="deletemobile" :to="basePath('/swap')">
+      <nuxt-link class="deletemobile" :to="basePath('/')">
         <img src="~/assets/sources/logos/logotype.svg" alt="logo" style="--w: 148px">
       </nuxt-link>
       <!-- mobile -->
-      <nuxt-link class="showmobile" :to="basePath('/swap')">
+      <nuxt-link class="showmobile" :to="basePath('/')">
         <img src="~/assets/sources/logos/logotype.svg" alt="logo" style="--w: 120px">
       </nuxt-link>
 
@@ -85,12 +85,6 @@ export default {
           name: "earn",
           to: "app/farm-details"
         },
-        {
-          name: "placeholder",
-        },
-        {
-          name: "placeholder",
-        },
       ],
 
       dataNavbarMobile: [
@@ -101,12 +95,6 @@ export default {
         {
           name: "earn",
           to: "/farm-details"
-        },
-        {
-          name: "placeholder",
-        },
-        {
-          name: "placeholder",
         },
       ],
     };

@@ -28,12 +28,13 @@
             From
           </span>
           <div class="swap-container">
-            <v-autocomplete
+            <v-select
               v-model="selectedItem"
               :items="items"
               item-text="text"
               item-value="value"
               class="input-auto"
+              :position="'fixed'"
             >
             <template #item="{ item }">
               <v-img :src="item.icon" style="max-width: 20px;"></v-img>
@@ -43,7 +44,7 @@
               <v-img v-if="item" :src="item.icon" style="max-width: 20px;"></v-img>
               <span v-if="item" style="margin-left: 10px;">{{ item.text }}</span>
             </template>
-            </v-autocomplete>
+            </v-select>
 
             <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
             ></v-text-field>
@@ -61,7 +62,7 @@
           </span>
 
           <div class="swap-container">
-            <v-autocomplete
+            <v-select
               v-model="selectedItem"
               :items="items"
               item-text="text"
@@ -76,7 +77,7 @@
               <v-img v-if="item" :src="item.icon" style="max-width: 20px;"></v-img>
               <span v-if="item" style="margin-left: 10px;">{{ item.text }}</span>
             </template>
-            </v-autocomplete>
+            </v-select>
 
             <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
             ></v-text-field>
