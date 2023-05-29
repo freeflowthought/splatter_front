@@ -1,3 +1,17 @@
+.circle{
+  position: absolute;
+  left: calc(0px - var(--margin-global));
+  margin-left: -12px;
+  max-width: 80%;
+  top: calc(0px - var(--h-navbar));
+  z-index: -1;
+  position: absolute;
+
+  @include media(max,1700px){
+    left: 0;
+  }
+}
+
 .section1-landing{
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -7,20 +21,8 @@
   padding-inline: 25px;
   margin-bottom: 80px;
   position: relative;
-
-  .circle{
-    position: absolute;
-    left: calc(0px - var(--margin-global));
-    margin-left: -12px;
-    max-width: 80%;
-    top: calc(0px - var(--navbar-height));
-    z-index: -1;
-
-    @include media(max,1700px){
-      left: 0;
-    }
-  }
-  
+  max-width: 1440px;
+  margin-inline: auto;
   
   @include media(max,920px){
     display: flex;
@@ -45,8 +47,8 @@
 
       @include media (max, 640px){
         text-align: center;
-        font-size: 48px!important;
-        max-width: 80%;
+        font-size: 40px!important;
+        max-width: 95%;
         margin-bottom: 0px;
       }
     }
@@ -59,8 +61,8 @@
 
       @include media (max, 640px){
         text-align: center;
-        font-size: 16px!important;
-        max-width: 80%;
+        font-size: 14px!important;
+        max-width: 95%;
       }
     }
   
@@ -231,6 +233,8 @@
   padding-inline: 25px;
   position: relative;
   padding-bottom: 40px;
+  max-width: 1440px;
+  margin-inline: auto;
 
   .title{
     font-weight: 500!important;
@@ -251,8 +255,8 @@
 
     @include media (max, 640px){
       text-align: center;
-      font-size: 40px!important;
-      max-width: 80%;
+      font-size: 34px!important;
+      max-width: 95%;
       margin-bottom: 10px;
     }
   }
@@ -327,8 +331,14 @@
   flex-direction: column;
   padding-inline: 25px;
   position: relative;
-  padding-bottom: 100px;
+  padding-bottom: 250px;
   position: relative;
+  max-width: 1440px;
+  margin-inline: auto;
+
+  @include media(max, 1010px){
+    padding-bottom: 100px!important;
+  }
 
   .title{
     font-weight: 500!important;
@@ -341,8 +351,8 @@
 
     @include media (max, 640px){
       text-align: center;
-      font-size: 36px!important;
-      max-width: 80%;
+      font-size: 34px!important;
+      max-width: 95%;
       margin-bottom: 10px;
     }
   }
@@ -362,13 +372,13 @@
     height: 55px!important;
     margin-top: 30px;
   }
+}
 
-  .circle2{
-    position: absolute;
-    left: -200px;
-    bottom: 0;
-    z-index: -1;
-  }
+.circle2{
+  position: absolute;
+  left: -200px;
+  bottom: 0;
+  z-index: -1;
 }
 
 

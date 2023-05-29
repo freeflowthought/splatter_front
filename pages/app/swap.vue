@@ -4,7 +4,7 @@
     <ModalsTokens ref="tokens" :from="swapFrom" :to="swapTo"></ModalsTokens>
 
     <section id="swap-content" class="fwrap center divcol">
-      <h1 class="swap-title">Swap tokens</h1>
+      <h1 class="swap-title">Swap Tokens</h1>
       <div class="divrow mobile-column" style="gap:20px;">
         <!-- left -->
         <v-card class="swap-card divcol center jspace">
@@ -49,8 +49,8 @@
 
             <div class="swap-container swap-container2">
               <v-select
-                v-model="selectedItem"
-                :items="items"
+                v-model="selectedItem2"
+                :items="items2"
                 item-text="text"
                 item-value="value"
                 class="input-auto"
@@ -71,7 +71,10 @@
 
             <v-btn class="btn mobile-btn" style="width: 350px!important; height: 60px!important; margin-top: 15px;">Swap</v-btn>
 
-            <a href="" class="atag">Add Splatter To Wallet</a>
+            <div class="center">
+              <a href="" class="atag">Add Splatter To Wallet</a>
+              <div class="div-linea"></div>
+            </div>
         </v-card>
 
         <!-- right -->
@@ -106,8 +109,13 @@ export default {
   data() {
     return {
       selectedItem: null,
+      selectedItem2: null,
       inputNumber: 1,
       items: [
+        { text: 'Ethereum', value: 1, icon: require('~/assets/sources/icons/Ellipse.svg') },
+        { text: 'Splatter', value: 2, icon: require('~/assets/sources/icons/Ellipse.svg') },
+      ],
+      items2: [
         { text: 'Ethereum', value: 1, icon: require('~/assets/sources/icons/Ellipse.svg') },
         { text: 'Splatter', value: 2, icon: require('~/assets/sources/icons/Ellipse.svg') },
       ],

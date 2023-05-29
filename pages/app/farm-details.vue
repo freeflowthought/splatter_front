@@ -13,7 +13,7 @@
     </div>
     
     <template v-else>
-      <h1 class="bold">Earn</h1>
+      <h1 class="bold" style="font-family:var(--font1);">Earn</h1>
       <!-- layoutcell 1 -->
       <section id="farm-details-content" class="gridauto">
         <v-card
@@ -49,7 +49,7 @@
             
             <div class="divrow jspace" style="gap: 5px; padding-inline: 20px;">
               <label style="--fm:var(--font2); --c: #767A89; font-weight:700!important; --fs:16px;">TVL</label>
-              <h3 style="--fm:var(--font1); font-weight:700!important" class="p">{{`$${item.tvl.formatter(true)}`}}</h3>
+              <h3 style="font-family:var(--font1)!important; font-weight:500!important" class="p">{{`$${item.tvl.formatter(true)}`}}</h3>
             </div>
           </aside>
           
@@ -65,7 +65,7 @@
 
 
       <div style="margin-top:50px;">
-        <div class="jspace acenter mobile-fields">
+        <div class="jspace acenter mobile-fields deletemobile">
           <v-btn-toggle mandatory class="tooggle">
             <v-btn class="btn-toggle">Pairs</v-btn>
             <v-btn class="btn-toggle">Pools</v-btn>
@@ -92,6 +92,7 @@
           :search="search"
           hide-default-footer
           mobile-breakpoint="840"
+          class="deletemobile"
         >
           <template #[`item.poolName`]="{ item }">
             <div class="acenter font2" style="gap: 10px">
@@ -121,6 +122,55 @@
             </div>
           </template>
         </v-data-table>
+
+        <div class="showmobile mobile-table">
+          <div class="title-grid" style="padding-inline: 10px;">
+            <span class="light-text element1">Pair</span>
+
+            <span class="light-text element2">APR</span>
+
+            <span class="light-text element3">TVL</span>
+
+            <span class="light-text element4">Volume</span>
+          </div>
+
+          <v-card v-for="(item,index) in dataTable" :key="index" class="card-mobile">
+            <div class="title-grid">
+              <div class="element1 divrow center">
+                <v-sheet class="dual-tokens" color="transparent" style="--h-sheet: 40px">
+                  <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:25px;">
+                  <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:25px; margin-right: 40px;">
+                </v-sheet>
+                
+                <span class="bold tup pool-text" style="margin-left: -30px;">{{item.poolName}}</span>
+              </div>
+
+              <div class="element2">
+                <span class="light-text">
+                  {{ item.apr }}
+                </span>
+              </div>
+
+              <div class="element3">
+                <span class="light-text">
+                  {{ item.tvl }}
+                </span>
+              </div>
+
+              <div class="element4">
+                <span class="light-text">
+                  {{ item.vol }}
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <v-btn class="btn bold" :class="{ 'custom-button': index === 1 }">
+                {{item.btn_text}}
+              </v-btn>
+            </div>
+          </v-card>
+        </div>
       </div>
     </template>
   </div>
@@ -210,6 +260,7 @@ export default {
           vol: "$21k",
           rewardA: "btc",
           rewardB: "usdc",
+          btn_text:"Deposit"
         },
         {
           poolName: "ETH-SPT",
@@ -220,6 +271,7 @@ export default {
           vol: "$21k",
           rewardA: "btc",
           rewardB: "usdc",
+          btn_text:"Claim $23.38"
         },
         {
           poolName: "ETH-SPT",
@@ -230,6 +282,8 @@ export default {
           vol: "$21k",
           rewardA: "btc",
           rewardB: "usdc",
+          btn_text:"Deposit"
+
         },
         {
           poolName: "ETH-SPT",
@@ -240,6 +294,7 @@ export default {
           vol: "$21k",
           rewardA: "btc",
           rewardB: "usdc",
+          btn_text:"Deposit"
         },
         {
           poolName: "ETH-SPT",
@@ -250,6 +305,7 @@ export default {
           vol: "$21k",
           rewardA: "btc",
           rewardB: "usdc",
+          btn_text:"Deposit"
         },
       ],
     }

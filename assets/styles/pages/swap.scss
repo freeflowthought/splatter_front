@@ -5,13 +5,19 @@
   @include parent;
   padding-inline: var(--margin-global);
   padding-bottom: 300px;
-  @include media(max, 700px){padding-bottom: 150px;}
+  @include media(max, 700px){padding-bottom: 50px;}
+  max-width: 1440px;
+  
 
   .img-container{
     max-width: 100vw;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @include media(max, 680px){
+      display: none;
+    }
 
     .circle-bottom{
       position: absolute;
@@ -23,6 +29,7 @@
       font-weight: 500!important;
       font-family: var(--font7)!important;
       margin-bottom: 80px;
+      font-size: 32px!important;
     }
 
     .mobile-column{
@@ -162,9 +169,26 @@
         font-weight: 400!important;
         font-family: var(--font1)!important;
         position: absolute;
-        text-decoration: underline!important;
         bottom: -50px;
-        color: #5A9FF7;
+        background: linear-gradient(to bottom, #A093F0, #5A9FF7) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        border-radius: 0px!important;
+        text-decoration: underline!important;
+      }
+
+      .div-linea{
+        width: 163px;
+        height: 1px;
+        position: absolute;
+        bottom: -50px;
+        background: linear-gradient(to bottom, #A093F0, #5A9FF7) !important;
+        border-radius: 0px!important;
+
+        @include media(max, 880px){
+          display: none;
+        }
       }
 
       .menu-btn{

@@ -1,7 +1,8 @@
 <template>
   <div>
+    <img src="~/assets/sources/images/Circulos.png" alt="circle" class="circle">
+
     <section class="section1-landing">
-      <img src="~/assets/sources/images/Circulos.png" alt="circle" class="circle">
 
       <div class="divcol astart div-title">
         <h1 class="title">
@@ -63,8 +64,8 @@
 
           <div class="swap-container">
             <v-select
-              v-model="selectedItem"
-              :items="items"
+              v-model="selectedItem2"
+              :items="items2"
               item-text="text"
               item-value="value"
               class="input-auto"
@@ -140,8 +141,8 @@
       <v-btn class="btn btn-launch">
         Launch App <v-icon>mdi-arrow-right</v-icon>
       </v-btn>
-      <img src="~/assets/sources/images/circles2.png" alt="circle" class="circle2">
     </section>
+    <img src="~/assets/sources/images/circles2.png" alt="circle" class="circle2">
   </div>
 </template>
 
@@ -152,8 +153,13 @@ export default {
   data() {
     return {
       selectedItem: null,
+      selectedItem2: null,
       inputNumber: 1,
       items: [
+        { text: 'Ethereum', value: 1, icon: require('~/assets/sources/icons/Ellipse.svg') },
+        { text: 'Splatter', value: 2, icon: require('~/assets/sources/icons/Ellipse.svg') },
+      ],
+      items2: [
         { text: 'Ethereum', value: 1, icon: require('~/assets/sources/icons/Ellipse.svg') },
         { text: 'Splatter', value: 2, icon: require('~/assets/sources/icons/Ellipse.svg') },
       ],

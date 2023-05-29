@@ -37,9 +37,10 @@
       display: flex;
       gap: 2em;
       a {
-        --fw: 700;
-        font-size: 1.3125em;
+        font-weight: 700!important;
+        font-size: 20px;
         transition: .5s $ease;
+        font-family: var(--font5);
         &.active {
           background: linear-gradient(99.45deg, #A093F0 7.5%, #5A9FF7 94.48%) !important;
           -webkit-background-clip: text !important;
@@ -53,6 +54,10 @@
       gap: 1em;
       .v-btn {
         --p: clamp(.8em, 1vw, 1em);
+      }
+
+      .v-btn__content{
+        height: 30px!important;
       }
     }
   }

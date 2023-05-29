@@ -4,7 +4,7 @@
     <ModalsConnect ref="connect" />
     <ModalsSwapModal ref="swap" />
     <LandingNavbar ref="navbar" />
-    <!-- <LandingFooter ref="footer" /> -->
+    <LandingFooter ref="footer" />
     
     <v-main :class="wrapperSpace?'with':'without'" class="parent">
       <!-- floating swap button -->
