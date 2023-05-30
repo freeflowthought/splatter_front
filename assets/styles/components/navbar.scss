@@ -20,7 +20,7 @@
     align-items: center;
     gap: 12px;
     @include parent;
-    padding-inline: var(--margin-global);
+    padding-inline: 40px;
     height: var(--h-navbar) !important;
     // overflow: hidden;
     // line

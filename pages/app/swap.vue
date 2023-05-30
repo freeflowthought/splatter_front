@@ -16,7 +16,7 @@
             </span>
             <div class="swap-container">
               <v-select
-                v-model="selectedItem"
+                ref="select1"
                 :items="items"
                 item-text="text"
                 item-value="value"
@@ -39,7 +39,7 @@
             </div>
 
             <div class="divrow center jspace mobile-btn" style="width:350px;">
-              <v-icon>mdi-swap-vertical</v-icon>
+              <v-icon @click="swapValues()">mdi-swap-vertical</v-icon>
               <span class="dm-light">ETH > SPTL = 1290.03 UDC </span>
             </div>
 
@@ -49,8 +49,8 @@
 
             <div class="swap-container swap-container2">
               <v-select
-                v-model="selectedItem2"
-                :items="items2"
+                ref="select2"
+                :items="items"
                 item-text="text"
                 item-value="value"
                 class="input-auto"
@@ -204,7 +204,13 @@ export default {
 
       this.$store.commit("setSwapReview", data)
       this.$router.push(this.basePath('/swap-review'))
-    }
+    },
+
+    swapValues() {
+      const temp = this.$refs.select1.internalValue;
+      this.$refs.select1.internalValue = this.$refs.select2.internalValue;
+      this.$refs.select2.internalValue = temp;
+    },
   }
 };
 </script>
