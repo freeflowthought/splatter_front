@@ -19,10 +19,15 @@
   justify-content: center;
   align-items: center;
   padding-inline: 25px;
-  margin-bottom: 80px;
+  margin-bottom: 100px;
   position: relative;
   max-width: 1440px;
-  margin-inline: auto;
+  margin-inline: var(--margin-global);
+
+  @include media(max, 1200px){
+    margin-inline: auto;
+  }
+
   
   @include media(max,920px){
     display: flex;
@@ -234,7 +239,11 @@
   position: relative;
   padding-bottom: 40px;
   max-width: 1440px;
-  margin-inline: auto;
+  margin-inline: var(--margin-global);
+
+  @include media(max, 1200px){
+    margin-inline: auto;
+  }
 
   .title{
     font-weight: 500!important;
@@ -243,6 +252,18 @@
     position: absolute;
     left: 20px;
     max-width: 30%;
+
+    @include media(max, 1470px){
+      font-size: 40px!important;
+      left: 0px;
+    }
+
+    @include media(max, 1380px){left:-30px;}
+    @include media(max, 1320px){left:-50px;}
+    @include media(max, 1255px){left:-80px;}
+    @include media(max, 1200px){left: 20px;}
+
+
 
     @include media(max, 965px){
       position: relative;
