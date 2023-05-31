@@ -53,6 +53,15 @@
 </template>
 
 <script>
+const { ethers } = require("ethers")
+const UNISWAP = require("@uniswap/sdk")
+const fs = require('fs');
+const { Token, WETH, Fetcher, Route, Trade, TokenAmount, TradeType, Percent} = require("@uniswap/sdk");
+const { getAddress } = require("ethers/lib/utils");
+
+const UNISWAP_ROUTER_ABI = fs.readFileSync("./static/abis/routerv2.json").toString();
+const UNISWAP_ROUTER_CONTRACT = new ethers.Contract(UNISWAP_ROUTER_ADDRESS, UNISWAP_ROUTER_ABI, provider);
+
 export default {
   name: "ModalsSwapComponent",
   data() {
@@ -85,6 +94,10 @@ export default {
     window.removeEventListener("resize", this.$targetTooltip)
   },
   methods: {
+    aprove(){},
+    swapExactTokensforTokens() {},
+    swapExactEthforTokens() {},
+    swapExactTokensforEth() {}
   }
 };
 </script>
