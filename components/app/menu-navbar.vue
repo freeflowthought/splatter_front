@@ -40,7 +40,7 @@
         <v-expansion-panels focusable accordion class="anim_moveleft">
           <v-expansion-panel
             v-for="(item, i) in $parent.dataNavbar" :key="i"
-            @click="item.name !== 'portfolio' ? $router.push(basePath(item.to)) : ''"
+            @click="$router.push(basePath2(item.to))"
           >
             <v-expansion-panel-header class="h10_em" expand-icon="mdi-menu-down" :hide-actions="item.to ? true : false">
               {{ item.name }}

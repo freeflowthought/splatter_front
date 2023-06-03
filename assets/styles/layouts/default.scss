@@ -45,7 +45,7 @@
     --w: max-content;
     --h: 49px;
     --br: 100px;
-    --bg: #1A1917;
+    --bg: var(--primary);
     --b: 1px solid #2D291D;
     --c: #ffffff !important;
     --fw: 700;
@@ -55,8 +55,8 @@
     font-family: var(--font2) !important;
     position: fixed;
     left: var(--margin-global);
-    bottom: 10%;
-    z-index: 10;
+    bottom: 5%;
+    z-index: 1000;
   }
 }
 

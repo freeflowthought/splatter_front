@@ -171,7 +171,7 @@ export default {
 
   // Router property -  https://nuxtjs.org/docs/2.x/features/file-system-routing#the-router-property
   router: {
-    base: development ? '/honeypot-dex/' : '/',
+    base: development ? '/splatter/' : '/',
     // middleware: ['route-validator'],
     extendRoutes(routes, resolve) {
       routes.push({
@@ -188,7 +188,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    publicPath: development ? '/honeypot-dex/' : '/',
+    publicPath: development ? '/splatter/' : '/',
     // TODO: read about this to fix it.
     // plugins: [
     //   new webpack.ProvidePlugin({

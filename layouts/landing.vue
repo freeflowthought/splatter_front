@@ -3,20 +3,21 @@
     <Alerts ref="alerts" />
     <ModalsConnect ref="connect" />
     <ModalsSwapModal ref="swap" />
-    <Navbar ref="navbar" />
+    <LandingNavbar ref="navbar" />
+    <LandingFooter ref="footer" />
     
     <v-main :class="wrapperSpace?'with':'without'" class="parent">
       <!-- floating swap button -->
-      <v-btn
+      <!-- <v-btn
         v-show="!$route.path.includes('/swap')" id="swap-floating-button" class="btn" @click="$refs.swap.modalSwap = true"
         @mousedown="customeDragOnly($event)" @touchstart="customeDragOnly($event)">
         <v-icon>mdi-chevron-up</v-icon>
         <span>Swap</span>
-      </v-btn>
+      </v-btn> -->
 
       <!-- connect button -->
       <v-menu top offset-y>
-        <template #activator="{ on, attrs }">
+        <!-- <template #activator="{ on, attrs }">
           <v-btn
             id="account-floating-button" class="btn showmobile"
             v-bind="isLogged ? attrs : ''"
@@ -31,7 +32,7 @@
             
             <template v-else>Connect wallet</template>
           </v-btn>
-        </template>
+        </template> -->
 
         <v-list class="font2" color="var(--secondary)" style="--c:#fff">
           <v-list-item-group active-class="activeClass">

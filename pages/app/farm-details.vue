@@ -1,124 +1,5 @@
 <template>
   <div id="farm-details">
-    <section id="farm-details-header" class="divcol" style="gap: 10px">
-      <h1 class="font1 acenter deletemobile" style="gap: inherit">My Portfolio
-        <v-btn icon @click="hideProfits = !hideProfits">
-          <v-icon size="2.3em" color="var(--accent)">mdi-eye{{hideProfits ? "" : "-off"}}-outline</v-icon>
-        </v-btn>
-      </h1>
-
-      <v-card class="container-profits card divcol">
-        <div class="grid showmobile pl-4">
-          <h1 class="p font1 acenter">Portfolio
-            <v-btn icon max-width="max-content" height="max-content" @click="hideProfits = !hideProfits">
-              <v-icon size=".6em" color="var(--accent)">mdi-eye{{hideProfits ? "" : "-off"}}-outline</v-icon>
-            </v-btn>
-          </h1>
-        </div>
-
-        <v-sheet color="transparent" class="grid" :class="{hide: hideProfits}">
-          <div class="divcol">
-            <label>deposits
-              <v-tooltip bottom max-width="174px" color="#574F42">
-                <template #activator="{on, attrs}">
-                  <img src="~/assets/sources/icons/info.svg" alt="info" style="--w: max(11px, .8em)" v-bind="attrs" v-on="on">
-                </template>
-                
-                <span>info</span>
-              </v-tooltip>
-            </label>
-            <span>${{profits.deposit.toString().split(".").join(",")}}</span>
-          </div>
-          
-          <div class="divcol">
-            <label>rewards
-              <v-tooltip bottom max-width="174px" color="#574F42">
-                <template #activator="{on, attrs}">
-                  <img src="~/assets/sources/icons/info.svg" alt="info" style="--w: max(11px, .8em)" v-bind="attrs" v-on="on">
-                </template>
-                
-                <span>info</span>
-              </v-tooltip>
-            </label>
-            <span>${{profits.rewards}}</span>
-          </div>
-          
-          <div class="divcol">
-            <label>monthly APY
-              <v-tooltip bottom max-width="174px" color="#574F42">
-                <template #activator="{on, attrs}">
-                  <img src="~/assets/sources/icons/info.svg" alt="info" style="--w: max(11px, .8em)" v-bind="attrs" v-on="on">
-                </template>
-                
-                <span>info</span>
-              </v-tooltip>
-            </label>
-            <span>{{profits.apy_monthly}}%</span>
-          </div>
-          
-          <div class="divcol">
-            <label>daily APY
-              <v-tooltip bottom max-width="174px" color="#574F42">
-                <template #activator="{on, attrs}">
-                  <img src="~/assets/sources/icons/info.svg" alt="info" style="--w: max(11px, .8em)" v-bind="attrs" v-on="on">
-                </template>
-                
-                <span>info</span>
-              </v-tooltip>
-            </label>
-            <span>{{profits.apy_daily}}%</span>
-          </div>
-        </v-sheet>
-      </v-card>
-    </section>
-
-    <section class="controls divcol" style="gap: 15px; margin-block: 30px 20px">
-      <aside class="space" style="gap: inherit">
-        <div class="acenter wrap" style="gap: inherit">
-          <v-tabs v-model="tabsFarms_model" hide-slider>
-            <v-tab v-for="item in dataFilterFarms" :key="item" class="tcap" @change="filters.farms = item">
-              {{item}}
-            </v-tab>
-          </v-tabs>
-          
-          <v-tabs v-model="tabsFilter_model" hide-slider>
-            <v-tab v-for="item in dataFilter" :key="item" class="tcap" @change="filters.filter = item">
-              {{item}}
-            </v-tab>
-          </v-tabs>
-        </div>
-        
-        <v-btn class="btn2 deletemobile" @click="changeLayoutCells()">
-          <img :src="require(`~/assets/sources/icons/cells-${layoutCells ? '2' : '1'}.svg`)" alt="layout cells type">
-        </v-btn>
-      </aside>
-      
-      <aside class="space" style="gap: inherit">
-        <v-text-field
-          v-model="filters.search"
-          label="Search"
-          class="search font3"
-          style="--b: 1px solid #2D291D; --br: 10px; --max-w: 16.375em; --c-label: var(--accent); --caret: var(--accent)"
-          hide-details solo
-          clearable
-          clear-icon="mdi-close"
-        >
-          <template #prepend-inner>
-            <img src="~/assets/sources/icons/search.svg" alt="search icon" class="mr-1">
-          </template>
-        </v-text-field>
-        
-        <div class="center alignr contentsmoible" style="gap: 10px">
-          <label class="plain deletemobile">Sort by</label>
-          <v-tabs hide-slider class="tab2" style="--bg-active: transparent">
-            <v-tab v-for="item in dataSort" :key="item" class="tup" @change="filters.sort = item">
-              {{item}}
-            </v-tab>
-          </v-tabs>
-        </div>
-      </aside>
-    </section>
-
     <!-- if not logged -->
     <div v-if="!isLogged" class="divcol center tcenter align font1 nopevents maxsize_w">
       <img src="~/assets/sources/icons/wallet-empty.png" alt="empty icon" style="--w: 13.4375em">
@@ -131,62 +12,49 @@
       </v-btn>
     </div>
     
-    <!-- if empty -->
-    <div v-else-if="filterDataFarms.length < 1 && layoutCells" class="divcol center tcenter align font1 nopevents">
-      <template v-if="filters.farms === 'my farms'">
-        <img src="~/assets/sources/icons/my-farms-empty.png" alt="empty icon" style="--w: 13.4375em">
-        <span class="h9_em bold mt-5 mb-2">You dont have any farms</span>
-        <span class="hspan" style="--fs: max(13px, 1em)">See which pools are available to swap</span>
-        <v-btn class="btn mt-3 pevents font2" style="--w: 10.3125em; --h: 3.25em; --stroke: .4px">
-          Create LP
-        </v-btn>
-      </template>
-      
-      <template v-else>
-        <img src="~/assets/sources/icons/empty.png" alt="empty icon" style="--w: 13.4375em">
-        <span class="h9_em bold mt-5 mb-2">No results found</span>
-        <span class="hspan" style="--fs: max(13px, 1em)">Try searching something else</span>
-      </template>
-    </div>
-
-    <!-- content filled -->
     <template v-else>
+      <h1 class="bold" style="font-family:var(--font1);">Earn</h1>
       <!-- layoutcell 1 -->
-      <section v-if="layoutCells" id="farm-details-content" class="gridauto">
+      <section id="farm-details-content" class="gridauto">
         <v-card
-          v-for="(item, i) in filterDataFarms" :key="i"
-          class="card divcol"
+          v-for="(item, i) in cardsInfo" :key="i"
+          class="card divcol relative"
           style=" --w: 100%; gap: 20px">
+          <v-btn class="right-absolute btn bold" style="width: 60px!important;height:35px!important; min-height: 35px!important; border-radius: 5px!important;">
+            New
+          </v-btn>
+
           <aside class="divcol align" style="gap: 10px">
             <v-sheet class="dual-tokens" color="transparent">
-              <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect">
-              <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect">
+              <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:35px; margin-left: 22px;">
+              <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 22px;">
             </v-sheet>
             
-            <h3 class="p tup">{{item.tokenA}}-{{item.tokenB}}</h3>
+            <h3 class="p tup" style="--fm:var(--font2); font-weight:700!important;">{{item.tokenA}}-{{item.tokenB}}</h3>
           </aside>
           
-          <aside class="spacea wrap" style="gap: 5px">
-            <div class="divcol center" style="gap: 5px">
-              <h3 class="p">{{`${item.apr}%`}}</h3>
-              <label>APR</label>
+          <aside class="jspace divcol" style="gap: 10px">
+            <div class="divrow jspace" style="gap: 5px; padding-inline: 20px;">
+              <label style="--fm:var(--font2); --c: #767A89; font-weight:700!important; --fs:16px;">APR</label>
+              <h3 class="gradient-text">{{`${item.apr}%`}}</h3>
             </div>
             
-            <div class="divcol center" style="gap: 5px">
-              <h3 class="p">{{`${item.vol.formatter(true)}`}}</h3>
-              <label>24h Vol.</label>
+            <div class="divrow jspace acenter" style="gap: 5px; padding-inline: 20px;">
+              <label style="--fm:var(--font2); --c: #767A89; font-weight:700!important; --fs:16px;">Rewards</label>
+              <div class="divrow">
+                <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:35px; margin-right: -10px;z-index: 99;">
+                <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 0px;">
+              </div>
             </div>
             
-            <div class="divcol center" style="gap: 5px">
-              <h3 class="p">{{`$${item.tvl.formatter(true)}`}}</h3>
-              <label>TVL</label>
+            <div class="divrow jspace" style="gap: 5px; padding-inline: 20px;">
+              <label style="--fm:var(--font2); --c: #767A89; font-weight:700!important; --fs:16px;">TVL</label>
+              <h3 style="font-family:var(--font1)!important; font-weight:500!important" class="p">{{`$${item.tvl.formatter(true)}`}}</h3>
             </div>
           </aside>
           
-          <aside class="fwrap space" style="gap: 10px; --max-w-child: 110px">
-            <v-btn class="btn">Deposit</v-btn>
-            <v-btn class="btn">Withdraw</v-btn>
-            <v-btn class="btn">Claim {{item.claim}}</v-btn>
+          <aside class="fwrap space bold" style="gap: 10px; --max-w-child: 110px;">
+            <v-btn class="btn" style="border:1px solid #000000;">Deposit</v-btn>
           </aside>
         </v-card>
       </section>
@@ -194,78 +62,116 @@
 
 
       <!-- layoutcell 2 -->
-      <v-data-table
-        v-else
-        :headers="tableHeaders"
-        :items="filterDataFarms"
-        hide-default-footer
-        mobile-breakpoint="-1"
-      >
-        <template #[`item.poolName`]="{ item }">
-          <div class="acenter font2" style="gap: 10px">
-            <v-sheet class="dual-tokens" color="transparent" style="--h-sheet: 40px">
-              <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect">
-              <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect">
-            </v-sheet>
-            
-            <span class="bold tup">{{item.poolName}}</span>
-          </div>
-        </template>
-        
-        <template #[`item.staked`]="{ item }">
-          {{item.staked ? `$${item.staked.toLocaleString()}` : ""}}
-        </template>
-        
-        <template #[`item.wallet`]="{ item }">
-          {{item.wallet ? `$${item.wallet.toLocaleString()}` : ""}}
-        </template>
-        
-        <template #[`item.apr`]="{ item }">
-          {{item.apr ? `${item.apr.toLocaleString()}%` : ""}}
-        </template>
-        
-        <template #[`item.tvl`]="{ item }">
-          {{item.tvl ? `$${item.tvl.formatter(true)}` : ""}}
-        </template>
-        
-        <template #[`item.actions`]>
-          <div class="end" style="gap: 10px">
-            <v-btn icon style="--bg: #292724">
-              <v-icon size="1.2em">mdi-plus</v-icon>
-            </v-btn>
-            
-            <v-btn icon style="--bg: #292724">
-              <v-icon size="1.2em">mdi-minus</v-icon>
-            </v-btn>
-            
-            <v-btn
-              class="btn" style="--fs: 1.3125em; --stroke: .4px; --br: 10px"
-            >
-              <img src="~/assets/sources/icons/download.svg" alt="claim icon" style="--w: .8em">
-              claim
+
+
+      <div style="margin-top:50px;">
+        <div class="jspace acenter mobile-fields deletemobile">
+          <v-btn-toggle mandatory class="tooggle">
+            <v-btn class="btn-toggle">Pairs</v-btn>
+            <v-btn class="btn-toggle">Pools</v-btn>
+          </v-btn-toggle>
+
+          <div class="divrow center" style="gap:5px;">
+            <v-text-field
+              v-model="search"
+              prepend-icon="mdi-magnify"
+              placeholder="Search"
+              hide-details
+              class="input-data-table"
+            ></v-text-field>
+
+            <v-btn class="btn bold" style="--w:150px; border:solid 1px #000; --h: 55px; border-radius: 10px!important;">
+              Create Pool
             </v-btn>
           </div>
-        </template>
-        
-        <template #no-data>
-          <div class="divcol center tcenter align font1 nopevents">
-            <template v-if="filters.farms === 'my farms'">
-              <img src="~/assets/sources/icons/my-farms-empty.png" alt="empty icon" style="--w: 13.4375em">
-              <span class="h9_em bold mt-5 mb-2">You dont have any farms</span>
-              <span class="hspan" style="--fs: max(13px, 1em)">See which pools are available to swap</span>
-              <v-btn class="btn mt-3 pevents font2" style="--w: 10.3125em; --h: 3.25em; --stroke: .4px">
-                Create LP
+        </div>
+
+        <v-data-table
+          :headers="tableHeaders"
+          :items="dataTable"
+          :search="search"
+          hide-default-footer
+          mobile-breakpoint="840"
+          class="deletemobile"
+        >
+          <template #[`item.poolName`]="{ item }">
+            <div class="acenter font2" style="gap: 10px">
+              <v-sheet class="dual-tokens" color="transparent" style="--h-sheet: 40px">
+                <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:35px;">
+                <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 28px;">
+              </v-sheet>
+              
+              <span class="bold tup">{{item.poolName}}</span>
+            </div>
+          </template>
+
+          <template #[`item.rewards`]="{ item }">
+            <div class="center font2" style="gap: 10px">
+              <v-sheet class="dual-tokens center" color="transparent" style="--h-sheet: 40px">
+                <img :src="require(`~/assets/sources/tokens/${item.rewardA}.svg`)" :alt="`${item.rewardA} token`" class="aspect" style="--p:0px; --w:35px; margin-left: 12px;">
+                <img :src="require(`~/assets/sources/tokens/${item.rewardB}.svg`)" :alt="`${item.rewardB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 12px;">
+              </v-sheet>            
+            </div>
+          </template>
+          
+          <template #[`item.actions`]>
+            <div class="end">
+              <v-btn class="btn" style="--fs: 1em; --stroke: .4px; --br: 10px; --b:1px solid #000;">
+                Deposit
               </v-btn>
-            </template>
-            
-            <template v-else>
-              <img src="~/assets/sources/icons/empty.png" alt="empty icon" style="--w: 13.4375em">
-              <span class="h9_em bold mt-5 mb-2">No results found</span>
-              <span class="hspan" style="--fs: max(13px, 1em)">Try searching something else</span>
-            </template>
+            </div>
+          </template>
+        </v-data-table>
+
+        <div class="showmobile mobile-table">
+          <div class="title-grid" style="padding-inline: 10px;">
+            <span class="light-text element1">Pair</span>
+
+            <span class="light-text element2">APR</span>
+
+            <span class="light-text element3">TVL</span>
+
+            <span class="light-text element4">Volume</span>
           </div>
-        </template>
-      </v-data-table>
+
+          <v-card v-for="(item,index) in dataTable" :key="index" class="card-mobile">
+            <div class="title-grid">
+              <div class="element1 divrow center">
+                <v-sheet class="dual-tokens" color="transparent" style="--h-sheet: 40px">
+                  <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:25px;">
+                  <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:25px; margin-right: 40px;">
+                </v-sheet>
+                
+                <span class="bold tup pool-text" style="margin-left: -30px;">{{item.poolName}}</span>
+              </div>
+
+              <div class="element2">
+                <span class="light-text">
+                  {{ item.apr }}
+                </span>
+              </div>
+
+              <div class="element3">
+                <span class="light-text">
+                  {{ item.tvl }}
+                </span>
+              </div>
+
+              <div class="element4">
+                <span class="light-text">
+                  {{ item.vol }}
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <v-btn class="btn bold" :class="{ 'custom-button': index === 1 }">
+                {{item.btn_text}}
+              </v-btn>
+            </div>
+          </v-card>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -278,6 +184,7 @@ export default {
   mixins: [computeds],
   data() {
     return {
+      search:'',
       hideProfits: false,
       profits: {
         deposit: 20.009,
@@ -299,15 +206,16 @@ export default {
       tabsFilter_model: 0,
       
       tableHeaders: [
-        { value: "poolName", text: "Name",  sortable: false },
-        { value: "staked", text: "Staked", align: "center", sortable: false },
-        { value: "wallet", text: "Wallet", align: "center", sortable: false },
+        { value: "poolName", text: "Pair",  sortable: false },
         { value: "apr", text: "APR", align: "center", sortable: false },
         { value: "tvl", text: "TVL", align: "center", sortable: false },
+        { value: "vol", text: "Volume (24h)", align: "center", sortable: false },
+        { value: "rewards", text: "Rewards", align: "center", sortable: false },
         { value: "actions", align: "center", sortable: false },
       ],
-      dataFarms: [
-        {
+
+      cardsInfo:[
+      {
           poolName: "btc-usdc",
           tokenA: "btc",
           tokenB: "usdc",
@@ -339,6 +247,65 @@ export default {
           claim: 29.7,
           staked: 1000,
           wallet: 10000,
+        },
+      ],
+
+      dataTable: [
+        {
+          poolName: "ETH-SPT",
+          tokenA: "elipse",
+          tokenB: "elipse-clara",
+          apr: "304%",
+          tvl: "1.4m",
+          vol: "$21k",
+          rewardA: "btc",
+          rewardB: "usdc",
+          btn_text:"Deposit"
+        },
+        {
+          poolName: "ETH-SPT",
+          tokenA: "elipse",
+          tokenB: "elipse-clara",
+          apr: "304%",
+          tvl: "1.4m",
+          vol: "$21k",
+          rewardA: "btc",
+          rewardB: "usdc",
+          btn_text:"Claim $23.38"
+        },
+        {
+          poolName: "ETH-SPT",
+          tokenA: "elipse",
+          tokenB: "elipse-clara",
+          apr: "304%",
+          tvl: "1.4m",
+          vol: "$21k",
+          rewardA: "btc",
+          rewardB: "usdc",
+          btn_text:"Deposit"
+
+        },
+        {
+          poolName: "ETH-SPT",
+          tokenA: "elipse",
+          tokenB: "elipse-clara",
+          apr: "304%",
+          tvl: "1.4m",
+          vol: "$21k",
+          rewardA: "btc",
+          rewardB: "usdc",
+          btn_text:"Deposit"
+        },
+        {
+          poolName: "ETH-SPT",
+          tokenA: "elipse",
+          tokenB: "elipse-clara",
+          apr: "304%",
+          tvl: "1.4m",
+          vol: "$21k",
+          rewardA: "btc",
+          rewardB: "usdc",
+          btn_text:"Deposit"
         },
       ],
     }

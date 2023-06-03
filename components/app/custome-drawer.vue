@@ -7,6 +7,7 @@
     :overlay-opacity="$store.state.overlay.opacity"
     :overlay-color="$store.state.overlay.color"
     class="custome-drawer"
+    style="z-index: 100;"
   >
     <section v-if="$slots.header" class="v-navigation-drawer__content--header divcol center gap2">
       <v-btn icon class="close" style="--t: 8px; --r: 10px" @click="propModel = false">
@@ -60,7 +61,7 @@ export default {
   @include media(max, x-small) {--w-drawer: 100vw}
   
   width: var(--w-drawer) !important;
-  background: var(--secondary) !important;
+  background: var(--card) !important;
   z-index: 99;
   .v-navigation-drawer__content {
     --h-drawer-header: 170px;

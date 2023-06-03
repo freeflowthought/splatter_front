@@ -2,17 +2,19 @@
   <div id="swap-chart" class="charts fill" :style="`--c-trend: ${isTrendUp ? 'var(--success)' : 'var(--error)'}`">
     <section class="charts-header jspace">
       <div class="divcol font2">
-        <span>HNY/POT</span>
-        <span>{{currentPrice ? `$${currentPrice}` : ''}}</span>
-        <div class="acenter">
-          <v-icon :color="isTrendUp ? 'var(--success)' : 'var(--error)'">mdi-trending-{{isTrendUp ? 'up' : 'down'}}</v-icon>
-          <span style="--c: var(--c-trend)">{{trendingPercent}}</span>
+        <span style="--c:#000; font-weight:700!important; font-family: var(--font1); font-size: 18px;">SPLT/ USDC</span>
+        <div class="divrow" style="gap:15px;">
+          <span style="color: rgb(0 0 0 / 66%)!important;font-weight:700!important; font-family: var(--font1); font-size: 18px;">{{currentPrice ? `$${currentPrice}` : ''}}</span>
+          <div class="acenter">
+            <span style="--c: var(--c-trend); font-size: 14px;">{{trendingPercent}}</span>
+            <v-icon :color="isTrendUp ? 'var(--success)' : 'var(--error)'" style="font-size: 14px!important;">mdi-trending-{{isTrendUp ? 'up' : 'down'}}</v-icon>
+          </div>
         </div>
       </div>
 
       <v-btn
         icon width="32px" height="32px" class="aspect" title="expand chart" style="top: -10px"
-        @click="$emit('model')">
+        >
         <img v-if="!closable" src="~/assets/sources/icons/expand.svg" alt="expand chart" class="aspect" style="--w: 16px">
         <v-icon v-else>mdi-close</v-icon>
       </v-btn>
@@ -69,7 +71,7 @@ export default {
   },
   data() {
     return {
-      dataControlsChart: [ "1d", "1w", "1y", "all" ],
+      dataControlsChart: [ "1D", "1W", "1Y", "All" ],
       selection: 3,
       // series
       chartSeries: [

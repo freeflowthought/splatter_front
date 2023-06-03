@@ -4,12 +4,12 @@
     
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
-      <nuxt-link class="deletemobile" :to="basePath('/swap')">
+      <nuxt-link class="deletemobile" :to="basePath('/')">
         <img src="~/assets/sources/logos/logotype.svg" alt="logo" style="--w: 148px">
       </nuxt-link>
       <!-- mobile -->
-      <nuxt-link class="showmobile" :to="basePath('/swap')">
-        <img src="~/assets/sources/logos/logo-mobile.svg" alt="logo" style="--w: 40px">
+      <nuxt-link class="showmobile" :to="basePath('/')">
+        <img src="~/assets/sources/logos/logotype.svg" alt="logo" style="--w: 120px">
       </nuxt-link>
 
       <!-- desktop -->
@@ -17,26 +17,28 @@
         <a
           v-for="(item, i) in dataNavbar" :key="i"
           :class="{active: $route.path.includes(item.to)}"
-          @click="item.name !== 'portfolio' ? $router.push(basePath(item.to)) : ''">
+          @click="item.name !== 'portfolio' ? $router.push(basePath2(item.to)) : ''">
           {{item.name}}
         </a>
       </aside>
 
       <!-- desktop -->
       <aside class="right deletemobile" :class="isLogged ? 'font2' : 'font1'">
-        <v-btn class="btn2">
+        <!-- <v-btn class="btn2">
           <img src="~/assets/sources/logos/honeypot.svg" alt="token" class="aspect" style="--w: 1.533125em">
           <span>${{user.balance}}</span>
-        </v-btn>
+        </v-btn> -->
 
         <!-- connect button -->
         <v-menu bottom offset-y nudge-bottom="10px">
           <template #activator="{ on, attrs }">
             <v-btn
               class="btn2"
+              style="min-width:125px!important;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
-              @click="!isLogged ? $store.dispatch('modalConnect') : ''">
+              @click="!isLogged ? $store.dispatch('modalConnect') : ''"
+              >
               <template v-if="isLogged">
                 <span>{{user.accountId}}</span>
                 <v-icon>mdi-chevron-down</v-icon>
@@ -77,24 +79,12 @@ export default {
     return {
       dataNavbar: [
         {
-          name: "portfolio",
-          to: "/portfolio"
-        },
-        {
           name: "swap",
           to: "/swap"
         },
         {
-          name: "farm",
+          name: "earn",
           to: "/farm-details"
-        },
-        {
-          name: "pools",
-          to: "/pools"
-        },
-        {
-          name: "xhpot",
-          to: "/staking"
         },
       ],
     };

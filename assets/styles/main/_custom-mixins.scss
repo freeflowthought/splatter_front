@@ -64,13 +64,13 @@
   --g: 5px;
   --br: 14.2183px;
   --bs: none;
-  --fw: 700;
   --tt: capitalize !important;
   --ls: normal;
   --lh: 26px;
   --f: initial;
   --t: initial;
   
+  font-weight: 700!important;
   background: var(--bg) !important;
   color: var(--c) !important;
   box-shadow: var(--bs) !important;
@@ -90,7 +90,7 @@
     font-family: var(--ff, var(--font1));
     color: var(--c);
     font-size: var(--fs, 14.2183px);
-    font-weight: var(--fw);
+    font-weight: 700;
     text-transform: var(--tt, initial);
     letter-spacing: var(--ls);
     line-height: var(--lh);
