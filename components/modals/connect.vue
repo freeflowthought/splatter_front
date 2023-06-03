@@ -9,14 +9,23 @@
     </aside>
 
     <v-sheet class="grid" color="transparent">
-      <v-btn plain @click="$store.commit('signIn')">
+      <v-btn plain @click="connectMetamask()">
+        <img src="~/assets/sources/logos/sender-icon.svg" alt="near">
+        
+        <div class="divcol astart" style="gap: 5px">
+          <span class="h12_em bold">metamask</span>
+          <span class="h13_em">metamask.org</span>
+        </div>
+      </v-btn>
+
+      <!-- <v-btn plain @click="$store.commit('signIn')">
         <img src="~/assets/sources/logos/sender-icon.svg" alt="near">
         
         <div class="divcol astart" style="gap: 5px">
           <span class="h12_em bold">connect</span>
           <span class="h13_em">connect.org</span>
         </div>
-      </v-btn>
+      </v-btn> -->
     </v-sheet>
   </v-dialog>
 </template>
@@ -32,6 +41,14 @@ export default {
   mounted() {
   },
   methods: {
+    async connectMetamask() {
+        console.log(this.$metamask.userAccounts)
+      if (this.$metamask.haveMetamask()) {
+        await this.$metamask.init()
+        console.log(this.$metamask.userAccounts)
+        console.log(this.$metamask.userAccount)
+      }
+    },
   }
 };
 </script>
