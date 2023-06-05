@@ -6,7 +6,7 @@
 
       <div class="divcol astart div-title">
         <h1 class="title">
-          Number One Dex On Scroll
+          Local innovate Dex On scroll
         </h1>
         <p class="poppins">
           The next generation Dex incorporated with the fully on-chain DAO to bring product continuous evolution towards the perfection.

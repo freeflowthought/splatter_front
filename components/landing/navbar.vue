@@ -93,15 +93,15 @@ export default {
 
       dataNavbarMobile: [
         {
-          name: "swap",
+          name: "Swap",
           to: "/swap"
         },
         {
-          name: "earn",
+          name: "Earn",
           to: "/farm-details"
         },
         {
-          name: "claim faucet",
+          name: "Claim faucet",
           to: "/faucet"
         },
       ],
