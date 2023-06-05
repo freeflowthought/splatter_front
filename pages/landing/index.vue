@@ -115,7 +115,7 @@
             Community Governance
           </p>
           <p class="description-card">
-            100% on-chain DAO.
+            The first 100% on-chain DAO in web3.
           </p>
         </v-card>
 
