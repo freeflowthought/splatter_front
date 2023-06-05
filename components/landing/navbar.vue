@@ -85,6 +85,10 @@ export default {
           name: "earn",
           to: "app/farm-details"
         },
+        {
+          name: "claim faucet",
+          to: "app/faucet"
+        },
       ],
 
       dataNavbarMobile: [
@@ -95,6 +99,10 @@ export default {
         {
           name: "earn",
           to: "/farm-details"
+        },
+        {
+          name: "claim faucet",
+          to: "/faucet"
         },
       ],
     };
