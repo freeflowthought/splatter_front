@@ -10,7 +10,7 @@
 
     <v-sheet class="grid" color="transparent">
       <v-btn plain @click="connectMetamask()">
-        <img src="~/assets/sources/logos/sender-icon.svg" alt="near">
+        <img src="~/assets/sources/logos/metamask-icon.svg" alt="near">
         
         <div class="divcol astart" style="gap: 5px">
           <span class="h12_em bold">metamask</span>
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     async connectMetamask() {
-        console.log(this.$metamask.userAccounts)
+        console.log(this.$metamask.userAccount)
       if (this.$metamask.haveMetamask()) {
         await this.$metamask.init()
         console.log(this.$metamask.userAccounts)
