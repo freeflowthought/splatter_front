@@ -75,7 +75,7 @@ export default {
     '~/plugins/google-maps.js',
     '~/plugins/vue-debounce.js',
     // services
-    '~/services/metamask.js',
+    // '~/services/near-api',
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules

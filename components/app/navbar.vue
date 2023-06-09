@@ -86,10 +86,6 @@ export default {
           name: "earn",
           to: "/farm-details"
         },
-        {
-          name: "claim faucet",
-          to: "/faucet"
-        },
       ],
     };
   },
