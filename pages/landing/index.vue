@@ -6,10 +6,10 @@
 
       <div class="divcol astart div-title">
         <h1 class="title">
-          Number One Dex On Scroll
+          Local innovate Dex On scroll
         </h1>
         <p class="poppins">
-          Lorem ipsum dolor sit amet consectetur. Viverra quis nec quis hendrerit.
+          The next generation Dex incorporated with the fully on-chain DAO to bring product continuous evolution towards the perfection.
         </p>
         <v-btn class="btn-black">
           Launch App <v-icon>mdi-arrow-right</v-icon>
@@ -102,30 +102,30 @@
         <v-card class="card-check" style="position: relative;">
           <img src="~/assets/sources/images/check_purple.png" alt="Purple Check" class="chechk-img">
           <p class="title-card">
-            Fork-less upgrades
+            Forkless upgrade
           </p>
           <p class="description-card">
-            Lorem ipsum dolor sit amet consectetur. Viverra quis nec quis hendrerit.
+            Safe and transparent smart contract upgrades to make our product unique and competitive.
           </p>
         </v-card>
 
         <v-card class="card-check margin-bottom">
           <img src="~/assets/sources/images/check_blue.png" alt="Blue Check" class="chechk-img">
           <p class="title-card">
-            Fork-less upgrades
+            Community Governance
           </p>
           <p class="description-card">
-            Lorem ipsum dolor sit amet consectetur. Viverra quis nec quis hendrerit.
+            The first 100% on-chain DAO in web3.
           </p>
         </v-card>
 
         <v-card class="card-check">
           <img src="~/assets/sources/images/check_green.png" alt="Green Check" class="chechk-img">
           <p class="title-card">
-            Fork-less upgrades
+            Variable mechanism
           </p>
           <p class="description-card">
-            Lorem ipsum dolor sit amet consectetur. Viverra quis nec quis hendrerit.
+            Variable tokenomics, incentives and other critical features.
           </p>
         </v-card>
       </div>

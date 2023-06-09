@@ -339,6 +339,10 @@
         max-width: 65%;
         text-align: center;
         line-height: 24px;
+
+        @include media(max, 580px){
+          font-size: 14px!important;
+        }
       }
     }
   }
