@@ -47,8 +47,6 @@ export default {
         alert("Please install metamask wallet");
       }
       await this.$metamask.init()
-      console.log(this.$metamask.userAccounts)
-      console.log(this.$metamask.userAccount)
       this.modalConnect = false
     },
   }

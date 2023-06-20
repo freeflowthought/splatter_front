@@ -35,7 +35,7 @@
             {{ item.amount }}
           </span>
 
-          <v-btn class="bold btn-faucet">
+          <v-btn class="bold btn-faucet" @click="claimFaucet(item,index)">
             Faucet
           </v-btn>
         </v-card>
@@ -96,9 +96,14 @@ export default {
     }
   },
   
-  methods: {
+  /* methods: {
+    async claimFaucet(tokenAddress) {
+      console.log(tokenAddress);
+      
+      await this.$ethersProvider.claimFaucetFaucet(tokenAddress);
+    }
 
-  }
+  } */
 };
 </script>
 
