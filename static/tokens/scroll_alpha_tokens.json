@@ -1,0 +1,38 @@
+[
+    {
+        "chainId": 534353,
+        "name": "WETH L2 - ScrollAlphaTestnet",
+        "symbol": "ETH2",
+        "decimals": 18,
+        "address": "0x5300000000000000000000000000000000000004",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+    },
+    {
+        "chainId": 534353,
+        "name": "Binance USD",
+        "symbol": "BUSD",
+        "decimals": 6,
+        "address": "0xb7931C72aE6f65ac8A83BE3bd3D38DD14Ea93279",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+    },
+    {
+        "chainId": 534353,
+        "name": "Tether USD",
+        "symbol": "USDT",
+        "decimals": 6,
+        "address": "0xc6D9F9903Ad46ee23CF30acF2505aBAFcE65b6c0",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+    },
+    {
+        "chainId": 534353,
+        "name": "USDT - MantleTestnet",
+        "symbol": "MTL-USDT",
+        "decimals": 6,
+        "address": "0xc9503F92d1763E464B4B5A110429fFbAd2E6b41f",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+    }
+]

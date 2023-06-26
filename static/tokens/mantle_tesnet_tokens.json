@@ -1,0 +1,41 @@
+[
+    {
+        "chainId": 5001,
+        "name": "USDT - MantleTestnet",
+        "symbol": "MTL-USDT",
+        "decimals": 6,
+        "address": "0xc9503F92d1763E464B4B5A110429fFbAd2E6b41f",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+    },
+    {
+        "chainId": 5001,
+        "name": "AAVE - MantleTestnet",
+        "symbol": "MTL-AAVE",
+        "decimals": 18,
+        "address": "0x2bF55290A9614bABAE879E2Ab66f192eE4DAa0c1",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+    },
+    {
+        "chainId": 5001,
+        "name": "BUSD - MantleTestnet",
+        "symbol": "MTL-BUSD",
+        "decimals": 18,
+        "address": "0xf24b6D4E57134D7CdA14e42566eB6F39E8FCFc3A",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+        
+    },
+    {
+        "chainId": 5001,
+        "name": "CRV - MantleTestnet",
+        "symbol": "MTL-CRV ",
+        "decimals": 18,
+        "address": "0xe0093015eA0b4668eEE7Af278aE56DDA3fCc379b",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+        
+    }
+    
+]
