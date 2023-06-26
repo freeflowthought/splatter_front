@@ -1,0 +1,38 @@
+[
+    {
+        "chainId": 80001,
+        "name": "USDT - MantleTestnet",
+        "symbol": "MTL-USDT",
+        "decimals": 6,
+        "address": "0xc9503F92d1763E464B4B5A110429fFbAd2E6b41f",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+    },
+    {
+        "chainId": 80001,
+        "name": "USDT - MantleTestnet",
+        "symbol": "MTL-USDT",
+        "decimals": 6,
+        "address": "0xc9503F92d1763E464B4B5A110429fFbAd2E6b41f",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+    },
+    {
+        "chainId": 80001,
+        "name": "USDT - MantleTestnet",
+        "symbol": "MTL-USDT",
+        "decimals": 6,
+        "address": "0xc9503F92d1763E464B4B5A110429fFbAd2E6b41f",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+    },
+    {
+        "chainId": 80001,
+        "name": "USDT - MantleTestnet",
+        "symbol": "MTL-USDT",
+        "decimals": 6,
+        "address": "0xc9503F92d1763E464B4B5A110429fFbAd2E6b41f",
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "tags": ["pos", "erc20", "swapable", "metaTx"]
+    }
+]

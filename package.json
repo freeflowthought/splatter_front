@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt" ,
+    "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
@@ -17,9 +17,11 @@
     "@metamask/sdk": "^0.3.0",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/i18n": "^7.3.0",
+    "@uniswap/sdk-core": "^3.2.6",
+    "@uniswap/v3-sdk": "^3.9.0",
     "@walletconnect/web3-provider": "^1.8.0",
     "core-js": "^3.19.3",
-    "ethers": "^6.4.1",
+    "ethers": "^6.6.0",
     "html2canvas": "^1.4.1",
     "near-api-js": "^1.0.0",
     "nuxt": "^2.15.8",
@@ -34,6 +36,7 @@
     "vue2-gmap-custom-marker": "^6.1.0",
     "vue2-google-maps": "^0.10.7",
     "vuetify": "^2.6.1",
+    "wagmi": "^1.2.0",
     "web3modal": "^1.9.9",
     "webpack": "^4.46.0"
   },
@@ -46,6 +49,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^3.1.0",
     "eslint-plugin-vue": "^8.2.0",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "raw-loader": "^4.0.2"
   }
 }
