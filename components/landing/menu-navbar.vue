@@ -67,8 +67,8 @@
         <span class="h10_em clr_inv">Join us on:</span>
 
         <div class="center">
-          <v-btn v-for="(item,i) in dataSocial" :key="i" icon :href="item.url" target="_blank">
-            <img :src="require(`~/assets/sources/icons/${item.icon}.svg`)" alt="social red">
+          <v-btn v-for="(item,i) in dataSocial" :key="i" icon :href="item.url" target="_blank" class="ml-1 mr-1">
+            <img :src="require(`~/assets/sources/icons/${item.icon}.png`)" alt="social red">
           </v-btn>
         </div>
       </template>
@@ -83,9 +83,9 @@ export default {
     return {
       drawer: false,
       dataSocial: [
+        { icon:"discord", url:"https://discord.gg/SDGJx8g5z4" },
         { icon:"twitter", url:"#" },
-        { icon:"instagram", url:"#" },
-        { icon:"twitch", url:"#" }
+        { icon:"telegram", url:"https://web.telegram.org/" }
       ],
     };
   },

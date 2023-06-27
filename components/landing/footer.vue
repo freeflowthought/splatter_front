@@ -8,9 +8,11 @@
           <span class="title-media">
             Telegram
           </span>
-          <span class="user-media">
-            @splatterprotocol 
-          </span>
+          <a target="_blank" href="https://web.telegram.org/">
+            <span class="user-media">
+              @splatterprotocol 
+            </span>
+          </a>
         </div>
 
         <div class="divcol" style="gap: 10px;">
@@ -20,6 +22,17 @@
           <span class="user-media">
             @splatter@gmail.com  
           </span>
+        </div>
+
+        <div class="divcol" style="gap: 10px;">
+          <span class="title-media">
+            Discord
+          </span>
+          <a target="_blank" href="https://discord.gg/SDGJx8g5z4">
+            <span class="user-media">
+              @Click here to go Discord 
+            </span>
+          </a>
         </div>
       </div>
     </div>
