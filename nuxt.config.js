@@ -76,6 +76,7 @@ export default {
     '~/plugins/vue-debounce.js',
     // services
     '~/services/metamask.js',
+    // '~/services/eth-provider.js',
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
