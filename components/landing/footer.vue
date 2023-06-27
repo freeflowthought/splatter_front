@@ -8,11 +8,9 @@
           <span class="title-media">
             Telegram
           </span>
-          <a target="_blank" href="https://web.telegram.org/">
-            <span class="user-media">
-              @splatterprotocol 
-            </span>
-          </a>
+          <span class="user-media">
+            @splatterprotocol 
+          </span>
         </div>
 
         <div class="divcol" style="gap: 10px;">

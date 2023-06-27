@@ -85,7 +85,7 @@ export default {
       dataSocial: [
         { icon:"discord", url:"https://discord.gg/SDGJx8g5z4" },
         { icon:"twitter", url:"#" },
-        { icon:"telegram", url:"https://web.telegram.org/" }
+        { icon:"telegram", url:"#" }
       ],
     };
   },
