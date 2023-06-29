@@ -35,7 +35,7 @@
             {{ item.amount }}
           </span>
 
-          <v-btn class="bold btn-faucet">
+          <v-btn class="bold btn-faucet" @click=" ">
             Faucet
           </v-btn>
         </v-card>
@@ -54,38 +54,34 @@
 export default {
   name: "FaucetPage",
   data() {
+    
     return {
       dataFaucet:[
         {
           icon:"elipse",
-          name:"Dai Stable coin",
+          name:"WETH L2",
           amount:"0.00",
         },
         {
           icon:"elipse",
-          name:"Dai Stable coin",
+          name:"Binance USD",
           amount:"0.00",
         },
         {
           icon:"elipse",
-          name:"Dai Stable coin",
+          name:"Tether USD",
           amount:"0.00",
         },
         {
           icon:"elipse",
-          name:"Dai Stable coin",
+          name:"Aave - Aave",
           amount:"0.00",
         },
         {
           icon:"elipse",
-          name:"Dai Stable coin",
+          name:"Curve DAO Token - CRV",
           amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
+        }
       ]     
     }
   },
@@ -97,7 +93,11 @@ export default {
   },
   
   methods: {
-
+    async claimFaucet(tokenAddress) {
+      await this.$provider.claimFaucet(tokenAddress);
+    }
+    //  posibly to get data?
+    //  get amount
   }
 };
 </script>
