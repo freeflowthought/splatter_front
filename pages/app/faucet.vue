@@ -35,7 +35,7 @@
             {{ item.amount }}
           </span>
 
-          <v-btn class="bold btn-faucet" @click="claimFaucet()">
+          <v-btn class="bold btn-faucet">
             Faucet
           </v-btn>
         </v-card>
@@ -50,40 +50,42 @@
 
 <script>
 // import isMobile from '~/mixins/isMobile'
-import { configureChains, mainnet } from 'wagmi'
-import { publicProvider } from 'wagmi/providers/public'
 
 export default {
   name: "FaucetPage",
   data() {
-    
     return {
       dataFaucet:[
         {
           icon:"elipse",
-          name:"WETH L2",
+          name:"Dai Stable coin",
           amount:"0.00",
         },
         {
           icon:"elipse",
-          name:"Binance USD",
+          name:"Dai Stable coin",
           amount:"0.00",
         },
         {
           icon:"elipse",
-          name:"Tether USD",
+          name:"Dai Stable coin",
           amount:"0.00",
         },
         {
           icon:"elipse",
-          name:"Aave - Aave",
+          name:"Dai Stable coin",
           amount:"0.00",
         },
         {
           icon:"elipse",
-          name:"Curve DAO Token - CRV",
+          name:"Dai Stable coin",
           amount:"0.00",
-        }
+        },
+        {
+          icon:"elipse",
+          name:"Dai Stable coin",
+          amount:"0.00",
+        },
       ]     
     }
   },
@@ -95,11 +97,7 @@ export default {
   },
   
   methods: {
-    async claimFaucet() {
-      await this.$provider.claimFaucet("0xb7931C72aE6f65ac8A83BE3bd3D38DD14Ea93279");
-    }
-    //  posibly to get data?
-    //  get amount
+
   }
 };
 </script>
