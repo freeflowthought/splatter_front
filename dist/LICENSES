@@ -73,6 +73,7 @@
     			 * @license Modernizr 3.0.0pre (Custom Build) | MIT
     			 */
 
+<<<<<<< HEAD
 /**
     		 * @license React
     		 * react-dom.development.js
@@ -82,6 +83,13 @@
     		 * This source code is licensed under the MIT license found in the
     		 * LICENSE file in the root directory of this source tree.
     		 */
+=======
+/*!
+ * Vue.js v2.7.14
+ * (c) 2014-2022 Evan You
+ * Released under the MIT License.
+ */
+>>>>>>> cd925e4d9d489d706f558e6cdf44672c25ea6793
 
 /**
     		 * @license React
