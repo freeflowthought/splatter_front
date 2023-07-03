@@ -35,7 +35,7 @@
             {{ item.amount }}
           </span>
 
-          <v-btn class="bold btn-faucet" @click=" ">
+          <v-btn class="bold btn-faucet" @click="claimFaucet()">
             Faucet
           </v-btn>
         </v-card>
@@ -50,6 +50,8 @@
 
 <script>
 // import isMobile from '~/mixins/isMobile'
+import { configureChains, mainnet } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
 
 export default {
   name: "FaucetPage",
@@ -93,8 +95,8 @@ export default {
   },
   
   methods: {
-    async claimFaucet(tokenAddress) {
-      await this.$provider.claimFaucet(tokenAddress);
+    async claimFaucet() {
+      await this.$provider.claimFaucet("0xb7931C72aE6f65ac8A83BE3bd3D38DD14Ea93279");
     }
     //  posibly to get data?
     //  get amount
