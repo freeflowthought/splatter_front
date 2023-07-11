@@ -53,7 +53,7 @@
 
 // import isMobile from '~/mixins/isMobile'
 const Web3 = require('web3')
-let web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(window.ethereum);
 // const rpcProvider = new ethers.providers.JsonRpcProvider('https://alpha-rpc.scroll.io/l2')
 const signer = metaMaskProvider.getSigner();
 const faucetAbi =[{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]}]
@@ -105,14 +105,15 @@ export default {
   
   methods: {
     async claimFaucet(contracAddress) {
-        const tokenContract = new Web3.Contract(contracAddress, faucetAbi, signer)
+        const tokenContract = new web3.eth.Contract(contracAddress, faucetAbi)
         const tx = await tokenContract.faucet;
         const receipt = await tx.wait();
     },
-    async getTokenBalance(decimals) {
-      let usdcBalance = await usdcContract.balanceOf(this.$metamask.userAccount);
-      usdcBalance = ethers.utils.formatUnits(usdcBalance, decimals);
-      return usdcBalance;
+    async getTokenBalance(contracAddress, decimals) {
+      const tokenContract = new Web3.eth.Contract(contracAddress, faucetAbi)
+      let tokenBalance = await tokenContract.balanceOf.call(this.$metamask.userAccount);
+      tokenBalance = ethers.utils.formatUnits(tokenBalance, decimals);
+      return tokenBalance;
     }
   }
 };
