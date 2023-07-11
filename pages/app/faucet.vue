@@ -54,7 +54,8 @@
 // const rpcProvider = new ethers.providers.JsonRpcProvider('https://alpha-rpc.scroll.io/l2')
 // const signer = metaMaskProvider.getSigner();
 // const faucetAbi =[{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]}]
-
+const Web3 = require('web3')
+ 
 export default {
   name: "FaucetPage",
   data() {
