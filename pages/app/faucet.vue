@@ -50,7 +50,8 @@
 
 <script>
 // import isMobile from '~/mixins/isMobile'
-
+const Web3 = require('web3')
+ 
 export default {
   name: "FaucetPage",
   data() {
