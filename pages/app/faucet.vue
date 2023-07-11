@@ -49,12 +49,14 @@
 </template>
 
 <script>
+//import web3 from '~/store/web3';
+
 // import isMobile from '~/mixins/isMobile'
-// const metaMaskProvider = new ethers.providers.Web3Provider(this.$metamask.$ethereum)
-// const rpcProvider = new ethers.providers.JsonRpcProvider('https://alpha-rpc.scroll.io/l2')
-// const signer = metaMaskProvider.getSigner();
-// const faucetAbi =[{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]}]
 const Web3 = require('web3')
+let web3 = new Web3(Web3.givenProvider);
+// const rpcProvider = new ethers.providers.JsonRpcProvider('https://alpha-rpc.scroll.io/l2')
+const signer = metaMaskProvider.getSigner();
+const faucetAbi =[{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]}]
  
 export default {
   name: "FaucetPage",
@@ -102,8 +104,8 @@ export default {
   },
   
   methods: {
-    /* async claimFaucet(contracAddress) {
-        const tokenContract = new ethers.Contract(contracAddress, faucetAbi, signer)
+    async claimFaucet(contracAddress) {
+        const tokenContract = new Web3.Contract(contracAddress, faucetAbi, signer)
         const tx = await tokenContract.faucet;
         const receipt = await tx.wait();
     },
@@ -111,7 +113,7 @@ export default {
       let usdcBalance = await usdcContract.balanceOf(this.$metamask.userAccount);
       usdcBalance = ethers.utils.formatUnits(usdcBalance, decimals);
       return usdcBalance;
-    } */
+    }
   }
 };
 </script>
