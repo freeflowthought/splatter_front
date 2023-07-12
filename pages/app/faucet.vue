@@ -35,7 +35,7 @@
             {{ item.amount }}
           </span>
 
-          <v-btn class="bold btn-faucet">
+          <v-btn class="bold btn-faucet" @click="claimFaucet">
             Faucet
           </v-btn>
         </v-card>
@@ -49,15 +49,12 @@
 </template>
 
 <script>
-//import web3 from '~/store/web3';
-
-// import isMobile from '~/mixins/isMobile'
+// import dataFaucet from '~/static/tokens/scroll_alpah_tokens.json'
 const Web3 = require('web3')
-const web3 = new Web3(window.ethereum);
+const web3 = new Web3(window.web3.currentProvider);
 // const rpcProvider = new ethers.providers.JsonRpcProvider('https://alpha-rpc.scroll.io/l2')
-const signer = metaMaskProvider.getSigner();
-const faucetAbi =[{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]}]
- 
+
+const faucetAbi = [{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]}]
 export default {
   name: "FaucetPage",
   data() {
@@ -102,17 +99,25 @@ export default {
       title,
     }
   },
-  
+  mounted() {
+  },
   methods: {
-    async claimFaucet(contracAddress) {
-        const tokenContract = new web3.eth.Contract(contracAddress, faucetAbi)
-        const tx = await tokenContract.faucet;
-        const receipt = await tx.wait();
+    getWallets(){
+      web3.eth.getAccounts().then(console.log)
     },
+
+    async claimFaucet() {
+
+        const tokenContract = new web3.eth.Contract(faucetAbi, "0xc6D9F9903Ad46ee23CF30acF2505aBAFcE65b6c0");
+        const tx = await tokenContract.methods.faucet().send;
+        console.log(tx)
+
+    },
+
     async getTokenBalance(contracAddress, decimals) {
       const tokenContract = new Web3.eth.Contract(contracAddress, faucetAbi)
-      let tokenBalance = await tokenContract.balanceOf.call(this.$metamask.userAccount);
-      tokenBalance = ethers.utils.formatUnits(tokenBalance, decimals);
+      const tokenBalance = await tokenContract.balanceOf.call(this.$metamask.userAccount);
+      // tokenBalance = ethers.utils.formatUnits(tokenBalance, decimals);
       return tokenBalance;
     }
   }
