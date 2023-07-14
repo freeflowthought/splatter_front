@@ -23,19 +23,19 @@
           </span>
         </div>
 
-        <v-card v-for="(item,index) in dataFaucet" :key="index" class="card-faucet">
+        <v-card v-for="(item,index) in dataFaucet2" :key="index" class="card-faucet">
           <div class="divrow center" style="gap: 5px;">
-            <img :src="require(`~/assets/sources/tokens/${item.icon}.svg`)" alt="Icon">
+            
             <span class="token-name">
               {{ item.name }}
             </span>
           </div>
 
           <span class="amount">
-            {{ item.amount }}
+            {{ "0.00" }}
           </span>
 
-          <v-btn class="bold btn-faucet" @click="claimFaucet">
+          <v-btn class="bold btn-faucet" @click="claimFaucet(item)">
             Faucet
           </v-btn>
         </v-card>
@@ -49,48 +49,16 @@
 </template>
 
 <script>
-// import dataFaucet from '~/static/tokens/scroll_alpah_tokens.json'
+import dataFaucet from '~/static/tokens/scroll_alpah_tokens.json'
 const Web3 = require('web3')
-const web3 = new Web3(window.web3.currentProvider);
-// const rpcProvider = new ethers.providers.JsonRpcProvider('https://alpha-rpc.scroll.io/l2')
+const web3 = new Web3(window.ethereum);
+const faucetAbi = [{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]}, {"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"balanceOf","inputs":[{"type":"address","name":"account","internalType":"address"}]}]
 
-const faucetAbi = [{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]}]
 export default {
   name: "FaucetPage",
   data() {
     return {
-      dataFaucet:[
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-      ]     
+      dataFaucet2: dataFaucet
     }
   },
   head() {
@@ -100,22 +68,28 @@ export default {
     }
   },
   mounted() {
+    dataFaucet.forEach(async element =>  {
+      await this.getTokenBalance(element.contracAddress, element.decimals)
+    });
   },
   methods: {
-    getWallets(){
-      web3.eth.getAccounts().then(console.log)
-    },
 
-    async claimFaucet() {
+    async claimFaucet(item) {
+        const tokenContract = new web3.eth.Contract(faucetAbi, item.address);
+        try {
+          await tokenContract.methods.faucet().send({from: this.$metamask.userAccount})
+          
+          //
+        } catch (error) {
 
-        const tokenContract = new web3.eth.Contract(faucetAbi, "0xc6D9F9903Ad46ee23CF30acF2505aBAFcE65b6c0");
-        const tx = await tokenContract.methods.faucet().send;
-        console.log(tx)
+          // modal with error message
 
+        }
+        
     },
 
     async getTokenBalance(contracAddress, decimals) {
-      const tokenContract = new Web3.eth.Contract(contracAddress, faucetAbi)
+      const tokenContract = new Web3.eth.Contract(faucetAbi,contracAddress)
       const tokenBalance = await tokenContract.balanceOf.call(this.$metamask.userAccount);
       // tokenBalance = ethers.utils.formatUnits(tokenBalance, decimals);
       return tokenBalance;
