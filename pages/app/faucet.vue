@@ -22,7 +22,7 @@
             .
           </span>
         </div>
-
+        
         <v-card v-for="(item,index) in dataFaucet2" :key="index" class="card-faucet">
           <div class="divrow center" style="gap: 5px;">
             
@@ -32,7 +32,7 @@
           </div>
 
           <span class="amount">
-            {{ "0.00" }}
+            {{ getTableBalance(index) }}
           </span>
 
           <v-btn class="bold btn-faucet" @click="claimFaucet(item)">
@@ -52,13 +52,14 @@
 import dataFaucet from '~/static/tokens/scroll_alpah_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
-const faucetAbi = [{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]}, {"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"balanceOf","inputs":[{"type":"address","name":"account","internalType":"address"}]}]
+const faucetAbi = [{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"balanceOf","inputs":[{"type":"address","name":"account","internalType":"address"}]}]
 
 export default {
   name: "FaucetPage",
   data() {
     return {
-      dataFaucet2: dataFaucet
+      dataFaucet2: dataFaucet,
+      databalance: []
     }
   },
   head() {
@@ -69,7 +70,13 @@ export default {
   },
   mounted() {
     dataFaucet.forEach(async element =>  {
-      await this.getTokenBalance(element.contracAddress, element.decimals)
+      try {
+        const balance = await this.getTokenBalance(element.address, element.decimals)
+        this.databalance.push(balance)
+        console.log(this.databalance, "------")
+      } catch (error) {
+        console.log(error)
+      }
     });
   },
   methods: {
@@ -89,10 +96,14 @@ export default {
     },
 
     async getTokenBalance(contracAddress, decimals) {
-      const tokenContract = new Web3.eth.Contract(faucetAbi,contracAddress)
-      const tokenBalance = await tokenContract.balanceOf.call(this.$metamask.userAccount);
-      // tokenBalance = ethers.utils.formatUnits(tokenBalance, decimals);
+      const tokenContract = new web3.eth.Contract(faucetAbi, contracAddress);
+      let tokenBalance = await tokenContract.methods.balanceOf("0x0f5762fe3aeB6e59ccDdAd1A202C9391c62BA509").call();
+      tokenBalance = tokenBalance/Math.pow(10,decimals);
       return tokenBalance;
+    },
+
+    getTableBalance(pos) {
+      return this.databalance[pos]
     }
   }
 };

@@ -17,18 +17,21 @@ const metamask = {
   userCurrentChainId : undefined,
   userAccounts : undefined,
   userAccount : undefined,
+
   init: async function getWallets() {
     this.userAccounts = await ethereum.request({ method: 'eth_requestAccounts', params: [] }).catch((err) => {
       if (err.code === 4001) {
-        // EIP-1193 userRejectedRequest error
-        // If this happens, the user rejected the connection request.
+
         console.log('Please connect to MetaMask.');
         alert("Connection rejected, please connect your metamask wallet")
       } else {
          console.error(err);
       }
     });
-      
+    localStorage.setItem("wallets", this.userAccounts[0])
+    localStorage.setItem("chainId", ethereum.chainId)
+    
+
     this.userAccount = this.userAccounts[0]
     this.userCurrentChainId = ethereum.chainId
   },
@@ -39,6 +42,14 @@ const metamask = {
     }
     return false
   },
+
+ /*  refreshAccounts: (accounts) => {if (accounts.length > 0) {
+    updateWallet(accounts)
+  } else {
+    // if length 0, user is disconnected
+    setWallet(initialState)
+  }},
+ */
   changeUserCurrentChain: async (desiredChainId) => {
     try {
 
@@ -58,6 +69,10 @@ const metamask = {
       
     }
   },
+  
+
+
+
   /* // it would be nice to take network params and choose wich to provide with some switch statement
   addNetworkToMetamask: async (desiredChain) => {
     // poligon chain 0x89

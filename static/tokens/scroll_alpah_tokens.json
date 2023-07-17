@@ -5,7 +5,8 @@
         "symbol": "ETH2",
         "decimals": 18,
         "address": "0x5300000000000000000000000000000000000004",
-        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg"
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "balance": 0 
     },
     {
         "chainId": 534353,
@@ -13,7 +14,8 @@
         "symbol": "BUSD",
         "decimals": 18,
         "address": "0xb7931C72aE6f65ac8A83BE3bd3D38DD14Ea93279",
-        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg"
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "balance": 0 
     },
     {
         "chainId": 534353,
@@ -21,7 +23,8 @@
         "symbol": "BUSD",
         "decimals": 6,
         "address": "0xc6D9F9903Ad46ee23CF30acF2505aBAFcE65b6c0",
-        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg"
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "balance": 0 
     },
     {
         "chainId": 534353,
@@ -29,7 +32,8 @@
         "symbol": "Aave",
         "decimals": 18,
         "address": "0x8A2a3B5397aa5dEa0A60970542CF7bA2c0ab1A27",
-        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg"
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "balance": 0 
     },
     {
         "chainId": 534353,
@@ -37,6 +41,7 @@
         "symbol": "CRV",
         "decimals": 18,
         "address": "0xe40D362E058FcC7687eea951d5B89e1Ab3EeB1f0",
-        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg"
+        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
+        "balance": 0 
     }
 ]
