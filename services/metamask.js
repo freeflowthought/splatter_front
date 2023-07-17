@@ -28,7 +28,9 @@ const metamask = {
          console.error(err);
       }
     });
-    localStorage.setItem("wallets", this.userAccounts[0])
+    localStorage.accountId = this.userAccounts[0]
+    localStorage.setItem("userConnected", "true")
+    localStorage.setItem("wallet", this.userAccounts[0])
     localStorage.setItem("chainId", ethereum.chainId)
     
 
@@ -43,13 +45,15 @@ const metamask = {
     return false
   },
 
- /*  refreshAccounts: (accounts) => {if (accounts.length > 0) {
-    updateWallet(accounts)
-  } else {
-    // if length 0, user is disconnected
-    setWallet(initialState)
-  }},
- */
+  updateWallet() {
+
+  },
+
+  updateChainId() {
+
+  },
+
+
   changeUserCurrentChain: async (desiredChainId) => {
     try {
 

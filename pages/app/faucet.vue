@@ -84,7 +84,7 @@ export default {
     async claimFaucet(item) {
         const tokenContract = new web3.eth.Contract(faucetAbi, item.address);
         try {
-          await tokenContract.methods.faucet().send({from: this.$metamask.userAccount})
+          await tokenContract.methods.faucet().send({from: localStorage.getItem("wallet")})
           
           //
         } catch (error) {
@@ -97,7 +97,7 @@ export default {
 
     async getTokenBalance(contracAddress, decimals) {
       const tokenContract = new web3.eth.Contract(faucetAbi, contracAddress);
-      let tokenBalance = await tokenContract.methods.balanceOf("0x0f5762fe3aeB6e59ccDdAd1A202C9391c62BA509").call();
+      let tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
       tokenBalance = tokenBalance/Math.pow(10,decimals);
       return tokenBalance;
     },
