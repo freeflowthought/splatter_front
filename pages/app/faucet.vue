@@ -73,7 +73,6 @@ export default {
       try {
         const balance = await this.getTokenBalance(element.address, element.decimals)
         this.databalance.push(balance)
-        console.log(this.databalance, "------")
       } catch (error) {
         console.log(error)
       }
@@ -82,6 +81,9 @@ export default {
   methods: {
 
     async claimFaucet(item) {
+      if (window.ethereum.networkVersion !== "534353") {
+        this.$metamask.changeUserCurrentChain()
+      }else {
         const tokenContract = new web3.eth.Contract(faucetAbi, item.address);
         try {
           await tokenContract.methods.faucet().send({from: localStorage.getItem("wallet")})
@@ -91,7 +93,7 @@ export default {
 
           // modal with error message
 
-        }
+        }}
         
     },
 
@@ -104,7 +106,8 @@ export default {
 
     getTableBalance(pos) {
       return this.databalance[pos]
-    }
+    },
+
   }
 };
 </script>

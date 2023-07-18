@@ -50,6 +50,9 @@ export default {
       console.log(this.$metamask.userAccounts)
       console.log(this.$metamask.userAccount)
       this.modalConnect = false
+      localStorage.setItem("isLogged", true)
+        localStorage.setItem("", true)
+
     },
   }
 };
