@@ -139,7 +139,7 @@
     border-top-right-radius: 0px!important;
     border-bottom-right-radius: 0px!important;
   }
-
+  
   .data-table-faucet td:nth-child(2) {
     border-left: none;
     border-right: none;
@@ -153,6 +153,10 @@
     border-left: none;
     border-top-left-radius: 0px!important;
     border-bottom-left-radius: 0px!important;
+  }
+
+  .data-table-faucet tr {
+    background-color: transparent!important;
   }
 }
 
