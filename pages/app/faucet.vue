@@ -26,8 +26,8 @@
             </div>
           </template>
 
-          <template #[`item.amount`]="{ item }">
-            <span class="span-amount">{{ item.amount }}</span>
+          <template>
+            <span class="span-amount">{{ getTableBalance(item) }}</span>
           </template>
 
           <template #[`item.actions`]="{ item }">
