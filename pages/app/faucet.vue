@@ -11,7 +11,8 @@
       <div class="card-container">
         <v-data-table
         :headers="headerFaucet"
-        :items="dataFaucet2"
+        :items="dataFaucet"
+        :balances="databalance"
         :no-data-text="'No hay datos disponibles'"
         :no-results-text="'No se encontraron resultados'"
         hide-default-footer
@@ -26,7 +27,7 @@
             </div>
           </template>
 
-          <template #[`item.amount`]="{ item }">
+          <template #[`item.balance`]="{ item }">
             <span class="span-amount">{{ item.balance }}</span>
           </template>
 
@@ -59,7 +60,7 @@ export default {
     return {
       headerFaucet: [
         { value: "name", text: "Assets", align: "start", sortable: false },
-        { value: "amount", text: "Balance", align: "center", sortable: false },
+        { value: "balance", text: "Balance", align: "center", sortable: false },
         { text: '', value: 'actions', sortable: false, align:'end' },
       ],
       /* dataFaucet:[
@@ -94,7 +95,7 @@ export default {
           amount:"0.00",
         },
       ],  */    
-      dataFaucet2: dataFaucet,
+      dataFaucet,
       databalance: []
     }
   },
