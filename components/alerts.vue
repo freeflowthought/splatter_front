@@ -6,19 +6,19 @@
       transition="slide-Y-reverse-transition"
       :style="`
         --color-snackbar: ${item.color};
-        --bg-snackbar: ${item.key === 'success' ? '#072C13'
-        : item.key === 'warning' ? '#332500'
-        : item.key === 'cancel' ? '#1F1316'
+        --bg-snackbar: ${item.key === 'success' ? '#E1D8D1'
+        : item.key === 'warning' ? '#E1D8D1'
+        : item.key === 'cancel' ? '#E1D8D1'
         : ''}`
       "
     >
       <div class="center font3" style="gap: 8px">
         <v-icon :color="item.color" size="1.375em">{{ item.icon }}</v-icon>
-        <span class="hspan" :style="`--fs: 1em; --c: ${item.color}`">{{$t(item.message)}}</span>
+        <span class="hspan" style="--fs: 1em; --c: #2D3748">{{$t(item.message)}}</span>
       </div>
       
       <v-btn icon @click="dataAlerts.splice(i, 1)">
-        <v-icon :color="item.color" size="1.1875em">mdi-close</v-icon>
+        <v-icon color="#2D3748" size="1.1875em">mdi-close</v-icon>
       </v-btn>
     </v-snackbar>
   </div>
