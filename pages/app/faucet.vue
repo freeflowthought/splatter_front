@@ -60,7 +60,7 @@ export default {
       headerFaucet: [
         { value: "name", text: "Assets", align: "start", sortable: false },
         { value: "amount", text: "Balance", align: "center", sortable: false },
-        { text: '', value: 'actions', sortable: false, align:'center' },
+        { text: '', value: 'actions', sortable: false, align:'end' },
       ],
 
       dataFaucet:[
