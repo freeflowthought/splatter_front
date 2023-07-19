@@ -47,6 +47,7 @@
   .card-container{
     max-width: 825px!important;
     width: 100%;
+    padding-inline: 10px;
 
     .titles-container{
       display: flex;
@@ -70,29 +71,88 @@
       width: 100%;
       height: 65px;
       margin-bottom: 20px;
-
-      .token-name{
-        font-family: var(--font1)!important;
-        font-weight: 700!important;
-        
-        @include media(max, 800px){font-size: 12px!important;}
-      }
-
-      .amount{
-        font-family: var(--font1)!important;
-        font-weight: 700!important;
-        color: rgba(#000000, 0.5);
-
-        @include media(max, 800px){font-size: 12px!important;}
-      }
-
-      .btn-faucet{
-        background-color: #A194F1;
-        border: 1px solid #000000;
-        width: 80px;
-        height: 40px;
-        min-height: 40px;
-      }
     }
   }
+
+  .btn-faucet{
+    background-color: #A194F1;
+    border: 1px solid #000000;
+    width: 80px;
+    height: 40px;
+    min-height: 40px;
+
+    @include media(max, 600px){
+      width: 60px;
+    }
+    
+    span{
+      font-weight: 600!important;
+    }
+  }
+
+  .mobile-gap{
+    @include media(max, 600px){
+      gap: 5px!important;
+    }
+  }
+
+  .span-coin-name{
+    font-size: max(18px, 1em)!important;
+
+    @include media(max, 600px){
+      font-size: max(14px, 1em)!important;
+    }
+  }
+  .span-amount{
+    color: rgba(#000000, 0.6);
+    font-size: max(18px, 1em)!important;
+
+    @include media(max, 600px){
+      font-size: max(14px, 1em)!important;
+    }
+  }
+
+  .data-table-faucet th {
+    color: rgba(#000000, 0.66);
+    font-size: max(16px, 1em)!important;
+
+    @include media(max, 600px){
+      font-size: max(14px, 1em)!important;
+      padding-inline: 5px!important;
+    }
+  }
+
+  .data-table-faucet td {
+    background-color: #E1D8D1;
+    border: 1px solid #000000;
+    border-bottom: 1px solid #000000!important;
+    border-radius: 15px!important;
+    padding-block: 10px!important;
+
+    @include media(max, 600px){
+      padding-inline: 5px!important;
+    }
+  }
+  
+  .data-table-faucet td:first-child {
+    border-right: none;
+    border-top-right-radius: 0px!important;
+    border-bottom-right-radius: 0px!important;
+  }
+
+  .data-table-faucet td:nth-child(2) {
+    border-left: none;
+    border-right: none;
+    border-top-left-radius: 0px!important;
+    border-bottom-left-radius: 0px!important;
+    border-top-right-radius: 0px!important;
+    border-bottom-right-radius: 0px!important;
+  }
+  
+  .data-table-faucet td:nth-child(3) {
+    border-left: none;
+    border-top-left-radius: 0px!important;
+    border-bottom-left-radius: 0px!important;
+  }
 }
+
