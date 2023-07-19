@@ -5,11 +5,11 @@
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
       <nuxt-link class="deletemobile" :to="basePath('/')">
-        <img src="~/assets/sources/logos/logotype.svg" alt="logo" style="--w: 148px">
+        <img src="~/assets/sources/logos/logo_black.svg" alt="logo" style="--w: 148px">
       </nuxt-link>
       <!-- mobile -->
       <nuxt-link class="showmobile" :to="basePath('/')">
-        <img src="~/assets/sources/logos/logotype.svg" alt="logo" style="--w: 120px">
+        <img src="~/assets/sources/logos/logo_black.svg" alt="logo" style="--w: 120px">
       </nuxt-link>
 
       <!-- desktop -->

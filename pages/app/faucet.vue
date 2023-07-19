@@ -31,7 +31,7 @@
           </template>
 
           <template #[`item.actions`]="{ item }">
-            <v-btn class="btn-faucet" @click="open(item)">
+            <v-btn class="btn-faucet" @click="openAlert(item)">
               <span>
                 Faucet
               </span>
@@ -116,6 +116,9 @@ export default {
     });
   },
   methods: {
+    openAlert(item){
+      return this.$alert("success", 'Transaction approved ')
+    },
 
     async claimFaucet(item) {
       if (window.ethereum.networkVersion !== "534353") {

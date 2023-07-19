@@ -4,7 +4,7 @@
     <AppCustomeDrawer :model="drawer" @update="drawer = $event">
       <template #header>
         <a class="center" @click="$router.push(basePath('/')); $scrollTo('home')">
-          <img src="~/assets/sources/logos/logo.svg" alt="logo" style="--w: 100%">
+          <img src="~/assets/sources/logos/mobile_gradient_logo.svg" alt="logo" style="--w: 90%">
         </a>
         
         <!-- connect button -->
