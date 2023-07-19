@@ -1,7 +1,7 @@
 <template>
   <div id="faucet">
     <section class="center divcol fwrap">
-      <div class="divcol center" style="padding-inline: 15px; margin-bottom: 30px;">
+      <div class="divcol center" style="padding-inline: 15px; margin-bottom: 0px;">
         <h1 class="faucet-title">Faucet</h1>
         <p class="sub-title maxw">
           With testnet Faucet you can get free assets to test the Splatter protocol
@@ -9,36 +9,35 @@
       </div>
 
       <div class="card-container">
-        <div class="titles-container">
-          <span class="sub-title">
-            Assets
-          </span>
+        <v-data-table
+        :headers="headerFaucet"
+        :items="dataFaucet"
+        :no-data-text="'No hay datos disponibles'"
+        :no-results-text="'No se encontraron resultados'"
+        hide-default-footer
+        mobile-breakpoint="-1"
+        class="data-table-faucet"
+        style=""
+        >
+          <template #[`item.name`]="{ item }">
+            <div class="jstart mobile-gap" style="gap: 10px;">
+              <img :src="require(`~/assets/sources/tokens/${item.icon}.svg`)" alt="Icon"> 
+              <span class="bold span-coin-name">{{ item.name }}</span>
+            </div>
+          </template>
 
-          <span class="sub-title">
-            Balance
-          </span>
+          <template #[`item.amount`]="{ item }">
+            <span class="span-amount">{{ item.amount }}</span>
+          </template>
 
-          <span style="color:transparent;">
-            .
-          </span>
-        </div>
-        
-        <v-card v-for="(item,index) in dataFaucet2" :key="index" class="card-faucet">
-          <div class="divrow center" style="gap: 5px;">
-            
-            <span class="token-name">
-              {{ item.name }}
-            </span>
-          </div>
-
-          <span class="amount">
-            {{ getTableBalance(index) }}
-          </span>
-
-          <v-btn class="bold btn-faucet" @click="claimFaucet(item)">
-            Faucet
-          </v-btn>
-        </v-card>
+          <template #[`item.actions`]="{ item }">
+            <v-btn class="btn-faucet" @click="open(item)">
+              <span>
+                Faucet
+              </span>
+            </v-btn>
+          </template>
+        </v-data-table>
       </div>
 
       <div class="img-container">
@@ -58,8 +57,46 @@ export default {
   name: "FaucetPage",
   data() {
     return {
-      dataFaucet2: dataFaucet,
-      databalance: []
+      headerFaucet: [
+        { value: "name", text: "Assets", align: "start", sortable: false },
+        { value: "amount", text: "Balance", align: "center", sortable: false },
+        { text: '', value: 'actions', sortable: false, align:'center' },
+      ],
+
+      dataFaucet:[
+        {
+          icon:"elipse",
+          name:"Dai Stable coin",
+          amount:"0.00",
+        },
+        {
+          icon:"elipse",
+          name:"Dai Stable coin",
+          amount:"0.00",
+        },
+        {
+          icon:"elipse",
+          name:"Dai Stable coin",
+          amount:"0.00",
+        },
+        {
+          icon:"elipse",
+          name:"Dai Stable coin",
+          amount:"0.00",
+        },
+        {
+          icon:"elipse",
+          name:"Dai Stable coin",
+          amount:"0.00",
+        },
+        {
+          icon:"elipse",
+          name:"Dai Stable coin",
+          amount:"0.00",
+        },
+      ]     
+      // dataFaucet2: dataFaucet,
+      // databalance: []
     }
   },
   head() {
