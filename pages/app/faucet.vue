@@ -11,7 +11,7 @@
       <div class="card-container">
         <v-data-table
         :headers="headerFaucet"
-        :items="dataFaucet"
+        :items="dataFaucet2"
         :no-data-text="'No hay datos disponibles'"
         :no-results-text="'No se encontraron resultados'"
         hide-default-footer
@@ -21,13 +21,13 @@
         >
           <template #[`item.name`]="{ item }">
             <div class="jstart mobile-gap" style="gap: 10px;">
-              <img :src="require(`~/assets/sources/tokens/${item.icon}.svg`)" alt="Icon"> 
+              <!-- <img :src="require(`~/assets/sources/tokens/${item.icon}.svg`)" alt="Icon">  -->
               <span class="bold span-coin-name">{{ item.name }}</span>
             </div>
           </template>
 
-          <template>
-            <span class="span-amount">{{ getTableBalance(item) }}</span>
+          <template #[`item.amount`]="{ item }">
+            <span class="span-amount">{{ item.balance }}</span>
           </template>
 
           <template #[`item.actions`]="{ item }">
@@ -62,8 +62,7 @@ export default {
         { value: "amount", text: "Balance", align: "center", sortable: false },
         { text: '', value: 'actions', sortable: false, align:'center' },
       ],
-
-      dataFaucet:[
+      /* dataFaucet:[
         {
           icon:"elipse",
           name:"Dai Stable coin",
@@ -94,9 +93,9 @@ export default {
           name:"Dai Stable coin",
           amount:"0.00",
         },
-      ]     
-      // dataFaucet2: dataFaucet,
-      // databalance: []
+      ],  */    
+      dataFaucet2: dataFaucet,
+      databalance: []
     }
   },
   head() {
@@ -105,15 +104,19 @@ export default {
       title,
     }
   },
-  mounted() {
-    dataFaucet.forEach(async element =>  {
+  async mounted() {
+    for(let i= 0; i< dataFaucet.length; i ++) {
       try {
-        const balance = await this.getTokenBalance(element.address, element.decimals)
-        this.databalance.push(balance)
+        const balance = await this.getTokenBalance(dataFaucet[i].address, dataFaucet[i].decimals)
+        dataFaucet[i][dataFaucet.balance] = balance;
+        console.log(balance)
+        console.log(dataFaucet[i][dataFaucet.balance])
+
       } catch (error) {
         console.log(error)
       }
-    });
+    }
+    
   },
   methods: {
 
