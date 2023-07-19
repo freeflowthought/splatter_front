@@ -211,6 +211,10 @@ export default {
       config.module.rules.push({
         exclude: /(node_modules)/,
       })
+      config.node = {
+        fs: 'empty'
+      }
     },
+    
   },
 }
