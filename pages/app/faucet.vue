@@ -128,11 +128,13 @@ export default {
       }else {
         const tokenContract = new web3.eth.Contract(faucetAbi, item.address);
         try {
-          await tokenContract.methods.faucet().send({from: localStorage.getItem("wallet")})
-          
+          await tokenContract.methods.faucet().send({from: localStorage.getItem("wallet")}).then(() => {
+            this.$alert("success", 'Transaction approved for ' + item.name , { persistent: true })
+            this.$forceUpdate()
+          })
           //
         } catch (error) {
-
+          this.$alert("fatal", error , { persistent: true })
           // modal with error message
 
         }}
