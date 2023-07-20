@@ -32,7 +32,7 @@
           </template>
 
           <template #[`item.actions`]="{ item }">
-            <v-btn class="btn-faucet" @click="openAlert(item)">
+            <v-btn class="btn-faucet" @click="claimFaucet(item)">
               <span>
                 Faucet
               </span>

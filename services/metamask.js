@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import { MetaMaskSDK } from '@metamask/sdk';
-import alertsVue from '~/components/alerts.vue';
 
 const MMSDK = new MetaMaskSDK(
   {
@@ -91,7 +90,7 @@ const metamask = {
           ]
       });
     } catch (err) {
-      alertsVue()
+
     } 
   },
 }
