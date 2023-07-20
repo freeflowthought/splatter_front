@@ -12,7 +12,6 @@
         <v-data-table
         :headers="headerFaucet"
         :items="dataFaucet"
-        :balances="databalance"
         :no-data-text="'No hay datos disponibles'"
         :no-results-text="'No se encontraron resultados'"
         hide-default-footer
@@ -27,8 +26,8 @@
             </div>
           </template>
 
-          <template #[`item.balance`]="{ item }">
-            <span class="span-amount">{{ item.balance }}</span>
+          <template #[`item.balance`]="{ index }">
+            <span class="span-amount">{{ getTableBalance(index) }}</span>
           </template>
 
           <template #[`item.actions`]="{ item }">
@@ -106,18 +105,17 @@ export default {
     }
   },
   async mounted() {
+    // console.log('dataFaucet', dataFaucet)
     for(let i= 0; i< dataFaucet.length; i ++) {
       try {
-        const balance = await this.getTokenBalance(dataFaucet[i].address, dataFaucet[i].decimals)
-        dataFaucet[i][dataFaucet.balance] = balance;
-        console.log(balance)
-        console.log(dataFaucet[i][dataFaucet.balance])
-
+        const tokenContract = new web3.eth.Contract(faucetAbi, dataFaucet[i].address);
+        const tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
+        this.databalance.push(Number(tokenBalance/Math.pow(10, i.decimals)));
       } catch (error) {
         console.log(error)
       }
     }
-    
+    // console.log('databalance', this.databalance)
   },
   methods: {
     openAlert(item){
@@ -141,15 +139,15 @@ export default {
         
     },
 
-    async getTokenBalance(contracAddress, decimals) {
-      const tokenContract = new web3.eth.Contract(faucetAbi, contracAddress);
-      let tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
-      tokenBalance = tokenBalance/Math.pow(10,decimals);
-      return tokenBalance;
-    },
+    // async getTokenBalance(contracAddress, decimals) {
+    //   const tokenContract = new web3.eth.Contract(faucetAbi, contracAddress);
+    //   const tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
+    //   console.log('tokenBalance', tokenBalance)
+    //   return Number(tokenBalance/Math.pow(10, decimals));
+    // },
 
     getTableBalance(pos) {
-      return this.databalance[pos]
+      return isNaN(this.databalance[pos]) ? 0.00 : this.databalance[pos]; 
     },
 
   }
