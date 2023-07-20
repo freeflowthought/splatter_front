@@ -136,7 +136,7 @@ export default {
         } catch (error) {
           this.$alert("fatal", error , { persistent: true })
           // modal with error message
-
+          
         }}
         
     },

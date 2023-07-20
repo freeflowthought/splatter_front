@@ -46,11 +46,11 @@ const metamask = {
   },
 
   updateWallet() {
-
+    localStorage.setItem("wallet", this.userAccounts[0])
   },
 
   updateChainId() {
-
+    this.userCurrentChainId = ethereum.chainId
   },
 
 
@@ -93,6 +93,7 @@ const metamask = {
 
     } 
   },
+  watch: {}
 }
 
 Vue.prototype.$metamask = metamask
