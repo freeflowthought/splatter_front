@@ -37,6 +37,19 @@
 
 
       <template #content>
+            <v-btn
+              class="btn2"
+              style="position: absolute; width: 80%; margin-left: 10%; margin-top: 160px;"
+              v-bind="isLogged ? attrs : ''"
+              v-on="isLogged ? on : ''"
+              @click="isLogged ? $store.dispatch('modalConnect') : ''"
+              >
+              <template v-if="isLogged">
+                <span>Login</span>
+              </template>
+              
+              <template v-else>{{ wallet.substring(1, 20) }} ...</template>
+            </v-btn>
         <v-expansion-panels focusable accordion class="anim_moveleft">
           <v-expansion-panel
             v-for="(item, i) in $parent.dataNavbar" :key="i"
@@ -87,7 +100,14 @@ export default {
         { icon:"twitter", url:"#" },
         { icon:"telegram", url:"#" }
       ],
+      wallet: localStorage.getItem("wallet") === null ? "Login": localStorage.getItem("wallet"),
+      isLogged: true,
     };
+  },
+  created() {
+    if (localStorage.getItem("wallet") !== null) {
+      this.isLogged = false;
+    }
   },
   methods: {
   },

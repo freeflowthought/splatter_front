@@ -37,26 +37,15 @@
               style="min-width:125px!important;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
-              @click="!isLogged ? $store.dispatch('modalConnect') : ''"
+              @click="isLogged ? $store.dispatch('modalConnect') : ''"
               >
               <template v-if="isLogged">
-                <span>{{user.accountId}}</span>
-                <v-icon>mdi-chevron-down</v-icon>
+                <span>Login</span>
               </template>
               
-              <template v-else>Login</template>
+              <template v-else>{{ wallet.substring(1, 20) }} ...</template>
             </v-btn>
           </template>
-
-          <v-list class="font2" color="var(--secondary)" style="--c:#fff">
-            <v-list-item-group active-class="activeClass">
-              <v-list-item
-                v-for="(item,i) in dataMenuLogin" :key="i"
-                @click="item.key==='logout' ? $store.commit('signOut') : $router.push(basePath(key))">
-                <v-list-item-title>{{item.name}}</v-list-item-title>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
         </v-menu>
       </aside>
 
@@ -79,30 +68,27 @@ export default {
     return {
       dataNavbar: [
         {
-          name: "swap",
+          name: "Swap",
           to: "/swap"
         },
         {
-          name: "earn",
+          name: "Earn",
           to: "/farm-details"
         },
         {
-          name: "claim faucet",
+          name: "Claim faucet",
           to: "/faucet"
         },
       ],
+      wallet: localStorage.getItem("wallet") === null ? "Login": localStorage.getItem("wallet"),
+      isLogged: true,
     };
   },
-  // created() {
-  //   const theme = localStorage.getItem("theme");
-  //   if (theme) {
-  //     setTimeout(() => {
-  //       this.$store.commit("switchTheme", theme);
-  //     }, 100);
-  //   }
-  //   if (theme === "light") {this.themeButton = true}
-  //   else {this.themeButton = false}
-  // },
+  created() {
+    if (localStorage.getItem("wallet") !== null) {
+      this.isLogged = false;
+    }
+  },
   methods: {
     // changeTheme(theme) {
     //   this.$store.commit("switchTheme", theme);

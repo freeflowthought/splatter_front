@@ -93,6 +93,13 @@ const metamask = {
 
     } 
   },
+  disconnect() {
+    // Disconnect the MetaMask manually (this may not be supported in all cases)
+    if (window.ethereum && window.ethereum.disconnect) {
+      window.ethereum.disconnect();
+      localStorage.removeItem("wallet")
+    }
+  },
   watch: {}
 }
 

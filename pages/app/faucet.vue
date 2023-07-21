@@ -1,57 +1,71 @@
 <template>
-  <div id="faucet">
-    <section class="center divcol fwrap">
-      <div class="divcol center" style="padding-inline: 15px; margin-bottom: 0px;">
-        <h1 class="faucet-title">Faucet</h1>
-        <p class="sub-title maxw">
-          With testnet Faucet you can get free assets to test the Splatter protocol
-        </p>
-      </div>
+	<div id="faucet">
+		<section class="center divcol fwrap">
+			<div
+				class="divcol center"
+				style="padding-inline: 15px; margin-bottom: 0px"
+			>
+				<h1 class="faucet-title">Faucet</h1>
+				<p class="sub-title maxw">
+					With testnet Faucet you can get free assets to test the Splatter
+					protocol
+				</p>
+			</div>
 
-      <div class="card-container">
-        <v-data-table
-        :headers="headerFaucet"
-        :items="dataFaucet"
-        :no-data-text="'No hay datos disponibles'"
-        :no-results-text="'No se encontraron resultados'"
-        hide-default-footer
-        mobile-breakpoint="-1"
-        class="data-table-faucet"
-        style=""
-        >
-          <template #[`item.name`]="{ item }">
-            <div class="jstart mobile-gap" style="gap: 10px;">
-              <!-- <img :src="require(`~/assets/sources/tokens/${item.icon}.svg`)" alt="Icon">  -->
-              <span class="bold span-coin-name">{{ item.name }}</span>
-            </div>
-          </template>
+			<div class="card-container">
+				<v-data-table
+					:headers="headerFaucet"
+					:items="dataFaucet"
+					:no-data-text="'No available data'"
+					:no-results-text="'Data not found'"
+					hide-default-footer
+					mobile-breakpoint="-1"
+					class="data-table-faucet"
+					style=""
+				>
+					<template #[`item.name`]="{ item }">
+						<div class="jstart mobile-gap" style="gap: 10px">
+							<!-- <img :src="require(`~/assets/sources/tokens/${item.icon}.svg`)" alt="Icon">  -->
+							<span class="bold span-coin-name">{{ item.name }}</span>
+						</div>
+					</template>
 
-          <template #[`item.balance`]="{ index, item }">
-            <span class="span-amount">{{ getTableBalance(index, item.decimals)|numericFormat(numericFormatConfig) }}</span>
-          </template>
+					<template #[`item.balance`]="{ index, item }">
+						<span class="span-amount">{{
+							getTableBalance(index, item.decimals)
+								| numericFormat(numericFormatConfig)
+						}}</span>
+					</template>
 
-          <template #[`item.actions`]="{ item }">
-            <v-btn class="btn-faucet" :disabled="disabled" :loading="loading" @click="claimFaucet(item)">
-              <span>
-                Faucet
-              </span>
-            </v-btn>
-          </template>
-        </v-data-table>
-      </div>
+					<template #[`item.actions`]="{ item }">
+						<v-btn
+							class="btn-faucet"
+							:disabled="disabled"
+							:loading="loading"
+							@click="claimFaucet(item)"
+						>
+							<span> Faucet </span>
+						</v-btn>
+					</template>
+				</v-data-table>
+			</div>
 
-      <div class="img-container">
-        <img src="~/assets/sources/images/circleBottom.png" alt="Circle" class="circle-bottom">
-      </div>
-    </section>
-  </div>
+			<div class="img-container">
+				<img
+					src="~/assets/sources/images/circleBottom.png"
+					alt="Circle"
+					class="circle-bottom"
+				/>
+			</div>
+		</section>
+	</div>
 </template>
 
 <script>
 import dataFaucet from '~/static/tokens/scroll_alpah_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
-const faucetAbi = [{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"faucet","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"balanceOf","inputs":[{"type":"address","name":"account","internalType":"address"}]}]
+const faucetAbi = [{ "type": "function", "stateMutability": "nonpayable", "outputs": [], "name": "faucet", "inputs": [] }, { "type": "function", "stateMutability": "view", "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }], "name": "balanceOf", "inputs": [{ "type": "address", "name": "account", "internalType": "address" }] }]
 
 export default {
   name: "FaucetPage",
@@ -60,7 +74,7 @@ export default {
       headerFaucet: [
         { value: "name", text: "Assets", align: "start", sortable: false },
         { value: "balance", text: "Balance", align: "center", sortable: false },
-        { text: '', value: 'actions', sortable: false, align:'end' },
+        { text: '', value: 'actions', sortable: false, align: 'end' },
       ],
       /* dataFaucet:[
         {
@@ -93,18 +107,18 @@ export default {
           name:"Dai Stable coin",
           amount:"0.00",
         },
-      ],  */    
+      ],  */
       dataFaucet,
       databalance: [],
       numericFormatConfig: {
-					decimalSeparator: ".",
-					fractionDigitsMax: 2,
-					fractionDigitsMin: 2,
-					fractionDigitsSeparator: "",
-					thousandsDigitsSeparator: ","
-				},
-        disabled: false,
-        loading: false,
+        decimalSeparator: ".",
+        fractionDigitsMax: 2,
+        fractionDigitsMin: 2,
+        fractionDigitsSeparator: "",
+        thousandsDigitsSeparator: ","
+      },
+      disabled: false,
+      loading: false,
 
     }
   },
@@ -114,47 +128,39 @@ export default {
       title,
     }
   },
-  async mounted() {
-    // console.log('dataFaucet', dataFaucet)
-    for(let i= 0; i< dataFaucet.length; i ++) {
-      try {
-        const tokenContract = new web3.eth.Contract(faucetAbi, dataFaucet[i].address);
-        const tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
-        this.databalance.push(tokenBalance);
-      } catch (error) {
-        console.log(error)
-      }
-    }
+  mounted() {
+    this.fetch();
   },
   methods: {
-    openAlert(item){
-      return this.$alert("success", 'Transaction approved ')
-    },
-
     async claimFaucet(item) {
       if (window.ethereum.networkVersion !== "534353") {
         this.$metamask.changeUserCurrentChain()
-      }else {
+      } else {
         this.disabled = true;
         this.loading = true;
 
         const tokenContract = new web3.eth.Contract(faucetAbi, item.address);
         try {
-          await tokenContract.methods.faucet().send({from: localStorage.getItem("wallet")}).then(() => {
-            this.$alert("success", 'Transaction approved for ' + item.name,{ persistent: true })
+          await tokenContract.methods.faucet().send({ from: localStorage.getItem("wallet") }).then(() => {
+            this.$alert("success", 'Transaction approved for ' + item.name, { persistent: true })
             this.disabled = false;
             this.loading = false;
-
+            setTimeout(() => {
+              this.databalance = [];
+              this.fetch();
+              this.$forceUpdate();
+            }, 500);
           })
           //
         } catch (error) {
           this.disabled = false;
           this.loading = false;
 
-          this.$alert("cancel","You have to wait at least 24 hours since the last time you received before asking for " + item.name + " faucet" , { persistent: true })
-          
-        }}
-        
+          this.$alert("cancel", "You have to wait at least 24 hours since the last time you received before asking for " + item.name + " faucet", { persistent: true })
+
+        }
+      }
+
     },
 
     // async getTokenBalance(contracAddress, decimals) {
@@ -164,8 +170,20 @@ export default {
     //   return Number(tokenBalance/Math.pow(10, decimals));
     // },
 
+    async fetch() {
+      for (let i = 0; i < dataFaucet.length; i++) {
+        try {
+          const tokenContract = new web3.eth.Contract(faucetAbi, dataFaucet[i].address);
+          const tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
+          this.databalance.push(tokenBalance);
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    },
+
     getTableBalance(pos, decimals) {
-      return isNaN(this.databalance[pos]) ? 0.00 : this.databalance[pos]/Math.pow(10, decimals);
+      return isNaN(this.databalance[pos]) ? 0.00 : this.databalance[pos] / Math.pow(10, decimals);
     },
 
   }
