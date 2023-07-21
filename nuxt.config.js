@@ -76,6 +76,7 @@ export default {
     '~/plugins/vue-debounce.js',
     // services
     '~/services/metamask.js',
+    '~/plugins/format-number.js',
     // '~/services/eth-provider.js',
   ],
 

@@ -26,12 +26,12 @@
             </div>
           </template>
 
-          <template #[`item.balance`]="{ index }">
-            <span class="span-amount">{{ getTableBalance(index) }}</span>
+          <template #[`item.balance`]="{ index, item }">
+            <span class="span-amount">{{ getTableBalance(index, item.decimals)|numericFormat(numericFormatConfig) }}</span>
           </template>
 
           <template #[`item.actions`]="{ item }">
-            <v-btn class="btn-faucet" @click="claimFaucet(item)">
+            <v-btn class="btn-faucet" :disabled="disabled" :loading="loading" @click="claimFaucet(item)">
               <span>
                 Faucet
               </span>
@@ -95,7 +95,17 @@ export default {
         },
       ],  */    
       dataFaucet,
-      databalance: []
+      databalance: [],
+      numericFormatConfig: {
+					decimalSeparator: ".",
+					fractionDigitsMax: 2,
+					fractionDigitsMin: 2,
+					fractionDigitsSeparator: "",
+					thousandsDigitsSeparator: ","
+				},
+        disabled: false,
+        loading: false,
+
     }
   },
   head() {
@@ -110,12 +120,11 @@ export default {
       try {
         const tokenContract = new web3.eth.Contract(faucetAbi, dataFaucet[i].address);
         const tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
-        this.databalance.push(Number(tokenBalance/Math.pow(10, i.decimals)));
+        this.databalance.push(tokenBalance);
       } catch (error) {
         console.log(error)
       }
     }
-    // console.log('databalance', this.databalance)
   },
   methods: {
     openAlert(item){
@@ -126,16 +135,23 @@ export default {
       if (window.ethereum.networkVersion !== "534353") {
         this.$metamask.changeUserCurrentChain()
       }else {
+        this.disabled = true;
+        this.loading = true;
+
         const tokenContract = new web3.eth.Contract(faucetAbi, item.address);
         try {
           await tokenContract.methods.faucet().send({from: localStorage.getItem("wallet")}).then(() => {
-            this.$alert("success", 'Transaction approved for ' + item.name , { persistent: true })
-            this.$forceUpdate()
+            this.$alert("success", 'Transaction approved for ' + item.name,{ persistent: true })
+            this.disabled = false;
+            this.loading = false;
+
           })
           //
         } catch (error) {
-          this.$alert("fatal", error , { persistent: true })
-          // modal with error message
+          this.disabled = false;
+          this.loading = false;
+
+          this.$alert("cancel","You have to wait at least 24 hours since the last time you received before asking for " + item.name + " faucet" , { persistent: true })
           
         }}
         
@@ -148,8 +164,8 @@ export default {
     //   return Number(tokenBalance/Math.pow(10, decimals));
     // },
 
-    getTableBalance(pos) {
-      return isNaN(this.databalance[pos]) ? 0.00 : this.databalance[pos]; 
+    getTableBalance(pos, decimals) {
+      return isNaN(this.databalance[pos]) ? 0.00 : this.databalance[pos]/Math.pow(10, decimals);
     },
 
   }
