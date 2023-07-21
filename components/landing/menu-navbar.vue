@@ -105,6 +105,7 @@ export default {
     };
   },
   created() {
+    this.$metamask.updateWallet();
     if (localStorage.getItem("wallet") !== null) {
       this.isLogged = false;
     }

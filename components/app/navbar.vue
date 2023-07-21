@@ -37,7 +37,7 @@
               style="min-width:125px!important;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
-              @click="isLogged ? $store.dispatch('modalConnect') : ''"
+              @click="isLogged ? $store.dispatch('modalConnect') : disconect()"
               >
               <template v-if="isLogged">
                 <span>Login</span>
@@ -85,6 +85,7 @@ export default {
     };
   },
   created() {
+    this.$metamask.updateWallet();
     if (localStorage.getItem("wallet") !== null) {
       this.isLogged = false;
     }
@@ -94,6 +95,11 @@ export default {
     //   this.$store.commit("switchTheme", theme);
     //   this.themeButton = !this.themeButton;
     // },
+    disconect() {
+      console.log('disconect')
+      this.$metamask.disconnect();
+      this.$forceUpdate();
+    },
   },
 };
 </script>

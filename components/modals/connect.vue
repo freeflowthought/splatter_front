@@ -42,17 +42,20 @@ export default {
   },
   methods: {
     async connectMetamask() {
-        console.log(this.$metamask.userAccount)
+      // console.log(this.$metamask.userAccount)
       if (!this.$metamask.haveMetamask()) {
         alert("Please install metamask wallet");
       }
-      await this.$metamask.init()
-      console.log(this.$metamask.userAccounts)
-      console.log(this.$metamask.userAccount)
-      this.modalConnect = false
-      localStorage.setItem("isLogged", true)
-        localStorage.setItem("", true)
-
+      await this.$metamask.init().then(() => {
+          // Refresh the site after a successful login
+          this.modalConnect = false
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error('Error initializing MetaMask:', error);
+        });
+      // console.log(this.$metamask.userAccounts)
+      // console.log(this.$metamask.userAccount)
     },
   }
 };

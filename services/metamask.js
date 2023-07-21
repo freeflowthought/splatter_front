@@ -18,24 +18,28 @@ const metamask = {
   userAccounts : undefined,
   userAccount : undefined,
 
-  init: async function getWallets() {
-    this.userAccounts = await ethereum.request({ method: 'eth_requestAccounts', params: [] }).catch((err) => {
-      if (err.code === 4001) {
-
-        console.log('Please connect to MetaMask.');
-        alert("Connection rejected, please connect your metamask wallet")
-      } else {
-         console.error(err);
-      }
+  init: function() {
+    return new Promise((resolve, reject) => {
+      ethereum
+        .request({ method: 'eth_requestAccounts', params: [] })
+        .then((userAccounts) => {
+          localStorage.accountId = userAccounts[0];
+          localStorage.setItem("wallet", userAccounts[0]);
+          localStorage.setItem("chainId", ethereum.chainId);
+          this.userAccount = userAccounts[0];
+          this.userCurrentChainId = ethereum.chainId;
+          resolve(userAccounts[0]); // Resolve the promise with the account address
+        })
+        .catch((err) => {
+          if (err.code === 4001) {
+            console.log('Please connect to MetaMask.');
+            alert("Connection rejected, please connect your MetaMask wallet");
+          } else {
+            console.error(err);
+          }
+          reject(err); // Reject the promise with the error
+        });
     });
-    localStorage.accountId = this.userAccounts[0]
-    localStorage.setItem("userConnected", "true")
-    localStorage.setItem("wallet", this.userAccounts[0])
-    localStorage.setItem("chainId", ethereum.chainId)
-    
-
-    this.userAccount = this.userAccounts[0]
-    this.userCurrentChainId = ethereum.chainId
   },
   haveMetamask: () => {
     if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {
@@ -44,6 +48,7 @@ const metamask = {
     }
     return false
   },
+  
 
   updateWallet() {
     localStorage.setItem("wallet", this.userAccounts[0])
@@ -94,11 +99,8 @@ const metamask = {
     } 
   },
   disconnect() {
-    // Disconnect the MetaMask manually (this may not be supported in all cases)
-    if (window.ethereum && window.ethereum.disconnect) {
       window.ethereum.disconnect();
       localStorage.removeItem("wallet")
-    }
   },
   watch: {}
 }
