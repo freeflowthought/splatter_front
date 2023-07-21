@@ -51,7 +51,14 @@ const metamask = {
   
 
   updateWallet() {
-    localStorage.setItem("wallet", this.userAccounts[0])
+    ethereum.on('accountsChanged', (accounts) => {
+      // Handle the updated accounts array
+      // In most cases, it will have a single address, but it can be more in some situations (e.g., hardware wallet)
+      this.currentAddress = accounts[0];
+      console.log('New address:', this.currentAddress);
+      this.currentAddress === undefined ? localStorage.removeItem("wallet") : localStorage.setItem("wallet", this.currentAddress);
+      window.location.reload();
+    });
   },
 
   updateChainId() {

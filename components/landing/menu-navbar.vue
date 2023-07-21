@@ -104,9 +104,9 @@ export default {
       isLogged: true,
     };
   },
-  created() {
-    this.$metamask.updateWallet();
+  mounted() {
     if (localStorage.getItem("wallet") !== null) {
+      this.$metamask.updateWallet();
       this.isLogged = false;
     }
   },

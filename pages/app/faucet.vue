@@ -171,13 +171,15 @@ export default {
     // },
 
     async fetch() {
-      for (let i = 0; i < dataFaucet.length; i++) {
-        try {
-          const tokenContract = new web3.eth.Contract(faucetAbi, dataFaucet[i].address);
-          const tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
-          this.databalance.push(tokenBalance);
-        } catch (error) {
-          console.log(error)
+      if(localStorage.getItem("wallet") !== null){
+        for (let i = 0; i < dataFaucet.length; i++) {
+          try {
+            const tokenContract = new web3.eth.Contract(faucetAbi, dataFaucet[i].address);
+            const tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
+            this.databalance.push(tokenBalance);
+          } catch (error) {
+            console.log(error)
+          }
         }
       }
     },

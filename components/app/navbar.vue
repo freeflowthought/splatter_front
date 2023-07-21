@@ -61,6 +61,7 @@
 import computeds from '~/mixins/computeds'
 import menuLogin from '~/mixins/menuLogin'
 
+
 export default {
   name: "NavbarComponent",
   mixins: [computeds, menuLogin],
@@ -82,19 +83,22 @@ export default {
       ],
       wallet: localStorage.getItem("wallet") === null ? "Login": localStorage.getItem("wallet"),
       isLogged: true,
+      walletValue: localStorage.getItem("wallet"),
     };
   },
-  created() {
-    this.$metamask.updateWallet();
+  mounted() {
     if (localStorage.getItem("wallet") !== null) {
+      this.$metamask.updateWallet();
       this.isLogged = false;
     }
   },
+  // created() {
+  //   this.$metamask.updateWallet();
+  //   if (localStorage.getItem("wallet") !== null) {
+  //     this.isLogged = false;
+  //   }
+  // },
   methods: {
-    // changeTheme(theme) {
-    //   this.$store.commit("switchTheme", theme);
-    //   this.themeButton = !this.themeButton;
-    // },
     disconect() {
       console.log('disconect')
       this.$metamask.disconnect();

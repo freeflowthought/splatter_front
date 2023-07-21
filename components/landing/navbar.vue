@@ -99,9 +99,22 @@ export default {
       isLogged: true,
     };
   },
-  created() {
-    this.$metamask.updateWallet();
+  watch: {
+    // Watch for changes in the 'wallet' key
+    wallet: function (newValue) {
+      // This will be called whenever the 'wallet' key in localStorage changes
+      // newValue will be the updated value of the 'wallet' key
+      if (!newValue) {
+        // If 'wallet' becomes falsy (e.g., user logs out or clears the wallet data), then refresh the site
+        // You can replace this with any other action you want to perform when the wallet data is removed
+        location.reload();
+      }
+    },
+  },
+  
+  mounted() {
     if (localStorage.getItem("wallet") !== null) {
+      this.$metamask.updateWallet();
       this.isLogged = false;
     }
   },
@@ -110,11 +123,6 @@ export default {
     //   this.$store.commit("switchTheme", theme);
     //   this.themeButton = !this.themeButton;
     // },
-    disconect() {
-      console.log('disconect')
-      this.$metamask.disconnect();
-      this.$forceUpdate();
-    },
   },
 };
 </script>
