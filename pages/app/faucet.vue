@@ -155,9 +155,7 @@ export default {
         } catch (error) {
           this.disabled = false;
           this.loading = false;
-
-          this.$alert("cancel", "You have to wait at least 24 hours since the last time you received before asking for " + item.name + " faucet", { persistent: true })
-
+          this.$alert("cancel", "Wait at least 24 hours to claim again " + item.name + " faucet", { persistent: true })
         }
       }
 

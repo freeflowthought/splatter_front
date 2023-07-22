@@ -1,15 +1,6 @@
 [
     {
         "chainId": 534353,
-        "name": "WETH L2",
-        "symbol": "ETH2",
-        "decimals": 18,
-        "address": "0x5300000000000000000000000000000000000004",
-        "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
-        "balance": 0 
-    },
-    {
-        "chainId": 534353,
         "name": "Binance USD",
         "symbol": "BUSD",
         "decimals": 18,
