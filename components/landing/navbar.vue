@@ -37,7 +37,7 @@
               style="min-width:125px!important;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
-              @click="isLogged ? $store.dispatch('modalConnect') : disconect()"
+              @click="isLogged ? $store.dispatch('modalConnect') : ''"
               >
               <template v-if="isLogged">
                 <span>Login</span>
