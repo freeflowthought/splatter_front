@@ -68,7 +68,7 @@ export default {
     return {
       dataNavbar: [
         {
-          name: "Cwap",
+          name: "Swap",
           to: "app/swap"
         },
         {
