@@ -78,33 +78,29 @@ const metamask = {
     } catch (switchError) {
       // The network has not been added to MetaMask
       if (switchError.code === 4902) {
-        alert("Please add ScrollAplhaChain to Metamask");
-        this.addTestnetToMetamask()
+        try {
+          await ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+                {
+                  chainId: '0x82751', 
+                  chainName:'Scroll Alpha Testnet',
+                  rpcUrls:['https://scroll-alpha-public.unifra.io'],                   
+                  blockExplorerUrls:['https://blockscout.scroll.io'],  
+                  nativeCurrency: { 
+                    symbol:'ETH',   
+                    decimals: 18
+                  }     
+                }
+              ]
+          });
+        } catch (err) {
+          
+        }
       }
     }
   },
   
-  addTestnetToMetamask: async () => {
-    try {
-      await ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [
-            {
-              chainId: '0x82751', 
-              chainName:'Scroll Alpha Testnet',
-              rpcUrls:['https://scroll-alpha-public.unifra.io'],                   
-              blockExplorerUrls:['https://blockscout.scroll.io'],  
-              nativeCurrency: { 
-                symbol:'ETH',   
-                decimals: 18
-              }     
-            }
-          ]
-      });
-    } catch (err) {
-
-    } 
-  },
   disconnect() {
       window.ethereum.disconnect();
       localStorage.removeItem("wallet")
