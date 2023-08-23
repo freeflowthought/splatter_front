@@ -162,6 +162,7 @@ export default {
     }
   },
   mounted() {
+    this.$metamask.checkConnection()
     this.styles()
     window.addEventListener("resize", this.styles)
   },
