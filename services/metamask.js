@@ -14,6 +14,7 @@ const MMSDK = new MetaMaskSDK(
 const ethereum = MMSDK.getProvider();
 
 const metamask = {
+  userConnected : false,
   userCurrentChainId : undefined,
   userAccounts : undefined,
   userAccount : undefined,
@@ -41,6 +42,20 @@ const metamask = {
         });
     });
   },
+
+  connect() {
+    ethereum
+      .request({ method: 'eth_requestAccounts' })
+      .then(handleAccountsChanged)
+      .catch((err) => {
+        if (err.code === 4001) {
+          console.log('Please connect to MetaMask.');
+        } else {
+          console.error(err);
+        }
+      });
+  },
+
   haveMetamask: () => {
     if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {
       console.log('MetaMask is installed!');
@@ -49,6 +64,21 @@ const metamask = {
     return false
   },
   
+  checkConnection() {
+    ethereum.request({ method: 'eth_accounts' }).then(handleAccountsChanged).catch(console.error);
+  },
+
+  handleAccountsChanged(accounts) {
+    console.log(accounts);
+  
+    if (accounts.length === 0) {
+      //  $('#connection-status').innerText = "You're not connected to MetaMask";
+      this.userConnected = false
+    } else if (accounts[0] !== currentAccount) {
+      currentAccount = accounts[0];
+      this.userConnected = true
+    }
+  },
 
   updateWallet() {
     ethereum.on('accountsChanged', (accounts) => {
@@ -100,9 +130,9 @@ const metamask = {
       }
     }
   },
-  
+
   disconnect() {
-      window.ethereum.disconnect();
+      ethereum.disconnect();
       localStorage.removeItem("wallet")
   },
   watch: {}
