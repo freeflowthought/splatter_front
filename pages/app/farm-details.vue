@@ -316,10 +316,6 @@ export default {
       title,
     }
   },
-  mounted() {
-    this.$metamask.checkConnection()
-    console.log(this.$metamask.userConnected)
-  },
   computed: {
     filterDataFarms() {
       // filters
@@ -337,6 +333,10 @@ export default {
 
       return filters
     }
+  },
+  mounted() {
+    this.$metamask.checkConnection()
+    console.log(this.$metamask.userConnected)
   },
   methods: {
     changeLayoutCells() {
