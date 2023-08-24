@@ -171,6 +171,10 @@ export default {
       title,
     }
   },
+  mounted() {
+    this.$metamask.checkConnection()
+    this.$metamask.detectMetamask()
+  },
   methods: {
     setMaxValue() {
       this.inputNumber = 9999;

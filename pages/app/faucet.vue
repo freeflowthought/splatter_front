@@ -130,6 +130,7 @@ export default {
   },
   mounted() {
     this.$metamask.checkConnection()
+    this.$metamask.detectMetamask()
     this.fetch();
   },
   methods: {

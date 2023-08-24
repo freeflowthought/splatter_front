@@ -163,6 +163,7 @@ export default {
   },
   mounted() {
     this.$metamask.checkConnection()
+    this.$metamask.detectMetamask()
     this.styles()
     window.addEventListener("resize", this.styles)
   },

@@ -46,7 +46,7 @@ const metamask = {
   connect() {
     ethereum
       .request({ method: 'eth_requestAccounts' })
-      .then(handleAccountsChanged)
+      .then(this.handleAccountsChanged)
       .catch((err) => {
         if (err.code === 4001) {
           console.log('Please connect to MetaMask.');
@@ -56,26 +56,27 @@ const metamask = {
       });
   },
 
-  haveMetamask: () => {
+  detectMetamask () {
     if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {
-      console.log('MetaMask is installed!');
-      return true
+      window.ethereum.on('accountsChanged', this.handleAccountsChanged);
+      this.checkConnection()
     }
-    return false
   },
   
   checkConnection() {
-    ethereum.request({ method: 'eth_accounts' }).then(handleAccountsChanged).catch(console.error);
+    ethereum.request({ method: 'eth_accounts' }).then(this.handleAccountsChanged).catch(console.error);
   },
 
   handleAccountsChanged(accounts) {
+    console.log("-----------------------")
     console.log(accounts);
+    console.log("-----------------------")
   
     if (accounts.length === 0) {
       //  $('#connection-status').innerText = "You're not connected to MetaMask";
       this.userConnected = false
-    } else if (accounts[0] !== currentAccount) {
-      currentAccount = accounts[0];
+    } else if (accounts[0] !== this.currentAccount) {
+      this.currentAccount = accounts[0];
       this.userConnected = true
     }
   },
