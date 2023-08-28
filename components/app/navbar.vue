@@ -81,13 +81,15 @@ export default {
           to: "/faucet"
         },
       ],
-      wallet: this.$metamask.userConnected ? this.$metamask.userAccount : "Login",
+      wallet: "Login",
       isLogged: true,
       walletValue: "",
     };
   },
-  mounted() {
-    console.log(this.$metamask.userAccount, this.$metamask.userConnected)
+  async mounted() {
+    console.log(this.wallet)
+    this.wallet = await this.$metamask.checkConnection()
+    console.log(this.wallet)
     this.walletValue = this.$metamask.userAccount
   },
 };
