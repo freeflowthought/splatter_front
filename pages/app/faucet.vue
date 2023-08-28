@@ -129,11 +129,13 @@ export default {
     }
   },
   mounted() {
-    this.$metamask.checkConnection()
-    this.$metamask.detectMetamask()
+    this.checkConnection()
     this.fetch();
   },
   methods: {
+    async checkConnection(){
+      await this.$metamask.checkConnection()
+    },
     async claimFaucet(item) {
       if (window.ethereum.networkVersion !== "534353") {
         this.$metamask.changeUserCurrentChain()

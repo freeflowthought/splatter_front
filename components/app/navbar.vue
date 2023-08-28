@@ -81,23 +81,15 @@ export default {
           to: "/faucet"
         },
       ],
-      wallet: localStorage.getItem("wallet") === null ? "Login": localStorage.getItem("wallet"),
+      wallet: this.$metamask.userConnected ? this.$metamask.userAccount : "Login",
       isLogged: true,
-      walletValue: localStorage.getItem("wallet"),
+      walletValue: "",
     };
   },
   mounted() {
-    if (localStorage.getItem("wallet") !== null) {
-      this.$metamask.updateWallet();
-      this.isLogged = false;
-    }
+    console.log(this.$metamask.userAccount, this.$metamask.userConnected)
+    this.walletValue = this.$metamask.userAccount
   },
-  // created() {
-  //   this.$metamask.updateWallet();
-  //   if (localStorage.getItem("wallet") !== null) {
-  //     this.isLogged = false;
-  //   }
-  // },
 };
 </script>
 
