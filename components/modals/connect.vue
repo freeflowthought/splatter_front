@@ -43,10 +43,10 @@ export default {
   methods: {
     async connectMetamask() {
       // console.log(this.$metamask.userAccount)
-      if (!this.$metamask.haveMetamask()) {
+      /* if (!this.$metamask.haveMetamask()) {
         alert("Please install metamask wallet");
-      }
-      await this.$metamask.init().then(() => {
+      } */
+      await this.$metamask.connect().then(() => {
           // Refresh the site after a successful login
           this.modalConnect = false
           window.location.reload();

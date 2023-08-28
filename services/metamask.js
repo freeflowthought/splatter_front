@@ -43,8 +43,8 @@ const metamask = {
     });
   },
 
-  connect() {
-    ethereum
+  async connect() {
+    await ethereum
       .request({ method: 'eth_requestAccounts' })
       .then(this.handleAccountsChanged)
       .catch((err) => {
