@@ -68,24 +68,22 @@ const metamask = {
   async checkConnection() {
     window.ethereum.on('accountsChanged', this.handleAccountsChanged);
     const accounts = await ethereum.request({ method: 'eth_accounts' })
-    console.log(accounts)
-    console.log(accounts)
 
     this.handleAccountsChanged(accounts)
   },
 
   handleAccountsChanged(accounts) {
-    if (accounts.length === 0) {
-      //  $('#connection-status').innerText = "You're not connected to MetaMask";
-      this.userConnected = false
-      console.log(this.userConnected)
-      console.log("--------- should be false ---------")
+    console.log(accounts);
+    console.log(accounts);
+    console.log(accounts);
+    console.log("handle accounts --------------");
 
-    } else if (accounts[0] !== this.currentAccount) {
-      this.currentAccount = accounts[0];
+    if (accounts.length === 0) {
+      this.userAccount = undefined;
+      this.userConnected = false
+    } else if (accounts[0] !== this.userAccount) {
+      this.userAccount = accounts[0];
       this.userConnected = true
-      console.log(this.userConnected)
-      console.log("--------- should be true ---------")
     }
   },
 

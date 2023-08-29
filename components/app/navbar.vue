@@ -43,7 +43,7 @@
                 <span>Login</span>
               </template>
               
-              <template v-else>{{ wallet.substring(1, 20) }} ...</template>
+              <template v-else>{{ truncatedWallet }} ...</template>
             </v-btn>
           </template>
         </v-menu>
@@ -83,15 +83,21 @@ export default {
       ],
       wallet: "Login",
       isLogged: true,
-      walletValue: "",
+
     };
   },
   async mounted() {
-    console.log(this.wallet)
-    this.wallet = await this.$metamask.checkConnection()
-    console.log(this.wallet)
-    this.walletValue = this.$metamask.userAccount
+    await this.$metamask.checkConnection()
+    if(this.$metamask.userAccount !== undefined) {
+      this.wallet = this.$metamask.userAccount
+      this.isLogged = false
+    }
   },
+  computed: {
+    truncatedWallet() {
+      return this.wallet.substring(1, 20);
+    }
+  }
 };
 </script>
 
