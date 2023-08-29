@@ -1,7 +1,7 @@
 <template>
   <div id="farm-details">
     <!-- if not logged -->
-    <div v-if="!this.$metamask.userConnected" class="divcol center tcenter align font1 nopevents maxsize_w">
+    <div v-if="!userConnected" class="divcol center tcenter align font1 nopevents maxsize_w">
       <img src="~/assets/sources/icons/wallet-empty.png" alt="empty icon" style="--w: 13.4375em">
       <span class="h9_em bold mt-5 mb-2">You haven't connected your wallet.</span>
       <span class="hspan" style="--fs: max(13px, 1em)">Connect to view eligible farms.</span>
@@ -184,6 +184,7 @@ export default {
   mixins: [computeds],
   data() {
     return {
+      userConnected: false,
       search:'',
       hideProfits: false,
       profits: {
@@ -336,7 +337,9 @@ export default {
   },
   mounted() {
     this.$metamask.checkConnection()
+    console.log("----------connected-----------")
     console.log(this.$metamask.userConnected)
+    console.log("----------connected-----------")
   },
   methods: {
     changeLayoutCells() {

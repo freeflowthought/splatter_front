@@ -14,7 +14,7 @@ const MMSDK = new MetaMaskSDK(
 const ethereum = MMSDK.getProvider();
 
 const metamask = {
-  userConnected : undefined,
+  userConnected : false,
   userCurrentChainId : undefined,
   userAccounts : undefined,
   userAccount : undefined,
