@@ -108,7 +108,7 @@ const metamask = {
     try {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x82751' }],
+        params: [{ chainId: '0x8274f' }],
       });
       
       window.location.reload();
@@ -120,10 +120,10 @@ const metamask = {
             method: 'wallet_addEthereumChain',
             params: [
                 {
-                  chainId: '0x82751', 
-                  chainName:'Scroll Alpha Testnet',
-                  rpcUrls:['https://scroll-alpha-public.unifra.io'],                   
-                  blockExplorerUrls:['https://blockscout.scroll.io'],  
+                  chainId: '0x8274f', 
+                  chainName:'Scroll Sepolia',
+                  rpcUrls:['https://scroll-sepolia.blockpi.network/v1/rpc/public'],                   
+                  blockExplorerUrls:['https://sepolia-blockscout.scroll.io'],  
                   nativeCurrency: { 
                     symbol:'ETH',   
                     decimals: 18
