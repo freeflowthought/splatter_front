@@ -1,7 +1,7 @@
 <template>
   <div id="farm-details">
     <!-- if not logged -->
-    <div v-if="!this.userConnected" class="divcol center tcenter align font1 nopevents maxsize_w">
+    <div v-if="!userConnected" class="divcol center tcenter align font1 nopevents maxsize_w">
       <img src="~/assets/sources/icons/wallet-empty.png" alt="empty icon" style="--w: 13.4375em">
       <span class="h9_em bold mt-5 mb-2">You haven't connected your wallet.</span>
       <span class="hspan" style="--fs: max(13px, 1em)">Connect to view eligible farms.</span>
@@ -178,8 +178,12 @@
 
 <script>
 import computeds from '~/mixins/computeds'
-// router: 0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C
-// factory: 0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545
+import routerV2ABI from '~/static/abis/routerv2.json'
+import factoryABI from '~/static/abis/factory.json'
+const Web3 = require('web3')
+const web3 = new Web3(window.ethereum);
+const routerAddress = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
+const factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
 
 export default {
   name: "FarmDetailsPage",
@@ -337,8 +341,8 @@ export default {
       return filters
     }
   },
-  mounted() {
-    this.$metamask.checkConnection()
+  async mounted() {
+    await this.$metamask.checkConnection()
     this.userConnected = this.$metamask.userConnected
   },
   methods: {
@@ -361,21 +365,42 @@ export default {
         this.tabsFilter_model = 0
       }, 100);
     },
-
-    // factory things
-    // addLiquidity
-    // removeLiquidity
-    //  
-    //
-    //
-    //
-    //
-    newLiquidityPoll(){
+    // create pool
+    async addLiquidity(
+      tokenA, 
+      tokenB, 
+      amountADesired, 
+      amountBDesired, 
+      amountAMin, 
+      amountBMin, 
+      to, 
+      deadline,
+    ){
+      const routerContract = new web3.eth.Contract(routerV2ABI, routerAddress);
+      await routerContract.methods.methodName(
+        tokenA, 
+        tokenB, 
+        amountADesired, 
+        amountBDesired, 
+        amountAMin, 
+        amountBMin, 
+        to, 
+        deadline,
+      ).call({ from: this.$metamask.userAccount })
+    }, 
+    addLiquidityETH(){
 
     },
-    availablePair() {
+    getAvailablePairs() {
       
-    }
+    },
+    createNewPair() {
+      
+    },
+    async createNewPool() {
+      const factoryContract = new web3.eth.Contract(factoryABI, factoryAddress);
+      await factoryContract.methods.methodName().send({ from: this.$metamask.userAccount })
+    },
 
   }
 };
