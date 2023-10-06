@@ -93,7 +93,16 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/i18n',
+    '@nuxtjs/apollo',
   ],
+
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+      }
+    }
+  },
 
   // we3-nuxt: https://www.npmjs.com/package/nuxt-web3
   publicRuntimeConfig: {
@@ -216,6 +225,6 @@ export default {
         fs: 'empty'
       }
     },
-    
+
   },
 }

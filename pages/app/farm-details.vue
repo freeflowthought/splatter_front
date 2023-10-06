@@ -11,7 +11,7 @@
         Connect Wallet
       </v-btn>
     </div>
-    
+
     <template v-else>
       <h1 class="bold" style="font-family:var(--font1);">Earn</h1>
       <!-- layoutcell 1 -->
@@ -29,16 +29,16 @@
               <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:35px; margin-left: 22px;">
               <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 22px;">
             </v-sheet>
-            
+
             <h3 class="p tup" style="--fm:var(--font2); font-weight:700!important;">{{item.tokenA}}-{{item.tokenB}}</h3>
           </aside>
-          
+
           <aside class="jspace divcol" style="gap: 10px">
             <div class="divrow jspace" style="gap: 5px; padding-inline: 20px;">
               <label style="--fm:var(--font2); --c: #767A89; font-weight:700!important; --fs:16px;">APR</label>
               <h3 class="gradient-text">{{`${item.apr}%`}}</h3>
             </div>
-            
+
             <div class="divrow jspace acenter" style="gap: 5px; padding-inline: 20px;">
               <label style="--fm:var(--font2); --c: #767A89; font-weight:700!important; --fs:16px;">Rewards</label>
               <div class="divrow">
@@ -46,13 +46,13 @@
                 <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 0px;">
               </div>
             </div>
-            
+
             <div class="divrow jspace" style="gap: 5px; padding-inline: 20px;">
               <label style="--fm:var(--font2); --c: #767A89; font-weight:700!important; --fs:16px;">TVL</label>
               <h3 style="font-family:var(--font1)!important; font-weight:500!important" class="p">{{`$${item.tvl.formatter(true)}`}}</h3>
             </div>
           </aside>
-          
+
           <aside class="fwrap space bold" style="gap: 10px; --max-w-child: 110px;">
             <v-btn class="btn" style="border:1px solid #000000;">Deposit</v-btn>
           </aside>
@@ -100,7 +100,7 @@
                 <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:35px;">
                 <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 28px;">
               </v-sheet>
-              
+
               <span class="bold tup">{{item.poolName}}</span>
             </div>
           </template>
@@ -110,10 +110,10 @@
               <v-sheet class="dual-tokens center" color="transparent" style="--h-sheet: 40px">
                 <img :src="require(`~/assets/sources/tokens/${item.rewardA}.svg`)" :alt="`${item.rewardA} token`" class="aspect" style="--p:0px; --w:35px; margin-left: 12px;">
                 <img :src="require(`~/assets/sources/tokens/${item.rewardB}.svg`)" :alt="`${item.rewardB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 12px;">
-              </v-sheet>            
+              </v-sheet>
             </div>
           </template>
-          
+
           <template #[`item.actions`]>
             <div class="end">
               <v-btn class="btn" style="--fs: 1em; --stroke: .4px; --br: 10px; --b:1px solid #000;">
@@ -141,7 +141,7 @@
                   <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:25px;">
                   <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:25px; margin-right: 40px;">
                 </v-sheet>
-                
+
                 <span class="bold tup pool-text" style="margin-left: -30px;">{{item.poolName}}</span>
               </div>
 
@@ -211,7 +211,7 @@ export default {
       },
       tabsFarms_model: 0,
       tabsFilter_model: 0,
-      
+
       tableHeaders: [
         { value: "poolName", text: "Pair",  sortable: false },
         { value: "apr", text: "APR", align: "center", sortable: false },
@@ -367,35 +367,35 @@ export default {
     },
     // create pool
     async addLiquidity(
-      tokenA, 
-      tokenB, 
-      amountADesired, 
-      amountBDesired, 
-      amountAMin, 
-      amountBMin, 
-      to, 
+      tokenA,
+      tokenB,
+      amountADesired,
+      amountBDesired,
+      amountAMin,
+      amountBMin,
+      to,
       deadline,
     ){
       const routerContract = new web3.eth.Contract(routerV2ABI, routerAddress);
       await routerContract.methods.methodName(
-        tokenA, 
-        tokenB, 
-        amountADesired, 
-        amountBDesired, 
-        amountAMin, 
-        amountBMin, 
-        to, 
+        tokenA,
+        tokenB,
+        amountADesired,
+        amountBDesired,
+        amountAMin,
+        amountBMin,
+        to,
         deadline,
       ).call({ from: this.$metamask.userAccount })
-    }, 
+    },
     addLiquidityETH(){
 
     },
     getAvailablePairs() {
-      
+
     },
     createNewPair() {
-      
+
     },
     async createNewPool() {
       const factoryContract = new web3.eth.Contract(factoryABI, factoryAddress);
