@@ -26,7 +26,7 @@
           <span class="title-media">
             Discord
           </span>
-          <a target="_blank" href="https://discord.gg/SDGJx8g5z4">
+          <a target="_blank" href="#">
             <span class="user-media">
               @Click here to go Discord 
             </span>
