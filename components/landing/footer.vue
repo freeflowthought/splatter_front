@@ -22,7 +22,7 @@
           </span>
         </div>
 
-        <div class="divcol" style="gap: 10px;">
+        <!-- <div class="divcol" style="gap: 10px;">
           <span class="title-media">
             Discord
           </span>
@@ -31,7 +31,7 @@
               @Click here to go Discord 
             </span>
           </a>
-        </div>
+        </div> -->
       </div>
     </div>
 

@@ -96,7 +96,7 @@ export default {
     return {
       drawer: false,
       dataSocial: [
-        { icon:"discord", url:"#" },
+        // { icon:"discord", url:"#" },
         { icon:"twitter", url:"#" },
         { icon:"telegram", url:"#" }
       ],
