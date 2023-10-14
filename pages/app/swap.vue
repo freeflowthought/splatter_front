@@ -69,7 +69,11 @@
               ></v-text-field>
             </div>
 
-            <v-btn class="btn mobile-btn" style="width: 350px!important; height: 60px!important; margin-top: 15px;">Swap</v-btn>
+            <v-btn 
+              class="btn mobile-btn" 
+              style="width: 350px!important; height: 60px!important; margin-top: 15px;" 
+            >Swap
+            </v-btn>
 
             <div class="center">
               <a href="" class="atag">Add Splatter To Wallet</a>
@@ -103,6 +107,19 @@
 
 <script>
 // import isMobile from '~/mixins/isMobile'
+
+import { Fetcher, Token, Route, Trade, Percent, TokenAmount, TradeType, } from '@uniswap/sdk'
+import routerV2ABI  from '~/static/abis/routerv2.json'
+import ERC20ABI from '~/static/abis/erc20.json'
+const { ethers } = require("ethers")
+const provider = new ethers.providers.JsonRpcProvider('https://scroll-sepolia.blockpi.network/v1/rpc/public')
+
+const Web3 = require('web3')
+const web3 = new Web3(window.ethereum);
+const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
+const routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
+const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
+const slippageTolerance = new Percent('50', '10000'); // 0.5%
 
 export default {
   name: "SwapPage",
@@ -213,8 +230,39 @@ export default {
       this.$refs.select1.internalValue = this.$refs.select2.internalValue;
       this.$refs.select2.internalValue = temp;
     },
+
+    // we have problems using uniSDK have to about think about some ways of getting an oracle working
+    // so we have amountOut in order to use a direct contract call
+
+    async swapTokensForToken(tokenInAddress, tokenOutAddress, amountIn,) {
+      //! crash
+      const tokenIn = new Token(0x8274f, tokenInAddress, 18);
+      const tokenOut = new Token(0x8274f, tokenOutAddress, 18);
+      //! crash
+      const pair = await Fetcher.fetchPairData(tokenOut, tokenIn, provider);
+      const route = new Route([pair], tokenInAddress)
+      const trade = new Trade(route, new TokenAmount(tokenInAddress, amountIn), TradeType.EXACT_INPUT)
+      const path = [tokenInAddress, tokenOutAddress]
+      const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw
+      const tokenInContract = new web3.eth.Contract(ERC20ABI, routerV2Address);
+      await tokenInContract.methods.aprove().call({ from: this.$metamask.userAccount }).then(
+        function (value) {
+          console.log(value);
+        },
+        function (reason) {
+          console.log(reason);
+        },
+      );
+      await routerV2.methods.swapExactTokensForToken(amountIn, amountOutMin, path, this.$metamask.userAccount, deadline).call({from: this.$metamask.userAccount})
+    },
+
+    swapETHForTokens() {},
+    swapTokensForETH() {},
+
   }
 };
 </script>
+
+<style src="~/assets/styles/pages/swap.scss" lang="scss" />
 
 <style src="~/assets/styles/pages/swap.scss" lang="scss" />

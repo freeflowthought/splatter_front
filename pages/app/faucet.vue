@@ -145,7 +145,7 @@ export default {
 
         const tokenContract = new web3.eth.Contract(faucetAbi, item.address);
         try {
-          await tokenContract.methods.faucet().send({ from: localStorage.getItem("wallet") }).then(() => {
+          await tokenContract.methods.faucet().send({ from: this.$metamask.userAccount }).then(() => {
             this.$alert("success", 'Transaction approved for ' + item.name, { persistent: true })
             this.disabled = false;
             this.loading = false;
@@ -167,17 +167,17 @@ export default {
 
     // async getTokenBalance(contracAddress, decimals) {
     //   const tokenContract = new web3.eth.Contract(faucetAbi, contracAddress);
-    //   const tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
+    //   const tokenBalance = await tokenContract.methods.balanceOf(this.$metamask.userAccount).call();
     //   console.log('tokenBalance', tokenBalance)
     //   return Number(tokenBalance/Math.pow(10, decimals));
     // },
 
     async fetch() {
-      if(localStorage.getItem("wallet") !== null){
+      if(this.$metamask.userAccount !== null){
         for (let i = 0; i < dataFaucet.length; i++) {
           try {
             const tokenContract = new web3.eth.Contract(faucetAbi, dataFaucet[i].address);
-            const tokenBalance = await tokenContract.methods.balanceOf(localStorage.getItem("wallet")).call();
+            const tokenBalance = await tokenContract.methods.balanceOf(this.$metamask.userAccount).call();
             this.databalance.push(tokenBalance);
           } catch (error) {
             console.log(error)

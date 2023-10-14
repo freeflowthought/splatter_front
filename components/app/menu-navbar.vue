@@ -100,7 +100,7 @@ export default {
         { icon:"twitter", url:"#" },
         { icon:"telegram", url:"#" }
       ],
-      wallet: localStorage.getItem("wallet") === null ? "Login": localStorage.getItem("wallet"),
+      wallet: this.$metamask.userAccount === null ? "Login": this.$metamask.userAccount,
       isLogged: true,
     };
   },

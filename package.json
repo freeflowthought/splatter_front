@@ -18,9 +18,11 @@
     "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/i18n": "^7.3.0",
+    "@uniswap/sdk": "^3.0.3",
     "@vuejs-community/vue-filter-numeric-format": "^1.1.0",
     "@walletconnect/web3-provider": "^1.8.0",
     "core-js": "^3.19.3",
+    "ethers": "^4.0.0",
     "fs": "^0.0.1-security",
     "graphql-tag": "^2.12.6",
     "html2canvas": "^1.4.1",
@@ -52,6 +54,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^3.1.0",
     "eslint-plugin-vue": "^8.2.0",
+    "postcss": "^8.4.31",
     "prettier": "^2.5.1"
   }
 }

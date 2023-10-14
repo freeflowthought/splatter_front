@@ -1,37 +1,37 @@
 [
     {
-        "chainId": 534353,
+        "chainId": 534351,
         "name": "Binance USD",
         "symbol": "BUSD",
         "decimals": 18,
-        "address": "0xb7931C72aE6f65ac8A83BE3bd3D38DD14Ea93279",
+        "address": "0x11021aFAafaa41764aa5D2A00C4331Fb9d741AD6",
         "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
         "balance": 0 
     },
     {
-        "chainId": 534353,
+        "chainId": 534351,
         "name": "Tether USD",
-        "symbol": "BUSD",
+        "symbol": "USDT",
         "decimals": 6,
-        "address": "0xc6D9F9903Ad46ee23CF30acF2505aBAFcE65b6c0",
+        "address": "0xB2a1216856880D07eee9C4f71756FA8f72036e1E",
         "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
         "balance": 0 
     },
     {
-        "chainId": 534353,
+        "chainId": 534351,
         "name": "Aave",
         "symbol": "Aave",
         "decimals": 18,
-        "address": "0x8A2a3B5397aa5dEa0A60970542CF7bA2c0ab1A27",
+        "address": "0x031bf274001BfecF3079c8a770e8559e08155FD3",
         "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
         "balance": 0 
     },
     {
-        "chainId": 534353,
-        "name": "Curve DAO Token",
+        "chainId": 534351,
+        "name": "CRV",
         "symbol": "CRV",
         "decimals": 18,
-        "address": "0xe40D362E058FcC7687eea951d5B89e1Ab3EeB1f0",
+        "address": "0x46bf2B606A217dBD8724B2AC9Cd7e9d1bc71D78A",
         "logoURI": "https://wallet-asset.matic.network/img/tokens/eth.svg",
         "balance": 0 
     }

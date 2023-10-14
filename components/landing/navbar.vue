@@ -95,7 +95,7 @@ export default {
           to: "/faucet"
         },
       ],
-      wallet: localStorage.getItem("wallet") === null ? "Login": localStorage.getItem("wallet"),
+      wallet: this.$metamask.userAccount === null ? "Login": this.$metamask.userAccount,
       isLogged: true,
     };
   },
