@@ -1,7 +1,7 @@
 <template>
   <div>
     <LandingMenuNavbar ref="menu"></LandingMenuNavbar>
-    
+
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
       <nuxt-link class="deletemobile" :to="basePath('/')">
@@ -42,7 +42,7 @@
               <template v-if="isLogged">
                 <span>Login</span>
               </template>
-              
+
               <template v-else>{{ wallet.substring(1, 20) }} ...</template>
             </v-btn>
           </template>
@@ -95,7 +95,7 @@ export default {
           to: "/faucet"
         },
       ],
-      wallet: this.$metamask.userAccount === null ? "Login": this.$metamask.userAccount,
+      wallet: this.$metamask.userAccount === undefined ? "Login": this.$metamask.userAccount,
       isLogged: true,
     };
   },
@@ -111,9 +111,9 @@ export default {
       }
     },
   },
-  
+
   mounted() {
-    if (localStorage.getItem("wallet") !== null) {
+    if (this.$metamask.userAccount !== undefined) {
       this.$metamask.updateWallet();
       this.isLogged = false;
     }

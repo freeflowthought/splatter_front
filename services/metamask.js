@@ -64,7 +64,7 @@ const metamask = {
     }
     return true
   },
-  
+
   async checkConnection() {
     window.ethereum.on('accountsChanged', this.handleAccountsChanged);
     const accounts = await ethereum.request({ method: 'eth_accounts' })
@@ -73,10 +73,6 @@ const metamask = {
   },
 
   handleAccountsChanged(accounts) {
-    console.log(accounts);
-    console.log(accounts);
-    console.log(accounts);
-    console.log("handle accounts --------------");
 
     if (accounts.length === 0) {
       this.userAccount = undefined;
@@ -110,7 +106,7 @@ const metamask = {
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: '0x8274f' }],
       });
-      
+
       window.location.reload();
     } catch (switchError) {
       // The network has not been added to MetaMask
@@ -120,19 +116,19 @@ const metamask = {
             method: 'wallet_addEthereumChain',
             params: [
                 {
-                  chainId: '0x8274f', 
+                  chainId: '0x8274f',
                   chainName:'Scroll Sepolia',
-                  rpcUrls:['https://scroll-sepolia.blockpi.network/v1/rpc/public'],                   
-                  blockExplorerUrls:['https://sepolia-blockscout.scroll.io'],  
-                  nativeCurrency: { 
-                    symbol:'ETH',   
+                  rpcUrls:['https://scroll-sepolia.blockpi.network/v1/rpc/public'],
+                  blockExplorerUrls:['https://sepolia-blockscout.scroll.io'],
+                  nativeCurrency: {
+                    symbol:'ETH',
                     decimals: 18
-                  }     
+                  }
                 }
               ]
           });
         } catch (err) {
-          
+
         }
       }
     }

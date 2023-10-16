@@ -6,7 +6,7 @@
         <a class="center" @click="$router.push(basePath('/')); $scrollTo('home')">
           <img src="~/assets/sources/logos/mobile_gradient_logo.svg" alt="logo" style="--w: 90%">
         </a>
-        
+
         <!-- connect button -->
         <!-- <v-menu bottom offset-y nudge-bottom="10px">
           <template #activator="{ on, attrs }">
@@ -20,7 +20,7 @@
                 <span>{{$parent.user.accountId}}</span>
                 <v-icon>mdi-chevron-down</v-icon>
               </template>
-              
+
               <template v-else>Connect</template>
             </v-btn>
           </template>
@@ -47,7 +47,7 @@
               <template v-if="isLogged">
                 <span>Login</span>
               </template>
-              
+
               <template v-else>{{ wallet.substring(1, 20) }} ...</template>
             </v-btn>
         <v-expansion-panels focusable accordion class="anim_moveleft">
@@ -100,12 +100,12 @@ export default {
         { icon:"twitter", url:"#" },
         { icon:"telegram", url:"#" }
       ],
-      wallet: this.$metamask.userAccount === null ? "Login": this.$metamask.userAccount,
+      wallet: this.$metamask.userAccount === undefined ? "Login": this.$metamask.userAccount,
       isLogged: true,
     };
   },
   mounted() {
-    if (localStorage.getItem("wallet") !== null) {
+    if (this.$metamask.userAccount !== undefined) {
       this.$metamask.updateWallet();
       this.isLogged = false;
     }

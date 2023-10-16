@@ -35,7 +35,7 @@
               <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
               ></v-text-field>
 
-              <v-btn class="btn-max" @click="setMaxValue">max</v-btn>  
+              <v-btn class="btn-max" @click="setMaxValue">max</v-btn>
             </div>
 
             <div class="divrow center jspace mobile-btn" style="width:350px;">
@@ -69,9 +69,9 @@
               ></v-text-field>
             </div>
 
-            <v-btn 
-              class="btn mobile-btn" 
-              style="width: 350px!important; height: 60px!important; margin-top: 15px;" 
+            <v-btn
+              class="btn mobile-btn"
+              style="width: 350px!important; height: 60px!important; margin-top: 15px;"
             >Swap
             </v-btn>
 
@@ -93,7 +93,7 @@
         <template v-if="isLogged">
           {{user.accountId}}
         </template>
-        
+
         <template v-else>Connect wallet</template>
         </v-btn>
       </div>
@@ -247,10 +247,10 @@ export default {
       const tokenInContract = new web3.eth.Contract(ERC20ABI, routerV2Address);
       await tokenInContract.methods.aprove().call({ from: this.$metamask.userAccount }).then(
         function (value) {
-          console.log(value);
+
         },
         function (reason) {
-          console.log(reason);
+
         },
       );
       await routerV2.methods.swapExactTokensForToken(amountIn, amountOutMin, path, this.$metamask.userAccount, deadline).call({from: this.$metamask.userAccount})

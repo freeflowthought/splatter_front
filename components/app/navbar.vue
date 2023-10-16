@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppMenuNavbar ref="menu"></AppMenuNavbar>
-    
+
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
       <nuxt-link class="deletemobile" :to="basePath('/')">
@@ -42,7 +42,7 @@
               <template v-if="isLogged">
                 <span>Login</span>
               </template>
-              
+
               <template v-else>{{ truncatedWallet }} ...</template>
             </v-btn>
           </template>
@@ -86,6 +86,11 @@ export default {
 
     };
   },
+  computed: {
+    truncatedWallet() {
+      return this.wallet.substring(1, 20);
+    }
+  },
   async mounted() {
     await this.$metamask.checkConnection()
     if(this.$metamask.userAccount !== undefined) {
@@ -93,11 +98,6 @@ export default {
       this.isLogged = false
     }
   },
-  computed: {
-    truncatedWallet() {
-      return this.wallet.substring(1, 20);
-    }
-  }
 };
 </script>
 
