@@ -73,7 +73,6 @@
             <v-btn
               class="btn mobile-btn"
               style="width: 350px!important; height: 60px!important; margin-top: 15px;"
-              
             >Swap
             </v-btn>
 
@@ -219,12 +218,25 @@ export default {
 
     async approve(tokenAddres, amount) {
       const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
-      await tokenInContract.methods.approve(routerV2Address, amount).call({ from: this.$metamask.userAccount }).then(
+      await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount }).then(
         function (value) {
         console.log(value, "<------- approve")
         },
         function (reason) {
         console.log(reason, "<------- approve")
+
+        },
+      );
+    },
+
+    async balanceOf(tokenAddres) {
+      const tokenContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
+      await tokenContract.methods.balanceOf(this.$metamask.userAccount).call().then(
+        function (value) {
+        console.log(value, "<------- balanceOf")
+        },
+        function (reason) {
+        console.log(reason, "<------- balanceOf")
 
         },
       );
@@ -258,7 +270,12 @@ export default {
     async swapTokensForTokens(tokenInAddress, tokenOutAddress) {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       const path = [tokenInAddress, tokenOutAddress]
-      await routerV2.methods.swapExactTokensForTokens(this.tokenAmountIn, this.tokenAmountOut, path, this.$metamask.userAccount, deadline).send({from: this.$metamask.userAccount})
+      await routerV2.methods.swapExactTokensForTokens(
+        this.tokenAmountIn,
+        this.tokenAmountOut,
+        path,
+        this.$metamask.userAccount,
+        deadline).send({from: this.$metamask.userAccount})
     },
 
     swapETHForTokens() {},
