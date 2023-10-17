@@ -23,12 +23,12 @@
                 class="input-auto"
               >
               <template #item="{ item }">
-                <v-img :src="item.icon" style="max-width: 20px;"></v-img>
-                <span style="margin-left: 10px;">{{ item.text }}</span>
+                <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
+                <span style="margin-left: 10px;">{{ item.name }}</span>
               </template>
               <template #selection="{ item }">
-                <v-img v-if="item" :src="item.icon" style="max-width: 20px;"></v-img>
-                <span v-if="item" style="margin-left: 10px;">{{ item.text }}</span>
+                <v-img v-if="item" :src="item.logoURI" style="max-width: 20px;"></v-img>
+                <span v-if="item" style="margin-left: 10px;">{{ item.symbol }}</span>
               </template>
               </v-select>
 
@@ -56,12 +56,12 @@
                 class="input-auto"
               >
               <template #item="{ item }">
-                <v-img :src="item.icon" style="max-width: 20px;"></v-img>
-                <span style="margin-left: 10px;">{{ item.text }}</span>
+                <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
+                <span style="margin-left: 10px;">{{ item.name }}</span>
               </template>
               <template #selection="{ item }">
-                <v-img v-if="item" :src="item.icon" style="max-width: 20px;"></v-img>
-                <span v-if="item" style="margin-left: 10px;">{{ item.text }}</span>
+                <v-img v-if="item" :src="item.logoURI" style="max-width: 20px;"></v-img>
+                <span v-if="item" style="margin-left: 10px;">{{ item.symbol }}</span>
               </template>
               </v-select>
 
@@ -73,7 +73,7 @@
               class="btn mobile-btn"
               style="width: 350px!important; height: 60px!important; margin-top: 15px;"
               @click="swapTokensForTokens(
-                '0x11021aFAafaa41764aa5D2A00C4331Fb9d741AD6',
+                $refs.select1.selected,
                 '0xB2a1216856880D07eee9C4f71756FA8f72036e1E',
                 10,
                 1
@@ -88,7 +88,7 @@
         </v-card>
 
         <!-- right -->
-        <v-card ref="target_swap_chart" class="right card">
+        <v-card v-if="false" ref="target_swap_chart" class="right card">
           <AppChartsSwapChart ref="chart" :height="heightChart" @model="$refs.modal.modalChart = true"></AppChartsSwapChart>
         </v-card>
 
@@ -113,20 +113,16 @@
 
 <script>
 // import isMobile from '~/mixins/isMobile'
-
-// import { Fetcher, Token, Route, Trade, Percent, TokenAmount, TradeType, } from '@uniswap/sdk'
 import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import routerV2ABI  from '~/static/abis/routerv2.json'
 import factoryABI  from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
-// const { ethers } = require("ethers")
-// const provider = new ethers.providers.JsonRpcProvider('https://scroll-sepolia.blockpi.network/v1/rpc/public')
+import scrollTokens from '~/static/tokens/scroll_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
 const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
 const factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
 const routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
-// const slippageTolerance = new Percent('50', '10000'); // 0.5%
 
 export default {
   name: "SwapPage",
@@ -135,14 +131,7 @@ export default {
       selectedItem: null,
       selectedItem2: null,
       inputNumber: 1,
-      items: [
-        { text: 'Ethereum', value: 1, icon: require('~/assets/sources/icons/Ellipse.svg') },
-        { text: 'Splatter', value: 2, icon: require('~/assets/sources/icons/Ellipse.svg') },
-      ],
-      items2: [
-        { text: 'Ethereum', value: 1, icon: require('~/assets/sources/icons/Ellipse.svg') },
-        { text: 'Splatter', value: 2, icon: require('~/assets/sources/icons/Ellipse.svg') },
-      ],
+      items: scrollTokens,
       heightChart: undefined,
       swapFrom: {
         img: require('~/assets/sources/tokens/database.svg'),
@@ -201,14 +190,14 @@ export default {
 
     styles() {
       // height chart calculator
-      const
+      /* const
         container = this.$refs.target_swap_chart.$el,
         header = container.querySelector(".charts-header"),
         footer = container.querySelector(".charts-footer");
       this.heightChart = `
         ${container.getBoundingClientRect().height -
         (header.getBoundingClientRect().height + footer.getBoundingClientRect().height + 48 + 15)}px
-      `
+      ` */
     },
     switchTokens() {
       [this.swapFrom.img, this.swapFrom.name, this.swapTo.img, this.swapTo.name]
@@ -271,16 +260,8 @@ export default {
 
     async swapTokensForTokens(tokenInAddress, tokenOutAddress, amountIn, amountOut) {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      
-      // const tokenIn = new Token(0x8274f, tokenInAddress, 18);
-      // const tokenOut = new Token(0x8274f, tokenOutAddress, 6);
 
-      // console.log("beforefecth")
-      // const pair = await Fetcher.fetchPairData(tokenOut, tokenIn, provider);
-      // console.log("afterfecth")
-
-      // const route = new Route([pair], tokenInAddress)
-      // const trade = new Trade(route, new TokenAmount(tokenInAddress, amountIn), TradeType.EXACT_INPUT)
+      console.log(tokenInAddress, "<---------address")
       const path = [tokenInAddress, tokenOutAddress]
 
       // const OMin = trade.minimumAmountOut(slippageTolerance).raw
