@@ -73,10 +73,7 @@
             <v-btn
               class="btn mobile-btn"
               style="width: 350px!important; height: 60px!important; margin-top: 15px;"
-              @click="swapTokensForTokens(
-                $refs.select1.internalValue.address,
-                $refs.select2.internalValue.address,
-              )"
+              
             >Swap
             </v-btn>
 
@@ -115,7 +112,7 @@
 import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import routerV2ABI  from '~/static/abis/routerv2.json'
 import factoryABI  from '~/static/abis/factory.json'
-// import ERC20ABI from '~/static/abis/erc20.json'
+import ERC20ABI from '~/static/abis/erc20.json'
 import scrollTokens from '~/static/tokens/scroll_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
@@ -220,6 +217,18 @@ export default {
     // we have problems using uniSDK have to about think about some ways of getting an oracle working
     // so we have amountOut in order to use a direct contract call
 
+    async approve(tokenAddres, amount) {
+      const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
+      await tokenInContract.methods.approve(routerV2Address, amount).call({ from: this.$metamask.userAccount }).then(
+        function (value) {
+        console.log(value, "<------- approve")
+        },
+        function (reason) {
+        console.log(reason, "<------- approve")
+
+        },
+      );
+    },
 
     async getPair(addressA, addressB){
       const factoryContract = new web3.eth.Contract(factoryABI, factoryAddress)
@@ -234,8 +243,6 @@ export default {
 
     async getReserves(tokenInAddress, tokenOutAddress) {
       const pairAddress = await this.getPair(tokenInAddress, tokenOutAddress)
-      console.log(pairAddress, "<---- pair address")
-
       const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
       const reserves = await pairContract.methods.getReserves().call()
       return reserves
@@ -251,32 +258,25 @@ export default {
     async swapTokensForTokens(tokenInAddress, tokenOutAddress) {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       const path = [tokenInAddress, tokenOutAddress]
-      /* const tokenInContract = new web3.eth.Contract(ERC20ABI, routerV2Address);
-      await tokenInContract.methods.approve(routerV2Address, this.tokenAmountIn).send({ from: this.$metamask.userAccount }).then(
-        function (value) {
-        console.log(value, "<------- approve")
-        },
-        function (reason) {
-        console.log(reason, "<------- approve")
-
-        },
-      ); */
       await routerV2.methods.swapExactTokensForTokens(this.tokenAmountIn, this.tokenAmountOut, path, this.$metamask.userAccount, deadline).send({from: this.$metamask.userAccount})
     },
 
     swapETHForTokens() {},
     swapTokensForETH() {},
 
-    async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin,
-    ) {
+    async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
+      await this.approve(tokenA, amountADesired)
+      await this.approve(tokenB, amountBDesired)
+      const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      await routerV2.methods.addLiquidity(tokenA,
+      await routerV2.methods.addLiquidity(
+        tokenA,
         tokenB,
         amountADesired,
         amountBDesired,
         amountAMin,
         amountBMin,
-        this.$metamask.userAccount,
+        to,
         deadline
       ).send({from: this.$metamask.userAccount}).then(
         function (value) {
@@ -289,13 +289,15 @@ export default {
     },
 
     async removeLiquidity(tokenA, tokenB, liquidity, amountAMin, amountBMin) {
+      const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      await routerV2.methods.addLiquidity(tokenA,
+      await routerV2.methods.addLiquidity(
+        tokenA,
         tokenB,
         liquidity,
         amountAMin,
         amountBMin,
-        this.$metamask.userAccount,
+        to,
         deadline
       ).send({from: this.$metamask.userAccount}).then(
         function (value) {

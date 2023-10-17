@@ -71,10 +71,10 @@ export default {
           name: "Swap",
           to: "app/swap"
         },
-        {
+        /* {
           name: "Earn",
           to: "app/farm-details"
-        },
+        }, */
         {
           name: "Claim faucet",
           to: "app/faucet"
@@ -86,10 +86,10 @@ export default {
           name: "Swap",
           to: "/swap"
         },
-        {
+      /*   {
           name: "Earn",
           to: "/farm-details"
-        },
+        }, */
         {
           name: "Claim faucet",
           to: "/faucet"
