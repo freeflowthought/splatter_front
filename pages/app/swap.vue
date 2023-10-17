@@ -128,10 +128,7 @@ export default {
   data() {
     return {
       selectedItem1: null,
-      selectedItem1: null,
       selectedItem2: null,
-      tokenAmountIn: 0,
-      tokenAmountOut: 0,
       tokenAmountIn: 0,
       tokenAmountOut: 0,
       items: scrollTokens,
