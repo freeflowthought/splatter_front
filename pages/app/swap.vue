@@ -72,6 +72,12 @@
             <v-btn
               class="btn mobile-btn"
               style="width: 350px!important; height: 60px!important; margin-top: 15px;"
+              @click="swapTokensForTokens(
+                '0x11021aFAafaa41764aa5D2A00C4331Fb9d741AD6',
+                '0xB2a1216856880D07eee9C4f71756FA8f72036e1E',
+                10,
+                1
+              )"
             >Swap
             </v-btn>
 
@@ -108,18 +114,19 @@
 <script>
 // import isMobile from '~/mixins/isMobile'
 
-import { Fetcher, Token, Route, Trade, Percent, TokenAmount, TradeType, } from '@uniswap/sdk'
+// import { Fetcher, Token, Route, Trade, Percent, TokenAmount, TradeType, } from '@uniswap/sdk'
+import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import routerV2ABI  from '~/static/abis/routerv2.json'
+import factoryABI  from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
-const { ethers } = require("ethers")
-const provider = new ethers.providers.JsonRpcProvider('https://scroll-sepolia.blockpi.network/v1/rpc/public')
-
+// const { ethers } = require("ethers")
+// const provider = new ethers.providers.JsonRpcProvider('https://scroll-sepolia.blockpi.network/v1/rpc/public')
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
 const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
+const factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
 const routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
-const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-const slippageTolerance = new Percent('50', '10000'); // 0.5%
+// const slippageTolerance = new Percent('50', '10000'); // 0.5%
 
 export default {
   name: "SwapPage",
@@ -234,26 +241,60 @@ export default {
     // we have problems using uniSDK have to about think about some ways of getting an oracle working
     // so we have amountOut in order to use a direct contract call
 
-    async swapTokensForToken(tokenInAddress, tokenOutAddress, amountIn,) {
-      //! crash
-      const tokenIn = new Token(0x8274f, tokenInAddress, 18);
-      const tokenOut = new Token(0x8274f, tokenOutAddress, 18);
-      //! crash
-      const pair = await Fetcher.fetchPairData(tokenOut, tokenIn, provider);
-      const route = new Route([pair], tokenInAddress)
-      const trade = new Trade(route, new TokenAmount(tokenInAddress, amountIn), TradeType.EXACT_INPUT)
-      const path = [tokenInAddress, tokenOutAddress]
-      const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw
-      const tokenInContract = new web3.eth.Contract(ERC20ABI, routerV2Address);
-      await tokenInContract.methods.aprove().call({ from: this.$metamask.userAccount }).then(
-        function (value) {
 
+    async getPair(addressA, addressB){
+      const factoryContract = new web3.eth.Contract(factoryABI, factoryAddress)
+      const pairAddress = await factoryContract.methods.getPair(addressA,addressB).call()
+      const pairExist = pairAddress !== 0x0000000000000000000000000000000000000000
+      if (pairExist) {
+        return pairAddress
+      } else {
+        console.log("----- pair not found-----")
+      }
+    },
+
+    async getReserves(tokenInAddress, tokenOutAddress) {
+      const pairAddress = await this.getPair(tokenInAddress, tokenOutAddress)
+      console.log(pairAddress, "<---- pair address")
+
+      const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
+      const reserves = await pairContract.methods.getReserves().call()
+      return reserves
+    },
+
+    /* calculateMidPrice(reserves) {
+      const token0= reserves[0]
+      const token1= reserves[1]
+      const dToken0 = 10 **18
+
+    }, */
+
+    async swapTokensForTokens(tokenInAddress, tokenOutAddress, amountIn, amountOut) {
+      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
+      
+      // const tokenIn = new Token(0x8274f, tokenInAddress, 18);
+      // const tokenOut = new Token(0x8274f, tokenOutAddress, 6);
+
+      // console.log("beforefecth")
+      // const pair = await Fetcher.fetchPairData(tokenOut, tokenIn, provider);
+      // console.log("afterfecth")
+
+      // const route = new Route([pair], tokenInAddress)
+      // const trade = new Trade(route, new TokenAmount(tokenInAddress, amountIn), TradeType.EXACT_INPUT)
+      const path = [tokenInAddress, tokenOutAddress]
+
+      // const OMin = trade.minimumAmountOut(slippageTolerance).raw
+      const tokenInContract = new web3.eth.Contract(ERC20ABI, routerV2Address);
+      await tokenInContract.methods.approve(routerV2Address, amountIn).send({ from: this.$metamask.userAccount }).then(
+        function (value) {
+        console.log(value, "<------- approve")
         },
         function (reason) {
+        console.log(reason, "<------- approve")
 
         },
       );
-      await routerV2.methods.swapExactTokensForToken(amountIn, amountOutMin, path, this.$metamask.userAccount, deadline).call({from: this.$metamask.userAccount})
+      await routerV2.methods.swapExactTokensForTokens(amountIn, amountOut, path, this.$metamask.userAccount, deadline).send({from: this.$metamask.userAccount})
     },
 
     swapETHForTokens() {},
