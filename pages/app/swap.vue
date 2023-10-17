@@ -32,16 +32,17 @@
               </template>
               </v-select>
 
-              <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
+              <v-text-field
+                v-model="tokenAmountIn" class="input-number" :value="0" placeholder="0.00"
               ></v-text-field>
 
               <v-btn class="btn-max" @click="setMaxValue">max</v-btn>
             </div>
 
-            <div class="divrow center jspace mobile-btn" style="width:350px;">
+           <!-- <div class="divrow center jspace mobile-btn" style="width:350px;">
               <v-icon @click="swapValues()">mdi-swap-vertical</v-icon>
               <span class="dm-light">ETH > SPTL = 1290.03 UDC </span>
-            </div>
+            </div> -->
 
             <span class="dm-400">
               To
@@ -65,7 +66,7 @@
               </template>
               </v-select>
 
-              <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
+              <v-text-field v-model="tokenAmountOut" class="input-number" :value="0" placeholder="0.00"
               ></v-text-field>
             </div>
 
@@ -73,10 +74,10 @@
               class="btn mobile-btn"
               style="width: 350px!important; height: 60px!important; margin-top: 15px;"
               @click="swapTokensForTokens(
-                $refs.select1.selected,
-                '0xB2a1216856880D07eee9C4f71756FA8f72036e1E',
+                $refs.select1.internalValue.address,
+                $refs.select2.internalValue.address,
                 10,
-                1
+                tokenOutAmount.value
               )"
             >Swap
             </v-btn>
@@ -128,9 +129,10 @@ export default {
   name: "SwapPage",
   data() {
     return {
-      selectedItem: null,
+      selectedItem1: null,
       selectedItem2: null,
-      inputNumber: 1,
+      tokenAmountIn: 0,
+      tokenAmountOut: 0,
       items: scrollTokens,
       heightChart: undefined,
       swapFrom: {
@@ -208,18 +210,7 @@ export default {
       console.log(item)
       this.swapTo.amount = (event / 1.5).toFixed(2)
     },
-    swap() {
-      if (!(this.swapFrom.amount && this.swapTo.amount)) return;
-      const data = {
-        tokenFrom: this.swapFrom.name,
-        priceFrom: this.swapFrom.amount,
-        tokenTo: this.swapTo.name,
-        priceTo: this.swapTo.amount,
-      }
 
-      this.$store.commit("setSwapReview", data)
-      this.$router.push(this.basePath('/swap-review'))
-    },
 
     swapValues() {
       const temp = this.$refs.select1.internalValue;
@@ -258,15 +249,20 @@ export default {
 
     }, */
 
-    async swapTokensForTokens(tokenInAddress, tokenOutAddress, amountIn, amountOut) {
+    async swapTokensForTokens(tokenInAddress, tokenOutAddress) {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
 
-      console.log(tokenInAddress, "<---------address")
+      console.log(tokenInAddress, "<---------tokenIn")
+      console.log(tokenOutAddress, "<---------tokenOut")
+      console.log(this.tokenAmountIn, "<---------amountIn")
+      console.log(this.tokenAmountOut, "<---------amountOut")
+
+
       const path = [tokenInAddress, tokenOutAddress]
 
-      // const OMin = trade.minimumAmountOut(slippageTolerance).raw
+      // const OMn = trade.minimumAmountOut(slippageTolerance).raw
       const tokenInContract = new web3.eth.Contract(ERC20ABI, routerV2Address);
-      await tokenInContract.methods.approve(routerV2Address, amountIn).send({ from: this.$metamask.userAccount }).then(
+      await tokenInContract.methods.approve(routerV2Address, this.tokenAmountIn).send({ from: this.$metamask.userAccount }).then(
         function (value) {
         console.log(value, "<------- approve")
         },
@@ -275,7 +271,7 @@ export default {
 
         },
       );
-      await routerV2.methods.swapExactTokensForTokens(amountIn, amountOut, path, this.$metamask.userAccount, deadline).send({from: this.$metamask.userAccount})
+      await routerV2.methods.swapExactTokensForTokens(this.tokenAmountIn, this.tokenAmountOut, path, this.$metamask.userAccount, deadline).send({from: this.$metamask.userAccount})
     },
 
     swapETHForTokens() {},
