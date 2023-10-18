@@ -25,18 +25,6 @@
   },
   {
     "chainId": 534352,
-    "address": "0xF613F403C2887aa473b46252da3AA5D6a6084b15",
-    "name": "PancakeSwap",
-    "symbol": "CAKE",
-    "decimals": 18,
-    "logoURI": "https://scroll-tech.github.io/token-list/data/CAKE/logo.svg",
-    "extensions": {
-      "scrollListId": "default",
-      "scrollTokenId": "CAKE"
-    }
-  },
-  {
-    "chainId": 534352,
     "address": "0xB755039eDc7910C1F1BD985D48322E55A31AC0bF",
     "name": "Curve DAO",
     "symbol": "CRV",
@@ -57,18 +45,6 @@
     "extensions": {
       "scrollListId": "default",
       "scrollTokenId": "DAI"
-    }
-  },
-  {
-    "chainId": 534351,
-    "address": "0xD9692f1748aFEe00FACE2da35242417dd05a8615",
-    "name": "Gho Token",
-    "symbol": "GHO",
-    "decimals": 18,
-    "logoURI": "https://scroll-tech.github.io/token-list/data/GHO/logo.png",
-    "extensions": {
-      "scrollListId": "extended",
-      "scrollTokenId": "GHO"
     }
   },
   {

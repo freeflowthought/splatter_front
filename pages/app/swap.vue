@@ -73,6 +73,10 @@
             <v-btn
               class="btn mobile-btn"
               style="width: 350px!important; height: 60px!important; margin-top: 15px;"
+              @click="swapTokensForTokens(
+                $refs.select1.internalValue,
+                $refs.select2.internalValue
+              )"
             >Swap
             </v-btn>
 
@@ -115,8 +119,8 @@ import ERC20ABI from '~/static/abis/erc20.json'
 import scrollTokens from '~/static/tokens/scroll_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
-const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
-const factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
+const routerV2Address = "0xB6120De62561D702087142DE405EEB02c18873Bc"
+const factoryAddress = "0xad88D4ABbE0d0672f00eB3B83E6518608d82e95d"
 const routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
 
 export default {
@@ -220,10 +224,9 @@ export default {
       const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
       await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount }).then(
         function (value) {
-        console.log(value, "<------- approve")
+
         },
         function (reason) {
-        console.log(reason, "<------- approve")
 
         },
       );
@@ -233,10 +236,10 @@ export default {
       const tokenContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
       await tokenContract.methods.balanceOf(this.$metamask.userAccount).call().then(
         function (value) {
-        console.log(value, "<------- balanceOf")
+
         },
         function (reason) {
-        console.log(reason, "<------- balanceOf")
+
 
         },
       );
@@ -267,9 +270,10 @@ export default {
 
     }, */
 
-    async swapTokensForTokens(tokenInAddress, tokenOutAddress) {
+    async swapTokensForTokens(tokenIn, tokenOut) {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      const path = [tokenInAddress, tokenOutAddress]
+      this.approve(tokenIn.address, (this.tokenAmountIn * 10 ** tokenIn.decimals).toString())
+      const path = [tokenIn.address, tokenOut.address]
       await routerV2.methods.swapExactTokensForTokens(
         this.tokenAmountIn,
         this.tokenAmountOut,
@@ -280,51 +284,6 @@ export default {
 
     swapETHForTokens() {},
     swapTokensForETH() {},
-
-    async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
-      await this.approve(tokenA, amountADesired)
-      await this.approve(tokenB, amountBDesired)
-      const to = this.$metamask.userAccount
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      await routerV2.methods.addLiquidity(
-        tokenA,
-        tokenB,
-        amountADesired,
-        amountBDesired,
-        amountAMin,
-        amountBMin,
-        to,
-        deadline
-      ).send({from: this.$metamask.userAccount}).then(
-        function (value) {
-          console.log(value, "<------- addliquidity")
-        },
-        function (reason) {
-          console.log(reason, "<------- addliquidity")
-        },
-      );
-    },
-
-    async removeLiquidity(tokenA, tokenB, liquidity, amountAMin, amountBMin) {
-      const to = this.$metamask.userAccount
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      await routerV2.methods.addLiquidity(
-        tokenA,
-        tokenB,
-        liquidity,
-        amountAMin,
-        amountBMin,
-        to,
-        deadline
-      ).send({from: this.$metamask.userAccount}).then(
-        function (value) {
-          console.log(value, "<------- removeliquidity")
-        },
-        function (reason) {
-          console.log(reason, "<------- removeliquidity")
-        },
-      );
-    },
   }
 };
 </script>

@@ -177,13 +177,19 @@
 </template>
 
 <script>
+import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import computeds from '~/mixins/computeds'
 import routerV2ABI from '~/static/abis/routerv2.json'
 import factoryABI from '~/static/abis/factory.json'
+import ERC20ABI from '~/static/abis/erc20.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
-const routerAddress = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
+const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
 const factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
+const routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
+const factory = new web3.eth.Contract(factoryABI, factoryAddress);
+
+console.log(IUniswapV2Pair.abi)
 
 export default {
   name: "FarmDetailsPage",
@@ -344,6 +350,7 @@ export default {
   async mounted() {
     await this.$metamask.checkConnection()
     this.userConnected = this.$metamask.userConnected
+    await this.getAllPairs()
   },
   methods: {
     changeLayoutCells() {
@@ -365,19 +372,67 @@ export default {
         this.tabsFilter_model = 0
       }, 100);
     },
-    // create pool
-    async addLiquidity(
-      tokenA,
-      tokenB,
-      amountADesired,
-      amountBDesired,
-      amountAMin,
-      amountBMin,
-      to,
-      deadline,
-    ){
-      const routerContract = new web3.eth.Contract(routerV2ABI, routerAddress);
-      await routerContract.methods.methodName(
+
+    // Pairs
+
+    /* pairObject
+      {
+        token0: {
+          symbol
+          name
+          address
+          decimals
+          logo
+        }
+        token1: {
+          symbol
+          name
+          address
+          decimals
+          logo
+        }
+      }
+    */
+    async getTokenData(tokenAddress) {
+      const token = {}
+      const tokenContract = new web3.eth.Contract(ERC20ABI,tokenAddress)
+      token.address = tokenAddress
+      token.name = await tokenContract.methods.name().call()
+      token.symbol = await tokenContract.methods.symbol().call()
+      token.decimals = await tokenContract.methods.decimals().call()
+      console.log(token)
+      return token
+    },
+
+    async getAllPairs() {
+      const allPairs = []
+      const pairsCreated = await factory.methods.allPairsLength().call()
+
+      for(let i = 0; i < pairsCreated; i++) {
+        const pair = {}
+        pair.address = await factory.methods.allPairs(i).call()
+        const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pair.address);
+        const token0Address = await pairContract.methods.token0().call()
+        const token1Address = await pairContract.methods.token1().call()
+        // console.log("pair" + i +" tokens" )
+        pair.token0 = await this.getTokenData(token0Address)
+        pair.token1 = await this.getTokenData(token1Address)
+        // console.log("pair" + i +" tokens" )
+        // console.log(" ")
+        allPairs.push(pair)
+      }
+      // console.log("----all Pairs----")
+      // console.log pairsCreated + " pairs created so far")
+      // console.log("----all Pairs----")
+
+    },
+
+    async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
+      await this.approve(tokenA, amountADesired)
+      await this.approve(tokenB, amountBDesired)
+      const to = this.$metamask.userAccount
+      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
+      await routerV2.methods.addLiquidity(
         tokenA,
         tokenB,
         amountADesired,
@@ -385,8 +440,36 @@ export default {
         amountAMin,
         amountBMin,
         to,
-        deadline,
-      ).call({ from: this.$metamask.userAccount })
+        deadline
+      ).send({from: this.$metamask.userAccount}).then(
+        function (value) {
+          console.log(value, "<------- addliquidity")
+        },
+        function (reason) {
+          console.log(reason, "<------- addliquidity")
+        },
+      );
+    },
+
+    async removeLiquidity(tokenA, tokenB, liquidity, amountAMin, amountBMin) {
+      const to = this.$metamask.userAccount
+      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
+      await routerV2.methods.addLiquidity(
+        tokenA,
+        tokenB,
+        liquidity,
+        amountAMin,
+        amountBMin,
+        to,
+        deadline
+      ).send({from: this.$metamask.userAccount}).then(
+        function (value) {
+          console.log(value, "<------- removeliquidity")
+        },
+        function (reason) {
+          console.log(reason, "<------- removeliquidity")
+        },
+      );
     },
     addLiquidityETH(){
 
