@@ -73,6 +73,10 @@
             <v-btn
               class="btn mobile-btn"
               style="width: 350px!important; height: 60px!important; margin-top: 15px;"
+              @click="swapExactTokensForTokens(
+                '0x11021aFAafaa41764aa5D2A00C4331Fb9d741AD6',
+                '0xB2a1216856880D07eee9C4f71756FA8f72036e1E',
+              )"
             >Swap
             </v-btn>
 
@@ -112,7 +116,7 @@ import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import routerV2ABI  from '~/static/abis/routerv2.json'
 import factoryABI  from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
-import scrollTokens from '~/static/tokens/scroll_tokens.json'
+import scrollTokens from '~/static/tokens/scroll_alpah_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
 const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
@@ -267,12 +271,12 @@ export default {
 
     }, */
 
-    async swapTokensForTokens(tokenInAddress, tokenOutAddress) {
+    async swapTokensForTokens(tokenIn, tokenOut) {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      const path = [tokenInAddress, tokenOutAddress]
+      const path = [tokenIn.Address, tokenOut.Address]
       await routerV2.methods.swapExactTokensForTokens(
-        this.tokenAmountIn,
-        this.tokenAmountOut,
+        (this.tokenAmountIn * 10 ** tokenIn.decimals).toString,
+        (this.tokenAmountOut * 10 ** tokenIn.decimals).toString,
         path,
         this.$metamask.userAccount,
         deadline).send({from: this.$metamask.userAccount})
@@ -282,15 +286,15 @@ export default {
     swapTokensForETH() {},
 
     async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
-      await this.approve(tokenA, amountADesired)
-      await this.approve(tokenB, amountBDesired)
+      await this.approve(tokenA.address, (amountADesired * 10 ** tokenA.decimals).toString())
+      await this.approve(tokenB.address, (amountBDesired * 10 ** tokenB.decimals).toString())
       const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       await routerV2.methods.addLiquidity(
         tokenA,
         tokenB,
-        amountADesired,
-        amountBDesired,
+        (amountADesired * 10 ** tokenA.decimals).toString(),
+        (amountBDesired * 10 ** tokenB.decimals).toString(),
         amountAMin,
         amountBMin,
         to,
@@ -308,7 +312,7 @@ export default {
     async removeLiquidity(tokenA, tokenB, liquidity, amountAMin, amountBMin) {
       const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      await routerV2.methods.addLiquidity(
+      await routerV2.methods.removeLiquidity(
         tokenA,
         tokenB,
         liquidity,
