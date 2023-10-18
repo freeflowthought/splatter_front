@@ -36,7 +36,7 @@
                 v-model="tokenAmountIn" class="input-number" :value="0" placeholder="0.00"
               ></v-text-field>
 
-              <v-btn class="btn-max" @click="setMaxValue">max</v-btn>
+              <v-btn  class="btn-max" @click="setMaxValue">max</v-btn>
             </div>
 
            <!-- <div class="divrow center jspace mobile-btn" style="width:350px;">
@@ -129,6 +129,7 @@ export default {
     return {
       selectedItem1: null,
       selectedItem2: null,
+      tokenInAmountUser: 0,
       tokenAmountIn: 0,
       tokenAmountOut: 0,
       items: scrollTokens,
@@ -143,29 +144,6 @@ export default {
         name: "btc",
         amount: undefined,
       },
-      dataTokens: [
-        {
-          img: require('~/assets/sources/tokens/hny.svg'),
-          name: "hny",
-        },
-        {
-          img: require('~/assets/sources/tokens/usdc.svg'),
-          name: "usdc",
-        },
-        {
-          img: require('~/assets/sources/tokens/btc.svg'),
-          name: "btc",
-        },
-        {
-          img: require('~/assets/sources/tokens/database.svg'),
-          name: "coin name",
-        },
-        {
-          img: require('~/assets/sources/tokens/database.svg'),
-          name: "coin name",
-        },
-      ],
-      currentDrag: undefined,
     }
   },
   head() {
@@ -185,7 +163,7 @@ export default {
   },
   methods: {
     setMaxValue() {
-      this.inputNumber = 9999;
+      this.tokenAmountIn = this.tokenInAmountUser;
     },
 
     styles() {
@@ -236,10 +214,9 @@ export default {
       const tokenContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
       await tokenContract.methods.balanceOf(this.$metamask.userAccount).call().then(
         function (value) {
-
+          return value
         },
         function (reason) {
-
 
         },
       );

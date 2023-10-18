@@ -68,7 +68,6 @@
         <div class="jspace acenter mobile-fields deletemobile">
           <v-btn-toggle mandatory class="tooggle">
             <v-btn class="btn-toggle">Pairs</v-btn>
-            <v-btn class="btn-toggle">Pools</v-btn>
           </v-btn-toggle>
 
           <div class="divrow center" style="gap:5px;">
@@ -94,22 +93,22 @@
           mobile-breakpoint="840"
           class="deletemobile"
         >
-          <template #[`item.poolName`]="{ item }">
+          <template #[`item.poolName`] ="{ item }">
             <div class="acenter font2" style="gap: 10px">
               <v-sheet class="dual-tokens" color="transparent" style="--h-sheet: 40px">
-                <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:35px;">
-                <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 28px;">
+                <img :src="require(`~/assets/sources/tokens/elipse.svg`)" :alt="`elipse token`" class="aspect" style="--p:0px; --w:35px;">
+                <img :src="require(`~/assets/sources/tokens/elipse-clara.svg`)" :alt="`elipse-clara token`" class="aspect" style="--p:0px; --w:35px; margin-right: 28px;">
               </v-sheet>
 
               <span class="bold tup">{{item.poolName}}</span>
             </div>
           </template>
 
-          <template #[`item.rewards`]="{ item }">
+          <template #[`item.rewards`]>
             <div class="center font2" style="gap: 10px">
               <v-sheet class="dual-tokens center" color="transparent" style="--h-sheet: 40px">
-                <img :src="require(`~/assets/sources/tokens/${item.rewardA}.svg`)" :alt="`${item.rewardA} token`" class="aspect" style="--p:0px; --w:35px; margin-left: 12px;">
-                <img :src="require(`~/assets/sources/tokens/${item.rewardB}.svg`)" :alt="`${item.rewardB} token`" class="aspect" style="--p:0px; --w:35px; margin-right: 12px;">
+                <img :src="require(`~/assets/sources/tokens/elipse.svg`)" :alt="`elipse token`" class="aspect" style="--p:0px; --w:35px; margin-left: 12px;">
+                <img :src="require(`~/assets/sources/tokens/elipse-clara.svg`)" :alt="`elipse-clara token`" class="aspect" style="--p:0px; --w:35px; margin-right: 12px;">
               </v-sheet>
             </div>
           </template>
@@ -138,8 +137,8 @@
             <div class="title-grid">
               <div class="element1 divrow center">
                 <v-sheet class="dual-tokens" color="transparent" style="--h-sheet: 40px">
-                  <img :src="require(`~/assets/sources/tokens/${item.tokenA}.svg`)" :alt="`${item.tokenA} token`" class="aspect" style="--p:0px; --w:25px;">
-                  <img :src="require(`~/assets/sources/tokens/${item.tokenB}.svg`)" :alt="`${item.tokenB} token`" class="aspect" style="--p:0px; --w:25px; margin-right: 40px;">
+                  <img :src="require(`~/assets/sources/tokens/elipse.svg`)" :alt="`elipse token`" class="aspect" style="--p:0px; --w:25px;">
+                  <img :src="require(`~/assets/sources/tokens/elipse-clara.svg`)" :alt="`elipse-clara token`" class="aspect" style="--p:0px; --w:25px; margin-right: 40px;">
                 </v-sheet>
 
                 <span class="bold tup pool-text" style="margin-left: -30px;">{{item.poolName}}</span>
@@ -263,64 +262,7 @@ export default {
         },
       ],
 
-      dataTable: [
-        {
-          poolName: "ETH-SPT",
-          tokenA: "elipse",
-          tokenB: "elipse-clara",
-          apr: "304%",
-          tvl: "1.4m",
-          vol: "$21k",
-          rewardA: "btc",
-          rewardB: "usdc",
-          btn_text:"Deposit"
-        },
-        {
-          poolName: "ETH-SPT",
-          tokenA: "elipse",
-          tokenB: "elipse-clara",
-          apr: "304%",
-          tvl: "1.4m",
-          vol: "$21k",
-          rewardA: "btc",
-          rewardB: "usdc",
-          btn_text:"Claim $23.38"
-        },
-        {
-          poolName: "ETH-SPT",
-          tokenA: "elipse",
-          tokenB: "elipse-clara",
-          apr: "304%",
-          tvl: "1.4m",
-          vol: "$21k",
-          rewardA: "btc",
-          rewardB: "usdc",
-          btn_text:"Deposit"
-
-        },
-        {
-          poolName: "ETH-SPT",
-          tokenA: "elipse",
-          tokenB: "elipse-clara",
-          apr: "304%",
-          tvl: "1.4m",
-          vol: "$21k",
-          rewardA: "btc",
-          rewardB: "usdc",
-          btn_text:"Deposit"
-        },
-        {
-          poolName: "ETH-SPT",
-          tokenA: "elipse",
-          tokenB: "elipse-clara",
-          apr: "304%",
-          tvl: "1.4m",
-          vol: "$21k",
-          rewardA: "btc",
-          rewardB: "usdc",
-          btn_text:"Deposit"
-        },
-      ],
+      dataTable: undefined,
     }
   },
   head() {
@@ -350,9 +292,12 @@ export default {
   async mounted() {
     await this.$metamask.checkConnection()
     this.userConnected = this.$metamask.userConnected
-    await this.getAllPairs()
+    this.dataTable = await this.getAllPairs()
+    console.log(this.dataTable)
   },
   methods: {
+    // TO-DO
+    // create modals to deposit and to create pool
     changeLayoutCells() {
       if (this.layoutCells) {
         this.dataFilterFarms = ["view all", "farms", "my farms"]
@@ -375,24 +320,11 @@ export default {
 
     // Pairs
 
-    /* pairObject
-      {
-        token0: {
-          symbol
-          name
-          address
-          decimals
-          logo
-        }
-        token1: {
-          symbol
-          name
-          address
-          decimals
-          logo
-        }
-      }
-    */
+    // TO-DO
+    calculateTLV() {
+      // https://droomdroom.com/total-value-locked-explained/#:~:text=The%20TVL%20formula%20is%20simple,circulating%20supply%20of%20the%20token.
+    },
+
     async getTokenData(tokenAddress) {
       const token = {}
       const tokenContract = new web3.eth.Contract(ERC20ABI,tokenAddress)
@@ -400,7 +332,6 @@ export default {
       token.name = await tokenContract.methods.name().call()
       token.symbol = await tokenContract.methods.symbol().call()
       token.decimals = await tokenContract.methods.decimals().call()
-      console.log(token)
       return token
     },
 
@@ -414,36 +345,31 @@ export default {
         const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pair.address);
         const token0Address = await pairContract.methods.token0().call()
         const token1Address = await pairContract.methods.token1().call()
-        // console.log("pair" + i +" tokens" )
         pair.token0 = await this.getTokenData(token0Address)
         pair.token1 = await this.getTokenData(token1Address)
-        // console.log("pair" + i +" tokens" )
-        // console.log(" ")
+        pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
         allPairs.push(pair)
       }
-      // console.log("----all Pairs----")
-      // console.log pairsCreated + " pairs created so far")
-      // console.log("----all Pairs----")
-
+      return allPairs
     },
 
     async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
-      await this.approve(tokenA, amountADesired)
-      await this.approve(tokenB, amountBDesired)
+      await this.approve(tokenA.address, (amountADesired * 10 ** tokenA.decimals).toString())
+      await this.approve(tokenB.address, (amountBDesired * 10 ** tokenB.decimals).toString())
       const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       await routerV2.methods.addLiquidity(
-        tokenA,
-        tokenB,
-        amountADesired,
-        amountBDesired,
+        tokenA.address,
+        tokenB.address,
+        (amountADesired * 10 ** tokenA.decimals).toString(),
+        (amountBDesired * 10 ** tokenB.decimals).toString(),
         amountAMin,
         amountBMin,
         to,
         deadline
       ).send({from: this.$metamask.userAccount}).then(
         function (value) {
-          console.log(value, "<------- addliquidity")
+          this.$alert("success", 'Liquidity provided succesfully')
         },
         function (reason) {
           console.log(reason, "<------- addliquidity")
@@ -454,7 +380,7 @@ export default {
     async removeLiquidity(tokenA, tokenB, liquidity, amountAMin, amountBMin) {
       const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      await routerV2.methods.addLiquidity(
+      await routerV2.methods.removeLiquidity(
         tokenA,
         tokenB,
         liquidity,
@@ -464,7 +390,7 @@ export default {
         deadline
       ).send({from: this.$metamask.userAccount}).then(
         function (value) {
-          console.log(value, "<------- removeliquidity")
+          this.$alert("success", 'Liquidity removed succesfully')
         },
         function (reason) {
           console.log(reason, "<------- removeliquidity")
