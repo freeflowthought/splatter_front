@@ -275,8 +275,8 @@ export default {
       this.approve(tokenIn.address, (this.tokenAmountIn * 10 ** tokenIn.decimals).toString())
       const path = [tokenIn.address, tokenOut.address]
       await routerV2.methods.swapExactTokensForTokens(
-        (this.tokenAmountIn * 10 ** tokenIn.decimals).toString,
-        (this.tokenAmountOut * 10 ** tokenIn.decimals).toString,
+        (this.tokenAmountIn * 10 ** tokenIn.decimals).toString(),
+        (this.tokenAmountOut * 10 ** tokenIn.decimals).toString(),
         path,
         this.$metamask.userAccount,
         deadline).send({from: this.$metamask.userAccount})
