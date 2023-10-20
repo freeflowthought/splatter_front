@@ -6,13 +6,14 @@
       <span class="h9_em bold mt-5 mb-2">You haven't connected your wallet.</span>
       <span class="hspan" style="--fs: max(13px, 1em)">Connect to view eligible farms.</span>
       <v-btn
-        class="btn mt-3 pevents font2" style="--w: 10.3125em; --h: 3.25em; --stroke: .4px"
-        @click="$store.dispatch('modalConnect')">
-        Connect Wallet
-      </v-btn>
-    </div>
+      class="btn mt-3 pevents font2" style="--w: 10.3125em; --h: 3.25em; --stroke: .4px"
+      @click="$store.dispatch('modalConnect')">
+      Connect Wallet
+    </v-btn>
+  </div>
 
-    <template v-else>
+  <template v-else>
+      <modalLiquidity v-show="true" ></modalLiquidity>
       <h1 class="bold" style="font-family:var(--font1);">Earn</h1>
       <!-- layoutcell 1 -->
       <section id="farm-details-content" class="gridauto">
@@ -177,6 +178,7 @@
 
 <script>
 import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
+import modalLiquidity from '~/components/modals/provide-remove-liquidity.vue'
 import computeds from '~/mixins/computeds'
 import routerV2ABI from '~/static/abis/routerv2.json'
 import factoryABI from '~/static/abis/factory.json'
@@ -192,9 +194,13 @@ console.log(IUniswapV2Pair.abi)
 
 export default {
   name: "FarmDetailsPage",
+  components: {
+    modalLiquidity
+  },
   mixins: [computeds],
   data() {
     return {
+      isModalVisible:true,
       userConnected: false,
       search:'',
       hideProfits: false,
@@ -293,11 +299,12 @@ export default {
     await this.$metamask.checkConnection()
     this.userConnected = this.$metamask.userConnected
     this.dataTable = await this.getAllPairs()
-    console.log(this.dataTable)
   },
   methods: {
     // TO-DO
     // create modals to deposit and to create pool
+    showModal(){},
+    hideModal(){},
     changeLayoutCells() {
       if (this.layoutCells) {
         this.dataFilterFarms = ["view all", "farms", "my farms"]
@@ -325,13 +332,29 @@ export default {
       // https://droomdroom.com/total-value-locked-explained/#:~:text=The%20TVL%20formula%20is%20simple,circulating%20supply%20of%20the%20token.
     },
 
+    async balanceOf(tokenAddres) {
+      const tokenContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
+      await tokenContract.methods.balanceOf(this.$metamask.userAccount).call().then(
+        function (value) {
+          return value
+        },
+        function (reason) {
+
+        },
+      );
+    },
+
     async getTokenData(tokenAddress) {
       const token = {}
       const tokenContract = new web3.eth.Contract(ERC20ABI,tokenAddress)
       token.address = tokenAddress
-      token.name = await tokenContract.methods.name().call()
-      token.symbol = await tokenContract.methods.symbol().call()
-      token.decimals = await tokenContract.methods.decimals().call()
+      const [name, symbol, decimals] = await Promise.all([
+        tokenContract.methods.name().call(),
+        tokenContract.methods.symbol().call(),
+        tokenContract.methods.decimals().call()])
+      token.name = name
+      token.symbol = symbol
+      token.decimals = decimals
       return token
     },
 
@@ -343,10 +366,17 @@ export default {
         const pair = {}
         pair.address = await factory.methods.allPairs(i).call()
         const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pair.address);
-        const token0Address = await pairContract.methods.token0().call()
-        const token1Address = await pairContract.methods.token1().call()
-        pair.token0 = await this.getTokenData(token0Address)
-        pair.token1 = await this.getTokenData(token1Address)
+        const [token0Address, token1Address] = await Promise.all([
+          pairContract.methods.token0().call(),
+          pairContract.methods.token1().call()])
+
+        const [token0, token1] = await Promise.all([
+          this.getTokenData(token0Address),
+          this.getTokenData(token1Address)
+        ])
+        pair.token0 = token0
+        pair.token1 = token1
+
         pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
         allPairs.push(pair)
       }
