@@ -1,9 +1,9 @@
 <template>
-  <v-dialog v-model="modalConnect" content-class="modal-connect divcol relative isolate">
+  <v-dialog v-model="modalLiquidity" content-class="modal-connect divcol relative isolate">
     <aside class="space">
       <span class="h8_em">Deposit {{ pair.poolName }}</span>
 
-      <v-btn style="background: hsl(0 0% 0% / .2)!important;" icon @click="modalConnect = false">
+      <v-btn style="background: hsl(0 0% 0% / .2)!important;" icon @click="modalLiquidity = false">
         <v-icon size="1.5em">mdi-close</v-icon>
       </v-btn>
     </aside>
@@ -87,7 +87,7 @@ export default {
   },
   data() {
     return {
-      modalConnect: true,
+      modalLiquidity: true,
     };
   },
   mounted() {

@@ -13,7 +13,7 @@
   </div>
 
   <template v-else>
-      <modalLiquidity v-show="true" ></modalLiquidity>
+      <modalLiquidity ref="modalLiquidity" pair="" ></modalLiquidity>
       <h1 class="bold" style="font-family:var(--font1);">Earn</h1>
       <!-- layoutcell 1 -->
       <section id="farm-details-content" class="gridauto">
@@ -200,7 +200,7 @@ export default {
   mixins: [computeds],
   data() {
     return {
-      isModalVisible:true,
+      pairSelected: undefined,
       userConnected: false,
       search:'',
       hideProfits: false,
@@ -303,7 +303,9 @@ export default {
   methods: {
     // TO-DO
     // create modals to deposit and to create pool
-    showModal(){},
+    showModal(){
+      this.$refs.modalLiquidity.modalLiquidity = true
+    },
     hideModal(){},
     changeLayoutCells() {
       if (this.layoutCells) {
