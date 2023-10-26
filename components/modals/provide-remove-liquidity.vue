@@ -8,48 +8,41 @@
       </v-btn>
     </aside>
 
-    <!-- <v-sheet class="grid" color="transparent">
-      <v-btn plain @click="connectMetamask(), $store.commit('signIn')">
-        <img src="~/assets/sources/logos/metamask-icon.svg" alt="metamask logo">
-
-        <div class="divcol astart" style="gap: 5px">
-          <span class="h12_em bold">metamask</span>
-          <span class="h13_em">metamask.org</span>
-        </div>
-      </v-btn>
-
-       <v-btn plain @click="$store.commit('signIn')">
-        <img src="~/assets/sources/logos/sender-icon.svg" alt="near">
-
-        <div class="divcol astart" style="gap: 5px">
-          <span class="h12_em bold">connect</span>
-          <span class="h13_em">connect.org</span>
-        </div>
-      </v-btn>
-    </v-sheet> -->
-    <v-form>
+    <v-form class="flex-column center">
       <v-text-field
-      class="input"
-      :label="`Amount ${ pair.token0.symbol } desired`"
+        v-model="token0Amount"
+        class="input"
+        :label="`Amount ${ pair.token0.symbol } desired`"
       ></v-text-field>
 
       <v-text-field
-      class="input"
-      :label="`Amount ${ pair.token1.symbol } desired`"
+        v-model="token1Amount"
+        class="input"
+        :label="`Amount ${ pair.token1.symbol } desired`"
       ></v-text-field>
 
       <v-text-field
-      class="input"
-      :label="`Amount ${ pair.token0.symbol } minimun`"
+        v-model="token0AmountMin"
+        class="input"
+        :label="`Amount ${ pair.token0.symbol } minimum`"
       ></v-text-field>
 
       <v-text-field
-      class="input"
-      :label="`Amount ${ pair.token1.symbol } minimun`"
+        v-model="token1AmountMin"
+        class="input"
+        :label="`Amount ${ pair.token1.symbol } minimum`"
       ></v-text-field>
 
       <v-btn
-      class="btn bold"
+        class="btn bold"
+        @click="addLiquidity(
+          pair.token0,
+          pair.token1,
+          token0Amount,
+          token1Amount,
+          token0AmountMin,
+          token1AmountMin,
+        )"
       >
         Add liquidity
       </v-btn>
@@ -59,6 +52,7 @@
 
 <script>
 import routerV2ABI from '~/static/abis/routerv2.json'
+import ERC20ABI from '~/static/abis/erc20.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
 const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
@@ -87,34 +81,41 @@ export default {
   },
   data() {
     return {
-      modalLiquidity: true,
+      modalLiquidity: false,
+      token0Amount: undefined,
+      token1Amount: undefined,
+      token0AmountMin: undefined,
+      token1AmountMin: undefined,
     };
   },
   mounted() {
   },
   methods: {
-    async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
-      await this.approve(tokenA.address, (amountADesired * 10 ** tokenA.decimals).toString())
-      await this.approve(tokenB.address, (amountBDesired * 10 ** tokenB.decimals).toString())
+
+    approve(tokenAddres, amount, batch) {
+      const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
+      batch.add(tokenInContract.methods.approve(routerV2Address, amount).send.request({ from: this.$metamask.userAccount }, () => {}))
+    },
+    // TODO callbacks
+    addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
+      const batch = new web3.BatchRequest();
+      this.approve(tokenA.address, (amountADesired * 10 ** tokenA.decimals).toString(), batch)
+      this.approve(tokenB.address, (amountBDesired * 10 ** tokenB.decimals).toString(), batch)
       const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      await routerV2.methods.addLiquidity(
-        tokenA.address,
-        tokenB.address,
-        (amountADesired * 10 ** tokenA.decimals).toString(),
-        (amountBDesired * 10 ** tokenB.decimals).toString(),
-        amountAMin,
-        amountBMin,
-        to,
-        deadline
-      ).send({from: this.$metamask.userAccount}).then(
-        function (value) {
-          this.$alert("success", 'Liquidity provided succesfully')
-        },
-        function (reason) {
-          console.log(reason, "<------- addliquidity")
-        },
-      );
+      batch.add(
+        routerV2.methods.addLiquidity(
+          tokenA.address,
+          tokenB.address,
+          (amountADesired * 10 ** tokenA.decimals).toString(),
+          (amountBDesired * 10 ** tokenB.decimals).toString(),
+          amountAMin,
+          amountBMin,
+          to,
+          deadline
+        ).send.request({from: this.$metamask.userAccount}, () => {})
+      )
+      batch.execute()
     },
   }
 };

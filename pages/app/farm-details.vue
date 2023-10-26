@@ -13,7 +13,7 @@
   </div>
 
   <template v-else>
-      <modalLiquidity ref="modalLiquidity" pair="" ></modalLiquidity>
+      <modalLiquidity ref="modalLiquidity" :pair='pairSelected' ></modalLiquidity>
       <h1 class="bold" style="font-family:var(--font1);">Earn</h1>
       <!-- layoutcell 1 -->
       <section id="farm-details-content" class="gridauto">
@@ -114,9 +114,11 @@
             </div>
           </template>
 
-          <template #[`item.actions`]>
+          <template #[`item.actions`] ="{ item }">
             <div class="end">
-              <v-btn class="btn" style="--fs: 1em; --stroke: .4px; --br: 10px; --b:1px solid #000;">
+              <v-btn
+              class="btn" style="--fs: 1em; --stroke: .4px; --br: 10px; --b:1px solid #000;"
+              @click="showModal(item)">
                 Deposit
               </v-btn>
             </div>
@@ -190,8 +192,6 @@ const factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
 const routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
 const factory = new web3.eth.Contract(factoryABI, factoryAddress);
 
-console.log(IUniswapV2Pair.abi)
-
 export default {
   name: "FarmDetailsPage",
   components: {
@@ -200,7 +200,18 @@ export default {
   mixins: [computeds],
   data() {
     return {
-      pairSelected: undefined,
+      pairSelected: {
+        address: "",
+        poolName: "",
+        token0: {
+          name:"",
+          symbol:"",
+        },
+        token1: {
+          name:"",
+          symbol:"",
+        }
+      },
       userConnected: false,
       search:'',
       hideProfits: false,
@@ -303,7 +314,8 @@ export default {
   methods: {
     // TO-DO
     // create modals to deposit and to create pool
-    showModal(){
+    showModal(item){
+      this.pairSelected = item
       this.$refs.modalLiquidity.modalLiquidity = true
     },
     hideModal(){},
@@ -378,6 +390,7 @@ export default {
         ])
         pair.token0 = token0
         pair.token1 = token1
+        console.log(token0.address, token1.address)
 
         pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
         allPairs.push(pair)

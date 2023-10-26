@@ -72,10 +72,10 @@ export default {
           name: "Swap",
           to: "/swap"
         },
-        /* {
+        {
           name: "Earn",
           to: "/farm-details"
-        }, */
+        },
         {
           name: "Claim faucet",
           to: "/faucet"
