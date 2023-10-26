@@ -8,27 +8,35 @@
       </v-btn>
     </aside>
 
-    <v-form class="flex-column center">
+    <v-form ref="form" class="flex-column center">
       <v-text-field
-        v-model="token0Amount"
+      v-model="token0Amount"
+      required
+        :rules="rules"
         class="input"
         :label="`Amount ${ pair.token0.symbol } desired`"
       ></v-text-field>
 
       <v-text-field
-        v-model="token1Amount"
+      v-model="token1Amount"
+      required
+        :rules="rules"
         class="input"
         :label="`Amount ${ pair.token1.symbol } desired`"
       ></v-text-field>
 
       <v-text-field
-        v-model="token0AmountMin"
+      v-model="token0AmountMin"
+      required
+        :rules="rules"
         class="input"
         :label="`Amount ${ pair.token0.symbol } minimum`"
       ></v-text-field>
 
       <v-text-field
-        v-model="token1AmountMin"
+      v-model="token1AmountMin"
+      required
+        :rules="rules"
         class="input"
         :label="`Amount ${ pair.token1.symbol } minimum`"
       ></v-text-field>
@@ -86,6 +94,11 @@ export default {
       token1Amount: undefined,
       token0AmountMin: undefined,
       token1AmountMin: undefined,
+      rules: [
+        v => !!v || 'Field is required',
+        v => /^\d+(\.\d+)?$/.test(v) || 'Invalid numeric input',
+        v => v >= 0 || 'Value must be positive',
+      ],
     };
   },
   mounted() {
@@ -94,7 +107,13 @@ export default {
 
     approve(tokenAddres, amount, batch) {
       const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
-      batch.add(tokenInContract.methods.approve(routerV2Address, amount).send.request({ from: this.$metamask.userAccount }, () => {}))
+      batch.add(tokenInContract.methods.approve(routerV2Address, amount).send.request({ from: this.$metamask.userAccount }, (err, res) => {
+          if (err) {
+            throw err
+          }
+          if (res) {
+            this.$alert('success', 'asdasdadadasd')
+          }}))
     },
     // TODO callbacks
     addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
@@ -113,7 +132,15 @@ export default {
           amountBMin,
           to,
           deadline
-        ).send.request({from: this.$metamask.userAccount}, () => {})
+        ).send.request({from: this.$metamask.userAccount}, (err, res) => {
+          if (err) {
+            console.log(err)
+          }
+          if (res) {
+            this.$alert('success', '')
+          }
+
+        })
       )
       batch.execute()
     },

@@ -34,7 +34,7 @@
               </v-select>
 
               <v-text-field
-                v-model="tokenAmountIn" class="input-number" :value="0" placeholder="0.00"
+                v-model="tokenAmountIn" :rules="rules" class="input-number" :value="0" placeholder="0.00"
               ></v-text-field>
 
               <v-btn  class="btn-max" @click="setMaxValue">max</v-btn>
@@ -67,7 +67,8 @@
               </template>
               </v-select>
 
-              <v-text-field v-model="tokenAmountOut" class="input-number" :value="0" placeholder="0.00"
+              <v-text-field
+                v-model="tokenAmountOut" :rules="rules" class="input-number" :value="0" placeholder="0.00"
               ></v-text-field>
             </div>
 
@@ -145,6 +146,11 @@ export default {
         name: "btc",
         amount: undefined,
       },
+      rules: [
+        v => !!v || 'Field is required',
+        v => /^\d+(\.\d+)?$/.test(v) || 'Invalid numeric input',
+        v => v >= 0 || 'Value must be positive',
+      ],
     }
   },
   head() {

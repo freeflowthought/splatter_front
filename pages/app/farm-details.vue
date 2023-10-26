@@ -390,36 +390,10 @@ export default {
         ])
         pair.token0 = token0
         pair.token1 = token1
-        console.log(token0.address, token1.address)
-
         pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
         allPairs.push(pair)
       }
       return allPairs
-    },
-
-    async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
-      await this.approve(tokenA.address, (amountADesired * 10 ** tokenA.decimals).toString())
-      await this.approve(tokenB.address, (amountBDesired * 10 ** tokenB.decimals).toString())
-      const to = this.$metamask.userAccount
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      await routerV2.methods.addLiquidity(
-        tokenA.address,
-        tokenB.address,
-        (amountADesired * 10 ** tokenA.decimals).toString(),
-        (amountBDesired * 10 ** tokenB.decimals).toString(),
-        amountAMin,
-        amountBMin,
-        to,
-        deadline
-      ).send({from: this.$metamask.userAccount}).then(
-        function (value) {
-          this.$alert("success", 'Liquidity provided succesfully')
-        },
-        function (reason) {
-          console.log(reason, "<------- addliquidity")
-        },
-      );
     },
 
     async removeLiquidity(tokenA, tokenB, liquidity, amountAMin, amountBMin) {
