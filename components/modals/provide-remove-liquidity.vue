@@ -43,14 +43,8 @@
 
       <v-btn
         class="btn bold"
-        @click="addLiquidity(
-          pair.token0,
-          pair.token1,
-          token0Amount,
-          token1Amount,
-          token0AmountMin,
-          token1AmountMin,
-        )"
+        :disabled="formValid"
+        @click="submitForm"
       >
         Add liquidity
       </v-btn>
@@ -105,15 +99,26 @@ export default {
   },
   methods: {
 
+    submitForm() {
+     if (this.$refs.form.validate()){
+      this.addLiquidity(
+        this.pair.token0,
+        this.pair.token1,
+        this.token0Amount,
+        this.token1Amount,
+        this.token0AmountMin,
+        this.token1AmountMin,
+      )
+     }
+    },
+
     approve(tokenAddres, amount, batch) {
       const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
-      batch.add(tokenInContract.methods.approve(routerV2Address, amount).send.request({ from: this.$metamask.userAccount }, (err, res) => {
+      batch.add(tokenInContract.methods.approve(routerV2Address, amount).send.request({ from: this.$metamask.userAccount }, (err) => {
           if (err) {
             throw err
           }
-          if (res) {
-            this.$alert('success', 'asdasdadadasd')
-          }}))
+      }))
     },
     // TODO callbacks
     addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
@@ -137,7 +142,7 @@ export default {
             console.log(err)
           }
           if (res) {
-            this.$alert('success', '')
+            this.$alert('success', 'Liquidity added successfully')
           }
 
         })

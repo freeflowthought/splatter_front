@@ -14,8 +14,8 @@
 
   <template v-else>
       <modalLiquidity ref="modalLiquidity" :pair='pairSelected' ></modalLiquidity>
-      <h1 class="bold" style="font-family:var(--font1);">Earn</h1>
       <!-- layoutcell 1 -->
+      <!-- <h1 class="bold" style="font-family:var(--font1);">Earn</h1>
       <section id="farm-details-content" class="gridauto">
         <v-card
           v-for="(item, i) in cardsInfo" :key="i"
@@ -58,7 +58,7 @@
             <v-btn class="btn" style="border:1px solid #000000;">Deposit</v-btn>
           </aside>
         </v-card>
-      </section>
+      </section> -->
 
 
 

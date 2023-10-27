@@ -6,22 +6,26 @@
 
     <section id="swap-content" class="fwrap center divcol">
       <h1 class="swap-title">Swap Tokens</h1>
-      <div class="divrow mobile-column" style="gap:20px;">
+      <v-form ref="form">
+        <div class="divrow mobile-column" style="gap:20px;">
         <!-- left -->
         <v-card class="swap-card divcol center jspace">
-            <v-btn class="menu-btn">
+
+            <!-- <v-btn class="menu-btn">
               <img src="~/assets/sources/icons/menu-circle.svg" alt="menu">
-            </v-btn>
+            </v-btn> -->
             <span class="dm-400">
               From
             </span>
             <div class="swap-container">
               <v-select
                 ref="select1"
-                :items="items"
+                v-model="selectedItem1"
+                :items="items1Filtered"
                 item-text="text"
                 item-value="value"
                 class="input-auto"
+                @change="balanceOf(selectedItem1)"
               >
               <template #item="{ item }">
                 <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
@@ -34,7 +38,13 @@
               </v-select>
 
               <v-text-field
-                v-model="tokenAmountIn" :rules="rules" class="input-number" :value="0" placeholder="0.00"
+                v-model="tokenAmountIn"
+                :rules="rules"
+                class="input-number"
+                :value="0"
+                placeholder="0.00"
+                @input="calculateMidPrice()"
+
               ></v-text-field>
 
               <v-btn  class="btn-max" @click="setMaxValue">max</v-btn>
@@ -52,7 +62,8 @@
             <div class="swap-container swap-container2">
               <v-select
                 ref="select2"
-                :items="items"
+                v-model="selectedItem2"
+                :items="items2Filtered"
                 item-text="text"
                 item-value="value"
                 class="input-auto"
@@ -75,10 +86,7 @@
             <v-btn
               class="btn mobile-btn"
               style="width: 350px!important; height: 60px!important; margin-top: 15px;"
-              @click="swapTokensForTokens(
-                $refs.select1.internalValue,
-                $refs.select2.internalValue
-              )"
+              @click="submitForm"
             >Swap
             </v-btn>
 
@@ -104,6 +112,7 @@
         <template v-else>Connect wallet</template>
         </v-btn>
       </div>
+      </v-form>
 
       <div class="img-container">
         <img src="~/assets/sources/images/circleBottom.png" alt="Circle" class="circle-bottom">
@@ -115,14 +124,15 @@
 <script>
 // import isMobile from '~/mixins/isMobile'
 import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
+import { numericFormat } from '@vuejs-community/vue-filter-numeric-format'
 import routerV2ABI  from '~/static/abis/routerv2.json'
 import factoryABI  from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
-import scrollTokens from '~/static/tokens/scroll_tokens.json'
+import scrollTokens from '~/static/tokens/scroll_alpah_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
-const routerV2Address = "0xB6120De62561D702087142DE405EEB02c18873Bc"
-const factoryAddress = "0xad88D4ABbE0d0672f00eB3B83E6518608d82e95d"
+const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
+const factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
 const routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
 
 export default {
@@ -134,7 +144,8 @@ export default {
       tokenInAmountUser: 0,
       tokenAmountIn: 0,
       tokenAmountOut: 0,
-      items: scrollTokens,
+      items1: scrollTokens,
+      items2: scrollTokens,
       heightChart: undefined,
       swapFrom: {
         img: require('~/assets/sources/tokens/database.svg'),
@@ -151,12 +162,27 @@ export default {
         v => /^\d+(\.\d+)?$/.test(v) || 'Invalid numeric input',
         v => v >= 0 || 'Value must be positive',
       ],
+      numericFormatConfig: {
+        decimalSeparator: ".",
+        fractionDigitsMax: 2,
+        fractionDigitsMin: 2,
+        fractionDigitsSeparator: "",
+        thousandsDigitsSeparator: ","
+      },
     }
   },
   head() {
     const title = 'Swap';
     return {
       title,
+    }
+  },
+  computed: {
+    items1Filtered() {
+      return scrollTokens.filter(item => item !== this.selectedItem2 ?? '')
+    },
+    items2Filtered() {
+      return scrollTokens.filter(item => item !== this.selectedItem1 ?? '')
     }
   },
   mounted() {
@@ -169,8 +195,19 @@ export default {
     window.removeEventListener("resize", this.styles)
   },
   methods: {
+
+    submitForm() {
+     if (this.$refs.form.validate()){
+      this.swapTokensForTokens(
+        this.$refs.select1.internalValue,
+        this.$refs.select2.internalValue
+      )
+     }
+    },
+
     setMaxValue() {
-      this.tokenAmountIn = this.tokenInAmountUser;
+      this.tokenAmountIn = this.tokenInAmountUser | numericFormat(this.numericFormatConfig);
+      this.calculateMidPrice()
     },
 
     styles() {
@@ -205,8 +242,8 @@ export default {
     // we have problems using uniSDK have to about think about some ways of getting an oracle working
     // so we have amountOut in order to use a direct contract call
 
-    async approve(tokenAddres, amount) {
-      const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
+    async approve(tokenAddress, amount) {
+      const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddress);
       await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount }).then(
         function (value) {
 
@@ -217,50 +254,53 @@ export default {
       );
     },
 
-    async balanceOf(tokenAddres) {
-      const tokenContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
-      await tokenContract.methods.balanceOf(this.$metamask.userAccount).call().then(
-        function (value) {
-          return value
-        },
-        function (reason) {
-
-        },
-      );
+    async balanceOf(token) {
+      const tokenContract = new web3.eth.Contract(ERC20ABI, token.address);
+      const balance = await tokenContract.methods.balanceOf(this.$metamask.userAccount).call()
+      this.tokenInAmountUser = balance / 10 ** token.decimals
     },
 
     async getPair(addressA, addressB){
       const factoryContract = new web3.eth.Contract(factoryABI, factoryAddress)
       const pairAddress = await factoryContract.methods.getPair(addressA,addressB).call()
-      const pairExist = pairAddress !== 0x0000000000000000000000000000000000000000
+      const pairExist = pairAddress !== '0x0000000000000000000000000000000000000000'
       if (pairExist) {
         return pairAddress
       } else {
-        console.log("----- pair not found-----")
+        this.$alerts('danger', 'Pair does not exist')
+
       }
     },
 
     async getReserves(tokenInAddress, tokenOutAddress) {
+
       const pairAddress = await this.getPair(tokenInAddress, tokenOutAddress)
       const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
-      const reserves = await pairContract.methods.getReserves().call()
-      return reserves
+      const res = await pairContract.methods.getReserves().call()
+      console.log(res)
+      return res
     },
 
-    /* calculateMidPrice(reserves) {
-      const token0= reserves[0]
-      const token1= reserves[1]
-      const dToken0 = 10 **18
+    async calculateMidPrice() {
+      if(this.tokenAmountIn > 0 && this.tokenAmountIn && this.selectedItem1 != null && this.selectedItem2 != null) {
+        const reserves = await this.getReserves(this.selectedItem1.address, this.selectedItem2.address)
+        const midPrice = await (routerV2.methods.getAmountOut((this.tokenAmountIn * 10 ** this.selectedItem1.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
+        console.log(this.tokenAmountIn * 10 ** this.selectedItem1.decimals, "amountin")
+        console.log(midPrice, "no format")
+        console.log(midPrice / 10 ** this.selectedItem2.decimals)
+        this.tokenAmountOut = midPrice / 10 ** this.selectedItem2.decimals
 
-    }, */
+      }
+    },
 
     async swapTokensForTokens(tokenIn, tokenOut) {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       this.approve(tokenIn.address, (this.tokenAmountIn * 10 ** tokenIn.decimals).toString())
       const path = [tokenIn.address, tokenOut.address]
+      console.log((this.tokenAmountOut * 10 ** tokenIn.decimals).toString().slice(0, tokenOut.decimals).replace(/[.,]/g))
       await routerV2.methods.swapExactTokensForTokens(
-        (this.tokenAmountIn * 10 ** tokenIn.decimals).toString(),
-        (this.tokenAmountOut * 10 ** tokenIn.decimals).toString(),
+        (this.tokenAmountIn * 10 ** tokenIn.decimals).toString().slice(0, tokenIn.decimals).replace(/[.,]/g),
+        (this.tokenAmountOut * 10 ** tokenIn.decimals).toString().slice(0, tokenOut.decimals).replace(/[.,]/g),
         path,
         this.$metamask.userAccount,
         deadline).send({from: this.$metamask.userAccount})
