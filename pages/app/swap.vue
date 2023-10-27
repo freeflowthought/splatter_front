@@ -277,7 +277,6 @@ export default {
       const pairAddress = await this.getPair(tokenInAddress, tokenOutAddress)
       const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
       const res = await pairContract.methods.getReserves().call()
-      console.log(res)
       return res
     },
 
@@ -285,9 +284,6 @@ export default {
       if(this.tokenAmountIn > 0 && this.tokenAmountIn && this.selectedItem1 != null && this.selectedItem2 != null) {
         const reserves = await this.getReserves(this.selectedItem1.address, this.selectedItem2.address)
         const midPrice = await (routerV2.methods.getAmountOut((this.tokenAmountIn * 10 ** this.selectedItem1.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
-        console.log(this.tokenAmountIn * 10 ** this.selectedItem1.decimals, "amountin")
-        console.log(midPrice, "no format")
-        console.log(midPrice / 10 ** this.selectedItem2.decimals)
         this.tokenAmountOut = midPrice / 10 ** this.selectedItem2.decimals
 
       }
@@ -297,7 +293,6 @@ export default {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       this.approve(tokenIn.address, (this.tokenAmountIn * 10 ** tokenIn.decimals).toString())
       const path = [tokenIn.address, tokenOut.address]
-      console.log((this.tokenAmountOut * 10 ** tokenIn.decimals).toString().slice(0, tokenOut.decimals).replace(/[.,]/g))
       await routerV2.methods.swapExactTokensForTokens(
         (this.tokenAmountIn * 10 ** tokenIn.decimals).toString().slice(0, tokenIn.decimals).replace(/[.,]/g),
         (this.tokenAmountOut * 10 ** tokenIn.decimals).toString().slice(0, tokenOut.decimals).replace(/[.,]/g),
