@@ -50,10 +50,11 @@
               <v-btn  class="btn-max" @click="setMaxValue">max</v-btn>
             </div>
 
-           <!-- <div class="divrow center jspace mobile-btn" style="width:350px;">
+           <div class="divrow center jspace mobile-btn" style="width:350px;">
               <v-icon @click="swapValues()">mdi-swap-vertical</v-icon>
-              <span class="dm-light">ETH > SPTL = 1290.03 UDC </span>
-            </div> -->
+              <!-- <span class="dm-light">ETH > SPTL = 1290.03 UDC </span> -->
+            </div>
+
 
             <span class="dm-400">
               To
@@ -222,8 +223,9 @@ export default {
       ` */
     },
     switchTokens() {
-      [this.swapFrom.img, this.swapFrom.name, this.swapTo.img, this.swapTo.name]
-      = [this.swapTo.img, this.swapTo.name, this.swapFrom.img, this.swapFrom.name]
+      const temp = this.selectedItem1
+      this.selectedItem1 = this.selectedItem2
+      this.selectedItem2 = temp
     },
     calcPriceTo(event) {
       const item = this.swapFrom

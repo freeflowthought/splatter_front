@@ -133,8 +133,8 @@ export default {
           tokenB.address,
           (amountADesired * 10 ** tokenA.decimals).toString(),
           (amountBDesired * 10 ** tokenB.decimals).toString(),
-          amountAMin,
-          amountBMin,
+          (amountAMin * 10 ** tokenA.decimals).toString(),
+          (amountBMin * 10 ** tokenB.decimals).toString(),
           to,
           deadline
         ).send.request({from: this.$metamask.userAccount}, (err, res) => {

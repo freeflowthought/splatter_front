@@ -37,7 +37,7 @@
 
 
       <template #content>
-        <v-btn
+            <v-btn
               class="btn2"
               style="position: absolute; width: 80%; margin-left: 10%; margin-top: 160px;"
               v-bind="isLogged ? attrs : ''"
@@ -52,7 +52,7 @@
             </v-btn>
         <v-expansion-panels focusable accordion class="anim_moveleft">
           <v-expansion-panel
-            v-for="(item, i) in $parent.dataNavbarMobile" :key="i"
+            v-for="(item, i) in $parent.dataNavbar" :key="i"
             @click="$router.push(basePath2(item.to))"
           >
             <v-expansion-panel-header class="h10_em" expand-icon="mdi-menu-down" :hide-actions="item.to ? true : false">
@@ -98,7 +98,7 @@ export default {
       dataSocial: [
         // { icon:"discord", url:"#" },
         { icon:"twitter", url:"#" },
-        { icon:"telegram", url:"#" }
+        // { icon:"telegram", url:"#" }
       ],
       wallet: this.$metamask.userAccount === undefined ? "Login": this.$metamask.userAccount,
       isLogged: true,

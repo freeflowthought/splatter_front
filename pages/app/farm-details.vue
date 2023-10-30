@@ -358,6 +358,15 @@ export default {
       );
     },
 
+    approve(tokenAddres, amount, batch) {
+      const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
+      batch.add(tokenInContract.methods.approve(routerV2Address, amount).send.request({ from: this.$metamask.userAccount }, (err) => {
+          if (err) {
+            throw err
+          }
+      }))
+    },
+
     async getTokenData(tokenAddress) {
       const token = {}
       const tokenContract = new web3.eth.Contract(ERC20ABI,tokenAddress)
@@ -396,17 +405,44 @@ export default {
       return allPairs
     },
 
-    async removeLiquidity(tokenA, tokenB, liquidity, amountAMin, amountBMin) {
+
+
+    async removeLiquidity(tokenA, tokenB, amountAMin, amountBMin ) {
+      const batch = new web3.BatchRequest();
+      const pairAddress = factory.methods.getPair(tokenA.decimals, tokenB.decimals);
+      const liquidity = await this.balanceOf(pairAddress)
+      this.approve(pairAddress, liquidity, batch)
       const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
+      batch.add(
+        routerV2.methods.removeLiquidity(
+          tokenA.address,
+          tokenB.address,
+          liquidity,
+          (amountAMin * 10 ** tokenA.decimals).toString(),
+          (amountBMin * 10 ** tokenB.decimals).toString(),
+          to,
+          deadline
+          ).send.request({from: this.$metamask.userAccount}, (err, res) => {
+            if (err) {
+              console.log(err)
+            }
+            if (res) {
+              this.$alert('success', 'Liquidity removed successfully')
+            }
+          }
+        )
+      )
+      batch.execute()
+    },
+    async addLiquidityETH(token, amountTokenDesired, amountTokenMin, amountETHMin){
+      // const to = this.$metamask.userAccount
+      // const batch = new web3.BatchRequest();
       await routerV2.methods.removeLiquidity(
-        tokenA,
-        tokenB,
-        liquidity,
-        amountAMin,
-        amountBMin,
-        to,
-        deadline
+        token.address,
+        amountTokenDesired,
+        amountTokenMin,
+        amountETHMin,
       ).send({from: this.$metamask.userAccount}).then(
         function (value) {
           this.$alert("success", 'Liquidity removed succesfully')
@@ -416,18 +452,18 @@ export default {
         },
       );
     },
-    addLiquidityETH(){
-
-    },
     getAvailablePairs() {
 
     },
     createNewPair() {
 
     },
-    async createNewPool() {
+    async createNewPool(tokenA, tokenB) {
       const factoryContract = new web3.eth.Contract(factoryABI, factoryAddress);
-      await factoryContract.methods.methodName().send({ from: this.$metamask.userAccount })
+      await factoryContract.methods.createPair(
+        tokenA,
+        tokenB
+      ).send({ from: this.$metamask.userAccount })
     },
 
   }

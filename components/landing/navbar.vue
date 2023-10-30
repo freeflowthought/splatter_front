@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LandingMenuNavbar ref="menu"></LandingMenuNavbar>
+    <AppMenuNavbar ref="menu"></AppMenuNavbar>
 
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
@@ -17,7 +17,7 @@
         <a
           v-for="(item, i) in dataNavbar" :key="i"
           :class="{active: $route.path.includes(item.to)}"
-          @click="$router.push(item.to)">
+          @click="item.name !== 'portfolio' ? $router.push(basePath2(item.to)) : ''">
           {{item.name}}
         </a>
       </aside>
@@ -43,7 +43,7 @@
                 <span>Login</span>
               </template>
 
-              <template v-else>{{ wallet.substring(1, 20) }} ...</template>
+              <template v-else>{{ truncatedWallet }} ...</template>
             </v-btn>
           </template>
         </v-menu>
@@ -61,27 +61,13 @@
 import computeds from '~/mixins/computeds'
 import menuLogin from '~/mixins/menuLogin'
 
+
 export default {
   name: "NavbarComponent",
   mixins: [computeds, menuLogin],
   data() {
     return {
       dataNavbar: [
-        {
-          name: "Swap",
-          to: "app/swap"
-        },
-        {
-          name: "Earn",
-          to: "app/farm-details"
-        },
-        {
-          name: "Claim faucet",
-          to: "app/faucet"
-        },
-      ],
-
-      dataNavbarMobile: [
         {
           name: "Swap",
           to: "/swap"
@@ -95,34 +81,22 @@ export default {
           to: "/faucet"
         },
       ],
-      wallet: this.$metamask.userAccount === undefined ? "Login": this.$metamask.userAccount,
+      wallet: "Login",
       isLogged: true,
+
     };
   },
-  watch: {
-    // Watch for changes in the 'wallet' key
-    wallet: function (newValue) {
-      // This will be called whenever the 'wallet' key in localStorage changes
-      // newValue will be the updated value of the 'wallet' key
-      if (!newValue) {
-        // If 'wallet' becomes falsy (e.g., user logs out or clears the wallet data), then refresh the site
-        // You can replace this with any other action you want to perform when the wallet data is removed
-        location.reload();
-      }
-    },
-  },
-
-  mounted() {
-    if (this.$metamask.userAccount !== undefined) {
-      this.$metamask.updateWallet();
-      this.isLogged = false;
+  computed: {
+    truncatedWallet() {
+      return this.wallet.substring(1, 20);
     }
   },
-  methods: {
-    // changeTheme(theme) {
-    //   this.$store.commit("switchTheme", theme);
-    //   this.themeButton = !this.themeButton;
-    // },
+  async mounted() {
+    await this.$metamask.checkConnection()
+    if(this.$metamask.userAccount !== undefined) {
+      this.wallet = this.$metamask.userAccount
+      this.isLogged = false
+    }
   },
 };
 </script>

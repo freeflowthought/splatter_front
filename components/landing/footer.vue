@@ -4,21 +4,21 @@
       <img src="~/assets/sources/logos/splatter-footer.png" alt="Splatter Footer">
 
       <div class="divrow" style="gap: 30px;">
-        <div class="divcol" style="gap: 10px;">
+        <!-- <div class="divcol" style="gap: 10px;">
           <span class="title-media">
             Telegram
           </span>
           <span class="user-media">
-            @splatterprotocol 
+            @splatterprotocol
           </span>
-        </div>
+        </div> -->
 
         <div class="divcol" style="gap: 10px;">
           <span class="title-media">
             Email
           </span>
           <span class="user-media">
-            @splatter@gmail.com  
+            splatterproto@gmail.com
           </span>
         </div>
 
@@ -28,7 +28,7 @@
           </span>
           <a target="_blank" href="#">
             <span class="user-media">
-              @Click here to go Discord 
+              @Click here to go Discord
             </span>
           </a>
         </div> -->
@@ -56,11 +56,11 @@ export default {
   name: "FooterComponent",
   data() {
     return {
-     
+
     }
   },
   methods: {
-    
+
   }
 }
 </script>

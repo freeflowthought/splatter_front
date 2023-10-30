@@ -98,7 +98,7 @@ export default {
       dataSocial: [
         // { icon:"discord", url:"#" },
         { icon:"twitter", url:"#" },
-        { icon:"telegram", url:"#" }
+        // { icon:"telegram", url:"#" }
       ],
       wallet: this.$metamask.userAccount === undefined ? "Login": this.$metamask.userAccount,
       isLogged: true,

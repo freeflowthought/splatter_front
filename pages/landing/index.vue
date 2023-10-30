@@ -6,7 +6,7 @@
 
       <div class="divcol astart div-title">
         <h1 class="title">
-          Local innovate Dex On scroll
+          Local Innovative Dex On Scroll
         </h1>
         <p class="poppins">
           The next generation Dex incorporated with the fully on-chain DAO to bring product continuous evolution towards the perfection.
@@ -50,7 +50,7 @@
             <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
             ></v-text-field>
 
-            <v-btn class="btn-max" @click="setMaxValue">max</v-btn>  
+            <v-btn class="btn-max" @click="setMaxValue">max</v-btn>
           </div>
 
           <div class="divrow center jspace mobile-btn" style="width:350px;">
@@ -83,7 +83,7 @@
             <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
             ></v-text-field>
 
-            <v-btn class="btn-max" @click="setMaxValue">max</v-btn>  
+            <v-btn class="btn-max" @click="setMaxValue">max</v-btn>
           </div>
 
           <v-btn class="btn mobile-btn" style="width: 350px!important; height: 60px!important; margin-top: 15px;">Swap</v-btn>
