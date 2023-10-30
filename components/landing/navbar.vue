@@ -47,6 +47,14 @@
             </v-btn>
           </template>
         </v-menu>
+
+        <v-select
+        v-model="itemSelected"
+        append-icon="mdi-chevron-down"
+        hide-details
+        :items="itemsBlockchain"
+        class="btn2"
+        ></v-select>
       </aside>
 
       <!-- mobile -->
@@ -67,6 +75,8 @@ export default {
   mixins: [computeds, menuLogin],
   data() {
     return {
+      itemSelected: 'Mainnet',
+      itemsBlockchain: ['Mainnet', 'Testnet'],
       dataNavbar: [
         {
           name: "Swap",
@@ -79,6 +89,10 @@ export default {
         {
           name: "Claim faucet",
           to: "/faucet"
+        },
+        {
+          name: "Liquidity",
+          to: "/liquidity"
         },
       ],
       wallet: "Login",

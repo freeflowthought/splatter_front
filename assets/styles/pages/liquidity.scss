@@ -1,0 +1,136 @@
+#liquidity{
+  @include parent;
+  padding-inline: var(--margin-global);
+  padding-bottom: 200px;
+  @include media(max, 700px){padding-bottom: 50px;}
+  max-width: 1440px;
+  .img-container{
+    max-width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include media(max, 680px){
+      display: none;
+    }
+
+    .circle-bottom{
+      position: absolute;
+      bottom: -140px;
+      max-width: 80%;
+    }
+  }
+
+  .v-tab{
+    color:rgba(0,0,0,0.33)!important; 
+    font-weight:700!important; 
+    font-family: var(--font1); 
+    font-size: 18px;
+    padding-inline: 5px!important;
+  }
+
+  .v-tab--active{
+    background: transparent!important;
+    color:#000!important; 
+    font-weight:700!important; 
+    font-family: var(--font1); 
+    font-size: 18px;
+  }
+
+  .v-tabs-slider{
+    background-color: transparent!important;
+  }
+
+  .v-slide-group__content{
+    gap: 5px!important;
+  }
+
+  .bold-title{
+    color:#000!important; 
+    font-weight:700!important; 
+    font-family: var(--font1); 
+    font-size: 18px;
+  }
+
+  .light-span{
+    color: #9E9DA3;
+    font-size: 12px;
+  }
+
+  .container-select{
+    background-color: #E1D8D1;
+    border-radius: 10px!important;
+    padding: 10px 20px 10px 20px;
+
+    .v-select{
+      max-height: 40px;
+      padding-top: 0px;
+      margin-top: 0px;
+      width: max-content!important;
+      min-width: 1px;
+      max-width: max-content;
+
+      ::placeholder{
+        color:#000!important; 
+        font-weight:700!important; 
+        font-family: var(--font1); 
+      }
+    }
+  }
+
+  .btn-add{
+    min-width: 100%!important;
+  }
+
+  .font13{
+    font-size: 13px;
+  }
+
+  .white-title{
+    color: #fff;
+    font-weight: 700!important; 
+    text-align: center;
+  }
+
+  .window-2{
+    .v-tab{
+      color:rgba(255,255,255, 0.9)!important; 
+      font-weight:300!important; 
+      font-family: var(--font1); 
+      font-size: 14px;
+      padding-inline: 18px!important;
+      border-radius: 30px!important;
+      background-color: #a9b1e1;
+      border: 1px solid #8a99e2;
+
+      @include media(max, 500px){
+        padding-inline: 6px!important;
+      }
+    }
+  
+    .v-tab--active{
+      background: var(--primary)!important;
+      color:#fff!important; 
+      font-weight:700!important; 
+      font-family: var(--font1); 
+      font-size: 14px;
+      border: 1px solid #a7abe4;
+
+      @include media(max, 500px){
+        font-size: 12px;
+      }
+    }
+  
+    .v-tabs-slider{
+      background-color: transparent!important;
+    }
+  
+    .v-slide-group__content{
+      gap: 10px!important;
+
+      @include media(max, 500px){
+        gap: 5px!important;
+      }
+    }
+  }
+}
