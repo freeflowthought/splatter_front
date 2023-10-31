@@ -27,14 +27,14 @@
                 class="input-auto"
                 @change="balanceOf(selectedItem1)"
               >
-              <template #item="{ item }">
-                <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
-                <span style="margin-left: 10px;">{{ item.name }}</span>
-              </template>
-              <template #selection="{ item }">
-                <v-img v-if="item" :src="item.logoURI" style="max-width: 20px;"></v-img>
-                <span v-if="item" style="margin-left: 10px;">{{ item.symbol }}</span>
-              </template>
+                <template #item="{ item }">
+                  <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
+                  <span style="margin-left: 10px;">{{ item.name }}</span>
+                </template>
+                <template #selection="{ item }">
+                  <v-img v-if="item" :src="item.logoURI" style="max-width: 20px;"></v-img>
+                  <span v-if="item" style="margin-left: 10px;">{{ item.symbol }}</span>
+                </template>
               </v-select>
 
               <v-text-field
@@ -50,7 +50,7 @@
               <v-btn  class="btn-max" @click="setMaxValue">max</v-btn>
             </div>
 
-           <div class="divrow center jspace mobile-btn" style="width:350px;">
+            <div class="divrow center jspace mobile-btn" style="width:350px;">
               <v-icon @click="swapValues()">mdi-swap-vertical</v-icon>
               <!-- <span class="dm-light">ETH > SPTL = 1290.03 UDC </span> -->
             </div>
@@ -129,7 +129,7 @@ import { numericFormat } from '@vuejs-community/vue-filter-numeric-format'
 import routerV2ABI  from '~/static/abis/routerv2.json'
 import factoryABI  from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
-import scrollTokens from '~/static/tokens/scroll_alpah_tokens.json'
+import scrollTokens from '~/static/tokens/scroll_alpha_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
 const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
@@ -269,7 +269,7 @@ export default {
       if (pairExist) {
         return pairAddress
       } else {
-        this.$alerts('danger', 'Pair does not exist')
+        this.$alert('cancel', 'Pair does not exist')
 
       }
     },

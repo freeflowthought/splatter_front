@@ -44,9 +44,6 @@
         Github
       </span>
 
-      <span class="title-media">
-        Launch App
-      </span>
     </div>
   </v-footer>
 </template>

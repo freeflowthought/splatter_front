@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import dataFaucet from '~/static/tokens/scroll_alpah_tokens.json'
+import dataFaucet from '~/static/tokens/scroll_alpha_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
 const faucetAbi = [{ "type": "function", "stateMutability": "nonpayable", "outputs": [], "name": "faucet", "inputs": [] }, { "type": "function", "stateMutability": "view", "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }], "name": "balanceOf", "inputs": [{ "type": "address", "name": "account", "internalType": "address" }] }]
@@ -76,38 +76,6 @@ export default {
         { value: "balance", text: "Balance", align: "center", sortable: false },
         { text: '', value: 'actions', sortable: false, align: 'end' },
       ],
-      /* dataFaucet:[
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-        {
-          icon:"elipse",
-          name:"Dai Stable coin",
-          amount:"0.00",
-        },
-      ],  */
       dataFaucet,
       databalance: [],
       numericFormatConfig: {
@@ -165,12 +133,12 @@ export default {
 
     },
 
-    // async getTokenBalance(contracAddress, decimals) {
-    //   const tokenContract = new web3.eth.Contract(faucetAbi, contracAddress);
-    //   const tokenBalance = await tokenContract.methods.balanceOf(this.$metamask.userAccount).call();
-    //   console.log('tokenBalance', tokenBalance)
-    //   return Number(tokenBalance/Math.pow(10, decimals));
-    // },
+    async getTokenBalance(contracAddress, decimals) {
+      const tokenContract = new web3.eth.Contract(faucetAbi, contracAddress);
+      const tokenBalance = await tokenContract.methods.balanceOf(this.$metamask.userAccount).call();
+      console.log('tokenBalance', tokenBalance)
+      return Number(tokenBalance/Math.pow(10, decimals));
+    },
 
     async fetch() {
       if(this.$metamask.userAccount !== null){

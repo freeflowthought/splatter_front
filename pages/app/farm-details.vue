@@ -14,6 +14,8 @@
 
   <template v-else>
       <modalLiquidity ref="modalLiquidity" :pair='pairSelected' ></modalLiquidity>
+      <modalCreatePair ref="modalCreatePair">
+      </modalCreatePair>
       <!-- layoutcell 1 -->
       <!-- <h1 class="bold" style="font-family:var(--font1);">Earn</h1>
       <section id="farm-details-content" class="gridauto">
@@ -80,7 +82,7 @@
               class="input-data-table"
             ></v-text-field>
 
-            <v-btn class="btn bold" style="--w:150px; border:solid 1px #000; --h: 55px; border-radius: 10px!important;">
+            <v-btn class="btn bold" style="--w:150px; border:solid 1px #000; --h: 55px; border-radius: 10px!important;" @click="showModalCreatePair">
               Create Pool
             </v-btn>
           </div>
@@ -116,6 +118,11 @@
 
           <template #[`item.actions`] ="{ item }">
             <div class="end">
+              <v-btn
+              class="btn mr-3" style="--fs: 1em; --stroke: .4px; --br: 10px; --b:1px solid #000;"
+              >
+                Withdraw
+              </v-btn>
               <v-btn
               class="btn" style="--fs: 1em; --stroke: .4px; --br: 10px; --b:1px solid #000;"
               @click="showModal(item)">
@@ -181,6 +188,7 @@
 <script>
 import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import modalLiquidity from '~/components/modals/provide-remove-liquidity.vue'
+import modalCreatePair from '~/components/modals/create-pair.vue'
 import computeds from '~/mixins/computeds'
 import routerV2ABI from '~/static/abis/routerv2.json'
 import factoryABI from '~/static/abis/factory.json'
@@ -195,7 +203,8 @@ const factory = new web3.eth.Contract(factoryABI, factoryAddress);
 export default {
   name: "FarmDetailsPage",
   components: {
-    modalLiquidity
+    modalLiquidity,
+    modalCreatePair
   },
   mixins: [computeds],
   data() {
@@ -313,10 +322,12 @@ export default {
   },
   methods: {
     // TO-DO
-    // create modals to deposit and to create pool
     showModal(item){
       this.pairSelected = item
       this.$refs.modalLiquidity.modalLiquidity = true
+    },
+    showModalCreatePair(){
+      this.$refs.modalCreatePair.modalCreatePair = true
     },
     hideModal(){},
     changeLayoutCells() {
@@ -405,8 +416,6 @@ export default {
       return allPairs
     },
 
-
-
     async removeLiquidity(tokenA, tokenB, amountAMin, amountBMin ) {
       const batch = new web3.BatchRequest();
       const pairAddress = factory.methods.getPair(tokenA.decimals, tokenB.decimals);
@@ -452,20 +461,6 @@ export default {
         },
       );
     },
-    getAvailablePairs() {
-
-    },
-    createNewPair() {
-
-    },
-    async createNewPool(tokenA, tokenB) {
-      const factoryContract = new web3.eth.Contract(factoryABI, factoryAddress);
-      await factoryContract.methods.createPair(
-        tokenA,
-        tokenB
-      ).send({ from: this.$metamask.userAccount })
-    },
-
   }
 };
 </script>

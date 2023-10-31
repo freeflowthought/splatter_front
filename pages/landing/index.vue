@@ -11,9 +11,6 @@
         <p class="poppins">
           The next generation Dex incorporated with the fully on-chain DAO to bring product continuous evolution towards the perfection.
         </p>
-        <v-btn class="btn-black">
-          Launch App <v-icon>mdi-arrow-right</v-icon>
-        </v-btn>
       </div>
 
       <div class="div-swap-card">
@@ -138,9 +135,6 @@
       <div class="preview-container">
         <img src="~/assets/sources/images/preview.png" alt="preview" class="preview-img">
       </div>
-      <v-btn class="btn btn-launch">
-        Launch App <v-icon>mdi-arrow-right</v-icon>
-      </v-btn>
     </section>
     <img src="~/assets/sources/images/circles2.png" alt="circle" class="circle2">
   </div>
