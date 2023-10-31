@@ -184,15 +184,19 @@ export default {
 
   i {color: #000000 !important;}
 
-  .input{
+  .input-auto{
     background-color: var(--card);
     border-radius: 10px;
     border: 1px solid #000;
     max-width: 250px;
     padding-inline: 10px;
     padding-block: 10px;
-    height: 55px;
+    height: 45px;
     margin-bottom: 10px;
+
+    .v-select__slot{
+      margin-top: -5px;
+    }
 
     ::placeholder{
       font-family: var(--font3);

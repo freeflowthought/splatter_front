@@ -19,25 +19,28 @@
               <label class="light-span" for="amount">Enter Amount</label>
               <v-form ref="form">
                 <div class="jspace mt-2 container-select">
-                  <v-select
+                  <v-autocomplete
                     v-model="selectedItem1"
                     :items="items1Filtered"
-                    placeholder="Select Token"
-                    hide-details
                     append-icon="mdi-chevron-down"
+                    class="input-auto"
                   >
                     <template #item="{ item }">
                       <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
-                      <span style="margin-left: 10px;">{{ item.name }}</span>
+                      <span style="margin-left: 10px; color: #000!important;">{{ item.name }}</span>
                     </template>
                     <template #selection="{ item }">
                       <v-img v-if="item" :src="item.logoURI" style="max-width: 20px;"></v-img>
-                      <span v-if="item" style="margin-left: 10px;">{{ item.symbol }}</span>
+                      <span v-if="item" style="margin-left: 10px; color: #000!important;">{{ item.symbol }}</span>
                     </template>
-                  </v-select>
+                  </v-autocomplete>
 
                   <div class="divcol">
-                    <p class="p bold-title">-.--</p>
+                    <v-text-field
+                    solo
+                    class="input"
+                    placeholder="-.--"
+                    ></v-text-field>
                     <p class="p light-span">Balance: 0.00</p>
                   </div>
                 </div>
@@ -50,27 +53,29 @@
 
                 <label class="light-span" for="amount">Enter Amount</label>
                 <div class="jspace mt-2 container-select">
-                  <v-select
+                  <v-autocomplete
                     v-model="selectedItem2"
                     :items="items2Filtered"
-                    placeholder="Select Token"
                     item-value="value"
                     class="input-auto"
-                    hide-details
                     append-icon="mdi-chevron-down"
                   >
                     <template #item="{ item }">
                       <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
-                      <span style="margin-left: 10px;">{{ item.name }}</span>
+                      <span style="margin-left: 10px; color: #000!important;">{{ item.name }}</span>
                     </template>
                     <template #selection="{ item }">
                       <v-img v-if="item" :src="item.logoURI" style="max-width: 20px;"></v-img>
-                      <span v-if="item" style="margin-left: 10px;">{{ item.symbol }}</span>
+                      <span v-if="item" style="margin-left: 10px; color: #000!important;">{{ item.symbol }}</span>
                     </template>
-                  </v-select>
+                  </v-autocomplete>
 
                   <div class="divcol">
-                    <p class="p bold-title">-.--</p>
+                    <v-text-field
+                    solo
+                    class="input"
+                    placeholder="-.--"
+                    ></v-text-field>
                     <p class="p light-span">Balance: 0.00</p>
                   </div>
                 </div>
