@@ -88,11 +88,11 @@
               <div v-if="selectedItem1 && selectedItem2" class="container-select mt-4 mb-4 divrow jspace">
                 <div  class="divcol astart" style="gap: 5px;">
                   <span class="bold font13">1306.67</span>
-                  <span class="font13">{{ selectedItem1?.symbol }} per {{ selectedItem2?.symbol }}</span>
+                  <span class="font13">{{ selectedItem1.symbol }} per {{ selectedItem2.symbol }}</span>
                 </div>
                 <div class="divcol astart" style="gap: 5px;">
                   <span class="bold font13">1306.67</span>
-                  <span class="font13">{{ selectedItem2?.symbol }} per {{ selectedItem1?.symbol }}</span>
+                  <span class="font13">{{ selectedItem2.symbol }} per {{ selectedItem1.symbol }}</span>
                 </div>
                 <div class="divcol astart" style="gap: 5px;">
                   <span class="bold font13">0%</span>
