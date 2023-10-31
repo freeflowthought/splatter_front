@@ -96,11 +96,6 @@ export default {
       modalCreatePair: false,
       selectedItem1: null,
       selectedItem2: null,
-      rules: [
-        v => !!v || 'Field is required',
-        v => /^\d+(\.\d+)?$/.test(v) || 'Invalid numeric input',
-        v => v >= 0 || 'Value must be positive',
-      ],
     };
   },
   computed: {

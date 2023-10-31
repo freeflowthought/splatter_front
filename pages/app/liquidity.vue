@@ -22,8 +22,10 @@
                   <v-autocomplete
                     v-model="selectedItem1"
                     :items="items1Filtered"
+                    :rules="[requiredRule]"
                     append-icon="mdi-chevron-down"
                     class="input-auto"
+                    @change="getUserBalance(1)"
                   >
                     <template #item="{ item }">
                       <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
@@ -41,12 +43,12 @@
                     class="input"
                     placeholder="-.--"
                     ></v-text-field>
-                    <p class="p light-span">Balance: 0.00</p>
+                    <p class="p light-span">Balance: {{balanceToken1 | numericFormat(numericFormatConfig)}}</p>
                   </div>
                 </div>
 
                 <div class="jspace acenter mt-4 mb-4">
-                  <span class="light-span">1 ETH ≈ 0.00</span>
+                  <!-- <span class="light-span">1 ETH ≈ 0.00</span> -->
                   <v-icon @click="swapValues()">mdi-swap-vertical</v-icon>
                   <v-icon color="#9E9DA3">mdi-plus</v-icon>
                 </div>
@@ -56,9 +58,11 @@
                   <v-autocomplete
                     v-model="selectedItem2"
                     :items="items2Filtered"
+                    :rules="[requiredRule]"
                     item-value="value"
                     class="input-auto"
                     append-icon="mdi-chevron-down"
+                    @change="getUserBalance(2)"
                   >
                     <template #item="{ item }">
                       <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
@@ -76,19 +80,19 @@
                     class="input"
                     placeholder="-.--"
                     ></v-text-field>
-                    <p class="p light-span">Balance: 0.00</p>
+                    <p class="p light-span">Balance: {{balanceToken2 | numericFormat(numericFormatConfig)}}</p>
                   </div>
                 </div>
               </v-form>
 
-              <div class="container-select mt-4 mb-4 divrow jspace">
-                <div class="divcol astart" style="gap: 5px;">
+              <div v-if="selectedItem1 && selectedItem2" class="container-select mt-4 mb-4 divrow jspace">
+                <div  class="divcol astart" style="gap: 5px;">
                   <span class="bold font13">1306.67</span>
-                  <span class="font13">USDC per SPLT</span>
+                  <span class="font13">{{ selectedItem1?.symbol }} per {{ selectedItem2?.symbol }}</span>
                 </div>
                 <div class="divcol astart" style="gap: 5px;">
                   <span class="bold font13">1306.67</span>
-                  <span class="font13">USDC per SPLT</span>
+                  <span class="font13">{{ selectedItem2?.symbol }} per {{ selectedItem1?.symbol }}</span>
                 </div>
                 <div class="divcol astart" style="gap: 5px;">
                   <span class="bold font13">0%</span>
@@ -200,6 +204,10 @@ export default {
       windowStep: 1,
       items1: scrollTokens,
       items2: scrollTokens,
+      amountToken1: 10,
+      amountToken2: 10,
+      balanceToken1: 0,
+      balanceToken2: 0,
       selectedItem1: null,
       selectedItem2: null,
       dataCurrentlyLps:[
@@ -234,8 +242,15 @@ export default {
       rules: [
         v => !!v || 'Field is required',
         v => /^\d+(\.\d+)?$/.test(v) || 'Invalid numeric input',
-        v => v >= 0 || 'Value must be positive',
+        v => v > 0 || 'Value must be positive',
       ],
+      numericFormatConfig: {
+        decimalSeparator: ".",
+        fractionDigitsMax: 2,
+        fractionDigitsMin: 2,
+        fractionDigitsSeparator: "",
+        thousandsDigitsSeparator: ","
+      },
     }
   },
   head() {
@@ -258,11 +273,17 @@ export default {
     this.allPairs = await this.getAllPairs()
   },
   methods: {
+    requiredRule(value) {
+      return !!value || 'This field is required';
+    },
+
     submitForm() {
      if (this.$refs.form.validate()){
-      this.swapTokensForTokens(
-        this.$refs.select1.internalValue,
-        this.$refs.select2.internalValue
+      this.addLiquidity(
+        this.selectedItem1,
+        this.selectedItem2,
+        this.amountToken1,
+        this.amountToken2
       )
      }
     },
@@ -311,6 +332,7 @@ export default {
       }
       return allPairs
     },
+
     approve(tokenAddres, amount, batch) {
       const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
       batch.add(tokenInContract.methods.approve(routerV2Address, amount).send.request({ from: this.$metamask.userAccount }, (err) => {
@@ -319,6 +341,81 @@ export default {
           }
       }))
     },
+
+    async getReserves(tokenInAddress, tokenOutAddress) {
+
+      const pairAddress = await this.getPair(tokenInAddress, tokenOutAddress)
+      const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
+      const res = await pairContract.methods.getReserves().call()
+      return res
+      },
+
+      async getPricing() {
+      if(this.selectedItem1 != null && this.selectedItem2 != null) {
+        const reserves = await this.getReserves(this.selectedItem1.address, this.selectedItem2.address)
+        const midPrice = await (routerV2.methods.getAmountOut((this.tokenAmountIn * 10 ** this.selectedItem1.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
+        this.tokenAmountOut = midPrice / 10 ** this.selectedItem2.decimals
+
+      }
+    },
+
+    async balanceOf(tokenAddres) {
+      const tokenContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
+      const balance = await tokenContract.methods.balanceOf(this.$metamask.userAccount).call()
+      return balance
+    },
+
+    async getUserBalance(key) {
+      switch (key) {
+        case 1:
+          {
+            const balance1 = await this.balanceOf(this.selectedItem1.address)
+            this.balanceToken1 = balance1 / 10 ** this.selectedItem1.decimals
+            console.log(balance1 )
+            console.log(balance1 / 10 ** this.selectedItem1.decimals)
+
+          }
+          break;
+
+        case 2:
+          {
+            const balance2 = await this.balanceOf(this.selectedItem2.address)
+            this.balanceToken2 = balance2 / 10 ** this.selectedItem2.decimals
+          }
+          break;
+      }
+
+    },
+
+    addLiquidity(tokenA, tokenB, amountADesired, amountBDesired,) {
+      const batch = new web3.BatchRequest();
+      this.approve(tokenA.address, (amountADesired * 10 ** tokenA.decimals).toString(), batch)
+      this.approve(tokenB.address, (amountBDesired * 10 ** tokenB.decimals).toString(), batch)
+      const to = this.$metamask.userAccount
+      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
+      batch.add(
+        routerV2.methods.addLiquidity(
+          tokenA.address,
+          tokenB.address,
+          (amountADesired * 10 ** tokenA.decimals).toString(),
+          (amountBDesired * 10 ** tokenB.decimals).toString(),
+          (0 * 10 ** tokenA.decimals).toString(),
+          (0 * 10 ** tokenB.decimals).toString(),
+          to,
+          deadline
+        ).send.request({from: this.$metamask.userAccount}, (err, res) => {
+          if (err) {
+            console.log(err)
+          }
+          if (res) {
+            this.$alert('success', 'Liquidity added successfully')
+          }
+
+        })
+      )
+      batch.execute()
+    },
+
     async removeLiquidity(tokenA, tokenB, amountAMin, amountBMin ) {
       const batch = new web3.BatchRequest();
       const pairAddress = factory.methods.getPair(tokenA.decimals, tokenB.decimals);

@@ -161,7 +161,7 @@ export default {
       rules: [
         v => !!v || 'Field is required',
         v => /^\d+(\.\d+)?$/.test(v) || 'Invalid numeric input',
-        v => v >= 0 || 'Value must be positive',
+        v => v > 0 || 'Value must be positive',
       ],
       numericFormatConfig: {
         decimalSeparator: ".",
