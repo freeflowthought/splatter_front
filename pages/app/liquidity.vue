@@ -1,6 +1,6 @@
 <template>
 	<div id="liquidity">
-		<v-row class="center divcol">
+		<v-row class="center">
       <!-- <v-col xl="4" lg="4" md="4" cols="12">
         <v-card class="card">
           <AppChartsSwapChart ref="chart" :height="heightChart" @model="$refs.modal.modalChart = true"></AppChartsSwapChart>
@@ -106,43 +106,45 @@
             </v-window-item>
 
             <v-window-item :value="2" class="window-2 divcol acenter">
-              <h2 class="white-title mb-6">50%</h2>
+              <h2 class="white-title mb-6">{{ percent * 100 }}%</h2>
 
-              <v-tabs background-color="transparent" :mobile-breakpoint="9999">
-                <v-tab :value="1">25%</v-tab>
-                <v-tab :value="2">50%</v-tab>
-                <v-tab :value="3">75%</v-tab>
-                <v-tab :value="4">100%</v-tab>
+              <div>
+                <v-tabs background-color="transparent d-flex center"  scrollable  :mobile-breakpoint="9999">
+                <v-tab :value="1" @click="setPercent(0.25)">25%</v-tab>
+                <v-tab :value="2" @click="setPercent(0.5)">50%</v-tab>
+                <v-tab :value="3" @click="setPercent(0.75)">75%</v-tab>
+                <v-tab :value="4" @click="setPercent(1)">100%</v-tab>
               </v-tabs>
+              </div>
 
-              <div class="mt-4 mb-4 container-select" style="width: 100%;">
+              <div v-if="selectedItemRemove1 && selectedItemRemove2" class="mt-4 mb-4 container-select" style="width: 100%;">
                 <div class="jspace mt-2 mb-4">
                   <div class="divrow acenter" style="gap: 10px;">
                     <img src="~/assets/sources/tokens/usdc.svg" alt="Btc" style="width: 25px;">
-                    <span class="bold-title">USDC</span>
+                    <span class="bold-title">{{ selectedItemRemove1.symbol }}</span>
                   </div>
-                  <span>0.029021</span>
+                  <!-- <span>0.029021</span> -->
                 </div>
                 <div class="jspace mb-2">
                   <div class="divrow acenter" style="gap: 10px;">
                     <img src="~/assets/sources/tokens/btc.svg" alt="Btc" style="width: 25px;">
-                    <span class="bold-title">BTC</span>
+                    <span class="bold-title">{{ selectedItemRemove2.symbol }}</span>
                   </div>
-                  <span>0.029021</span>
+                  <!-- <span>0.029021</span> -->
                 </div>
               </div>
 
-              <v-btn class="mb-4 mt-4 btn btn-add">Remove</v-btn>
+              <v-btn class="mb-4 mt-4 btn btn-add" @click="removeLiquidity(selectedItemRemove1, selectedItemRemove2)">Remove</v-btn>
             </v-window-item>
           </v-window>
         </v-card>
       </v-col>
 
-      <!-- <v-col xl="4" lg="4" md="4" cols="12">
+      <v-col xl="4" lg="4" md="4" cols="12">
         <v-card class="card">
           <p class="p bold-title mb-6">Currently LPs</p>
 
-          <div v-for="(item, index) in dataCurrentlyLps" :key="index" class="jspace mb-14">
+          <!-- <div v-for="(item, index) in dataCurrentlyLps" :key="index" class="jspace mb-14">
             <div class="divrow center" style="gap: 10px;">
               <v-sheet class="dual-tokens" color="transparent" style="--h-sheet: 40px; width: 40px!important;">
                 <img :src="require(`~/assets/sources/tokens/${item.img_left}.svg`)" :alt="`elipse token`" class="aspect" style="--p:0px; --w:25px;">
@@ -155,10 +157,10 @@
               <span v-if="item.fiat" class="bold-title mb-2">{{ item.fiat }}</span>
               <span class="light-span">{{ item.crypto_balance }}</span>
             </div>
-          </div>
+          </div> -->
 
-          <div v-for="(item, index) in allPairs" :key="index" class="jspace mb-14">
-            <div class="divrow center" style="gap: 10px;">
+          <div v-for="(item, index) in allPairs" :key="index" class="jspace mb-14 hoverable">
+            <div class="divrow center" style="gap: 10px;" @click="selectPair(item)">
               <v-sheet class="dual-tokens" color="transparent" style="--h-sheet: 40px; width: 40px!important;">
                 <img :src="require(`~/assets/sources/tokens/btc.svg`)" :alt="`elipse token`" class="aspect" style="--p:0px; --w:25px;">
                 <img :src="require(`~/assets/sources/tokens/usdc.svg`)" :alt="`elipse-clara token`" class="aspect" style="--p:0px; --w:25px;">
@@ -173,7 +175,7 @@
           </div>
 
         </v-card> 
-      </v-col> -->
+      </v-col>
     </v-row>
 
     <div class="img-container">
@@ -212,6 +214,9 @@ export default {
       balanceToken2: 0,
       selectedItem1: null,
       selectedItem2: null,
+      selectedItemRemove1: null,
+      selectedItemRemove2: null,
+      percent: 0.5,
       midPrice1: 0,
       midPrice2: 0,
       dataCurrentlyLps:[
@@ -280,6 +285,14 @@ export default {
     requiredRule(value) {
       return !!value || 'This field is required';
     },
+    selectPair(pair) {
+      this.selectedItemRemove1 = pair.token0 
+      this.selectedItemRemove2 = pair.token1 
+    },
+
+    setPercent(value) {
+      this.percent = value
+    },
 
     submitForm() {
      if (this.$refs.form.validate()){
@@ -320,6 +333,11 @@ export default {
       for(let i = 0; i < pairsCreated; i++) {
         const pair = {}
         pair.address = await factory.methods.allPairs(i).call()
+        const balance = await this.balanceOf(pair.address)
+        const userHasBalance = balance > 0
+        if(!userHasBalance) {
+          continue
+        } 
         const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pair.address);
         const [token0Address, token1Address] = await Promise.all([
           pairContract.methods.token0().call(),
@@ -360,8 +378,8 @@ export default {
         const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** this.selectedItem2.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
         this.midPrice1 = midPrice1 / 10 ** this.selectedItem2.decimals
         this.midPrice2 = midPrice2 / 10 ** this.selectedItem1.decimals
-        console.log(midPrice1 / 10 ** this.selectedItem2.decimals)
-        console.log(midPrice2 / 10 ** this.selectedItem1.decimals)
+        
+        
       }
     },
 
@@ -377,8 +395,8 @@ export default {
           {
             const balance1 = await this.balanceOf(this.selectedItem1.address)
             this.balanceToken1 = balance1 / 10 ** this.selectedItem1.decimals
-            console.log(balance1 )
-            console.log(balance1 / 10 ** this.selectedItem1.decimals)
+            
+            
 
           }
           break;
@@ -411,7 +429,8 @@ export default {
           deadline
         ).send.request({from: this.$metamask.userAccount}, (err, res) => {
           if (err) {
-            console.log(err)
+            this.$alert('cancel', 'Something went wrong')
+            
           }
           if (res) {
             this.$alert('success', 'Liquidity added successfully')
@@ -422,33 +441,39 @@ export default {
       batch.execute()
     },
 
-    async removeLiquidity(tokenA, tokenB, amountAMin, amountBMin ) {
+    async removeLiquidity(tokenA, tokenB) {
       const batch = new web3.BatchRequest();
-      const pairAddress = factory.methods.getPair(tokenA.decimals, tokenB.decimals);
-      const liquidity = await this.balanceOf(pairAddress)
-      this.approve(pairAddress, liquidity, batch)
-      const to = this.$metamask.userAccount
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      batch.add(
-        routerV2.methods.removeLiquidity(
-          tokenA.address,
-          tokenB.address,
-          liquidity,
-          (amountAMin * 10 ** tokenA.decimals).toString(),
-          (amountBMin * 10 ** tokenB.decimals).toString(),
-          to,
-          deadline
-          ).send.request({from: this.$metamask.userAccount}, (err, res) => {
-            if (err) {
-              console.log(err)
+      const pairAddress = await factory.methods.getPair(tokenA.address, tokenB.address).call();
+      const amountAMin = 1
+      const amountBMin = 1
+      const percent = this.percent
+      const totalliquidity = await this.balanceOf(pairAddress)
+      const liquidity = totalliquidity * percent
+      if(liquidity){
+        this.approve(pairAddress, liquidity, batch)
+        const to = this.$metamask.userAccount
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
+        batch.add(
+          routerV2.methods.removeLiquidity(
+            tokenA.address,
+            tokenB.address,
+            liquidity,
+            (amountAMin * 10 ** tokenA.decimals).toString(),
+            (amountBMin * 10 ** tokenB.decimals).toString(),
+            to,
+            deadline
+            ).send.request({from: this.$metamask.userAccount}, (err, res) => {
+              if (err) {
+                this.$alert('cancel', 'Something went wrong')
+              }
+              if (res) {
+                this.$alert('success', 'Liquidity removed successfully')
+              }
             }
-            if (res) {
-              this.$alert('success', 'Liquidity removed successfully')
-            }
-          }
+          )
         )
-      )
-      batch.execute()
+        batch.execute()
+      }
     },
   }
 };

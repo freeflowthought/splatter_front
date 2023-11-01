@@ -118,11 +118,11 @@
 
           <template #[`item.actions`] ="{ item }">
             <div class="end">
-              <v-btn
+              <!-- <v-btn
               class="btn mr-3" style="--fs: 1em; --stroke: .4px; --br: 10px; --b:1px solid #000;"
               >
                 Withdraw
-              </v-btn>
+              </v-btn> -->
               <v-btn
               class="btn" style="--fs: 1em; --stroke: .4px; --br: 10px; --b:1px solid #000;"
               @click="showModal(item)">

@@ -136,7 +136,6 @@ export default {
     async getTokenBalance(contracAddress, decimals) {
       const tokenContract = new web3.eth.Contract(faucetAbi, contracAddress);
       const tokenBalance = await tokenContract.methods.balanceOf(this.$metamask.userAccount).call();
-      console.log('tokenBalance', tokenBalance)
       return Number(tokenBalance/Math.pow(10, decimals));
     },
 

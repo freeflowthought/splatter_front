@@ -20,7 +20,11 @@
       max-width: 80%;
     }
   }
-
+  .hoverable:hover {
+    /* define the styles for the hover state */
+    background-color: grey;
+    cursor: pointer;
+  }
   .v-tab{
     color:rgba(0,0,0,0.33)!important; 
     font-weight:700!important; 
