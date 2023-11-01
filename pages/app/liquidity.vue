@@ -1,11 +1,11 @@
 <template>
 	<div id="liquidity">
-		<v-row>
-      <v-col xl="4" lg="4" md="4" cols="12">
+		<v-row class="center divcol">
+      <!-- <v-col xl="4" lg="4" md="4" cols="12">
         <v-card class="card">
           <AppChartsSwapChart ref="chart" :height="heightChart" @model="$refs.modal.modalChart = true"></AppChartsSwapChart>
         </v-card>
-      </v-col>
+      </v-col> -->
 
       <v-col xl="4" lg="4" md="4" cols="12">
         <v-card class="card">
@@ -25,7 +25,7 @@
                     :rules="[requiredRule]"
                     append-icon="mdi-chevron-down"
                     class="input-auto"
-                    @change="getUserBalance(1)"
+                    @change="getUserBalance(1),getPricing()"
                   >
                     <template #item="{ item }">
                       <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
@@ -39,6 +39,7 @@
 
                   <div class="divcol">
                     <v-text-field
+                    v-model="amountToken1"
                     solo
                     class="input"
                     placeholder="-.--"
@@ -62,7 +63,7 @@
                     item-value="value"
                     class="input-auto"
                     append-icon="mdi-chevron-down"
-                    @change="getUserBalance(2)"
+                    @change="getUserBalance(2), getPricing()"
                   >
                     <template #item="{ item }">
                       <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
@@ -76,6 +77,7 @@
 
                   <div class="divcol">
                     <v-text-field
+                    v-model="amountToken2"
                     solo
                     class="input"
                     placeholder="-.--"
@@ -87,17 +89,17 @@
 
               <div v-if="selectedItem1 && selectedItem2" class="container-select mt-4 mb-4 divrow jspace">
                 <div  class="divcol astart" style="gap: 5px;">
-                  <span class="bold font13">1306.67</span>
+                  <span class="bold font13">{{ midPrice1 | numericFormat(numericFormatConfig) }}</span>
                   <span class="font13">{{ selectedItem1.symbol }} per {{ selectedItem2.symbol }}</span>
                 </div>
                 <div class="divcol astart" style="gap: 5px;">
-                  <span class="bold font13">1306.67</span>
+                  <span class="bold font13">{{ midPrice2 | numericFormat(numericFormatConfig) }}</span>
                   <span class="font13">{{ selectedItem2.symbol }} per {{ selectedItem1.symbol }}</span>
                 </div>
-                <div class="divcol astart" style="gap: 5px;">
+                <!-- <div class="divcol astart" style="gap: 5px;">
                   <span class="bold font13">0%</span>
                   <span class="font13">Share</span>
-                </div>
+                </div> -->
               </div>
 
               <v-btn class="btn btn-add mb-4 mt-4" @click="submitForm">Add</v-btn>
@@ -136,7 +138,7 @@
         </v-card>
       </v-col>
 
-      <v-col xl="4" lg="4" md="4" cols="12">
+      <!-- <v-col xl="4" lg="4" md="4" cols="12">
         <v-card class="card">
           <p class="p bold-title mb-6">Currently LPs</p>
 
@@ -155,7 +157,7 @@
             </div>
           </div>
 
-          <!-- <div v-for="(item, index) in allPairs" :key="index" class="jspace mb-14">
+          <div v-for="(item, index) in allPairs" :key="index" class="jspace mb-14">
             <div class="divrow center" style="gap: 10px;">
               <v-sheet class="dual-tokens" color="transparent" style="--h-sheet: 40px; width: 40px!important;">
                 <img :src="require(`~/assets/sources/tokens/btc.svg`)" :alt="`elipse token`" class="aspect" style="--p:0px; --w:25px;">
@@ -168,10 +170,10 @@
               <span v-if="item.fiat" class="bold-title mb-2">{{ item.fiat }}</span>
               <span class="light-span">{{ item.crypto_balance }}</span>
             </div>
-          </div> -->
+          </div>
 
-        </v-card>
-      </v-col>
+        </v-card> 
+      </v-col> -->
     </v-row>
 
     <div class="img-container">
@@ -204,12 +206,14 @@ export default {
       windowStep: 1,
       items1: scrollTokens,
       items2: scrollTokens,
-      amountToken1: 10,
-      amountToken2: 10,
+      amountToken1: undefined,
+      amountToken2: undefined,
       balanceToken1: 0,
       balanceToken2: 0,
       selectedItem1: null,
       selectedItem2: null,
+      midPrice1: 0,
+      midPrice2: 0,
       dataCurrentlyLps:[
         {
           img_left: 'btc',
@@ -343,8 +347,7 @@ export default {
     },
 
     async getReserves(tokenInAddress, tokenOutAddress) {
-
-      const pairAddress = await this.getPair(tokenInAddress, tokenOutAddress)
+      const pairAddress = await factory.methods.getPair(tokenInAddress, tokenOutAddress).call()
       const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
       const res = await pairContract.methods.getReserves().call()
       return res
@@ -353,9 +356,12 @@ export default {
       async getPricing() {
       if(this.selectedItem1 != null && this.selectedItem2 != null) {
         const reserves = await this.getReserves(this.selectedItem1.address, this.selectedItem2.address)
-        const midPrice = await (routerV2.methods.getAmountOut((this.tokenAmountIn * 10 ** this.selectedItem1.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
-        this.tokenAmountOut = midPrice / 10 ** this.selectedItem2.decimals
-
+        const midPrice1 = await (routerV2.methods.getAmountOut((1 * 10 ** this.selectedItem1.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
+        const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** this.selectedItem2.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
+        this.midPrice1 = midPrice1 / 10 ** this.selectedItem2.decimals
+        this.midPrice2 = midPrice2 / 10 ** this.selectedItem1.decimals
+        console.log(midPrice1 / 10 ** this.selectedItem2.decimals)
+        console.log(midPrice2 / 10 ** this.selectedItem1.decimals)
       }
     },
 
