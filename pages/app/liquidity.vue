@@ -174,7 +174,7 @@
             </div>
           </div>
 
-        </v-card> 
+        </v-card>
       </v-col>
     </v-row>
 
@@ -286,8 +286,8 @@ export default {
       return !!value || 'This field is required';
     },
     selectPair(pair) {
-      this.selectedItemRemove1 = pair.token0 
-      this.selectedItemRemove2 = pair.token1 
+      this.selectedItemRemove1 = pair.token0
+      this.selectedItemRemove2 = pair.token1
     },
 
     setPercent(value) {
@@ -337,7 +337,7 @@ export default {
         const userHasBalance = balance > 0
         if(!userHasBalance) {
           continue
-        } 
+        }
         const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pair.address);
         const [token0Address, token1Address] = await Promise.all([
           pairContract.methods.token0().call(),
@@ -378,8 +378,8 @@ export default {
         const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** this.selectedItem2.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
         this.midPrice1 = midPrice1 / 10 ** this.selectedItem2.decimals
         this.midPrice2 = midPrice2 / 10 ** this.selectedItem1.decimals
-        
-        
+
+
       }
     },
 
@@ -395,8 +395,8 @@ export default {
           {
             const balance1 = await this.balanceOf(this.selectedItem1.address)
             this.balanceToken1 = balance1 / 10 ** this.selectedItem1.decimals
-            
-            
+
+
 
           }
           break;
@@ -430,7 +430,7 @@ export default {
         ).send.request({from: this.$metamask.userAccount}, (err, res) => {
           if (err) {
             this.$alert('cancel', 'Something went wrong')
-            
+
           }
           if (res) {
             this.$alert('success', 'Liquidity added successfully')
@@ -447,8 +447,14 @@ export default {
       const amountAMin = 1
       const amountBMin = 1
       const percent = this.percent
-      const totalliquidity = await this.balanceOf(pairAddress)
-      const liquidity = totalliquidity * percent
+      const totalLiquidity = await this.balanceOf(pairAddress)
+      console.log(totalLiquidity, "total")
+      const liquidity = totalLiquidity
+      if(this.percent < 1){
+        console.log(this.percent, true)
+        const liquidity = (totalLiquidity * percent).toString()
+        console.log(liquidity, "liquidity")
+      }
       if(liquidity){
         this.approve(pairAddress, liquidity, batch)
         const to = this.$metamask.userAccount
