@@ -396,24 +396,37 @@ export default {
       const allPairs = []
       const pairsCreated = await factory.methods.allPairsLength().call()
 
-      for(let i = 0; i < pairsCreated; i++) {
-        const pair = {}
-        pair.address = await factory.methods.allPairs(i).call()
-        const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pair.address);
-        const [token0Address, token1Address] = await Promise.all([
-          pairContract.methods.token0().call(),
-          pairContract.methods.token1().call()])
+      const allFetch = []
 
-        const [token0, token1] = await Promise.all([
-          this.getTokenData(token0Address),
-          this.getTokenData(token1Address)
-        ])
-        pair.token0 = token0
-        pair.token1 = token1
-        pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
+      for(let i = 0; i < pairsCreated; i++) {
+        const fetch = this.fetchPair(i);
+        allFetch.push(fetch);
+      }
+
+      for (let i = 0; i < allFetch.length ; i++) {
+        const fetch = allFetch[i];
+        const pair = await fetch;
         allPairs.push(pair)
       }
       return allPairs
+    },
+
+    async fetchPair(index) {
+      const pair = {}
+      pair.address = await factory.methods.allPairs(index).call()
+      const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pair.address);
+      const [token0Address, token1Address] = await Promise.all([
+        pairContract.methods.token0().call(),
+        pairContract.methods.token1().call()])
+
+      const [token0, token1] = await Promise.all([
+        this.getTokenData(token0Address),
+        this.getTokenData(token1Address)
+      ])
+      pair.token0 = token0
+      pair.token1 = token1
+      pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
+      return pair
     },
 
     async removeLiquidity(tokenA, tokenB, amountAMin, amountBMin ) {

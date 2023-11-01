@@ -12,6 +12,28 @@ const MMSDK = new MetaMaskSDK(
 );
 
 const ethereum = MMSDK.getProvider();
+/* const chainParams = {
+  534351: {
+    chainId: '0x8274f',
+    rpcUrls: 'https://scroll-sepolia.blockpi.network/v1/rpc/public',
+    chainName: 'Scroll Sepolia Testnet',
+    blockExplorerUrls:['https://sepolia-blockscout.scroll.io'],
+    nativeCurrency: {
+      symbol:'ETH',
+      decimals: 18
+    }
+  },
+  534352: {
+    chainId: '0x82750',
+    rpcUrls: 'https://scroll-sepolia.blockpi.network/v1/rpc/public',
+    chainName: 'Scroll Sepolia Testnet',
+    blockExplorerUrls:['https://sepolia-blockscout.scroll.io'],
+    nativeCurrency: {
+      symbol:'ETH',
+      decimals: 18
+    }
+  },
+}; */
 
 const metamask = {
   userConnected : false,
@@ -98,6 +120,7 @@ const metamask = {
     this.userCurrentChainId = ethereum.chainId
   },
 
+  changeChain() {},
 
   changeUserCurrentChain: async () => {
 
@@ -134,9 +157,10 @@ const metamask = {
     }
   },
 
+
+
   disconnect() {
-      ethereum.disconnect();
-      localStorage.removeItem("wallet")
+    ethereum.disconnect();
   },
   watch: {}
 }

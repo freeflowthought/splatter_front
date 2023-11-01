@@ -330,18 +330,34 @@ export default {
       const allPairs = []
       const pairsCreated = await factory.methods.allPairsLength().call()
 
+      const allFetch = []
+
       for(let i = 0; i < pairsCreated; i++) {
-        const pair = {}
-        pair.address = await factory.methods.allPairs(i).call()
-        const balance = await this.balanceOf(pair.address)
-        const userHasBalance = balance > 0
-        if(!userHasBalance) {
-          continue
+        const fetch = this.fetchPair(i);
+        allFetch.push(fetch);
+      }
+
+      for (let i = 0; i < allFetch.length ; i++) {
+        const fetch = allFetch[i];
+        const pair = await fetch;
+        if (pair.poolName != null){
+          allPairs.push(pair)
         }
-        const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pair.address);
-        const [token0Address, token1Address] = await Promise.all([
-          pairContract.methods.token0().call(),
-          pairContract.methods.token1().call()])
+      }
+      return allPairs
+    },
+
+    async fetchPair(index) {
+      const pair = {}
+      pair.address = await factory.methods.allPairs(index).call()
+      const balance = await this.balanceOf(pair.address)
+        const userHasBalance = balance > 0
+        if(userHasBalance) {
+
+          const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pair.address);
+      const [token0Address, token1Address] = await Promise.all([
+        pairContract.methods.token0().call(),
+        pairContract.methods.token1().call()])
 
         const [token0, token1] = await Promise.all([
           this.getTokenData(token0Address),
@@ -350,9 +366,8 @@ export default {
         pair.token0 = token0
         pair.token1 = token1
         pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
-        allPairs.push(pair)
       }
-      return allPairs
+      return pair
     },
 
     approve(tokenAddres, amount, batch) {
