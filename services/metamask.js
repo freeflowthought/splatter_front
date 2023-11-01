@@ -13,7 +13,7 @@ const MMSDK = new MetaMaskSDK(
 
 const ethereum = MMSDK.getProvider();
 const chainParams = {
-  534351: {
+  '0x8274f': {
     chainId: '0x8274f',
     rpcUrls: 'https://scroll-sepolia.blockpi.network/v1/rpc/public',
     chainName: 'Scroll Sepolia Testnet',
@@ -23,11 +23,11 @@ const chainParams = {
       decimals: 18
     }
   },
-  534352: {
+  '0x82750': {
     chainId: '0x82750',
-    rpcUrls: 'https://scroll-sepolia.blockpi.network/v1/rpc/public',
-    chainName: 'Scroll Sepolia Testnet',
-    blockExplorerUrls:['https://sepolia-blockscout.scroll.io'],
+    rpcUrls: 'https://rpc.ankr.com/scroll',
+    chainName: 'Scroll',
+    blockExplorerUrls:['https://scrollscan.com'],
     nativeCurrency: {
       symbol:'ETH',
       decimals: 18
@@ -123,6 +123,7 @@ const metamask = {
   async switchToChain(id) {
     console.log(id)
     console.log(chainParams[id].chainId)
+    console.log(ethereum.chainId, "ethereum chain id")
     try {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',

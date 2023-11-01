@@ -132,9 +132,10 @@ import ERC20ABI from '~/static/abis/erc20.json'
 import scrollTokens from '~/static/tokens/scroll_alpha_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
-const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
-const factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
-const routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
+let routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
+let factoryV2Address = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
+let routerV2;
+let factory;
 
 export default {
   name: "SwapPage",
@@ -190,6 +191,11 @@ export default {
     this.$metamask.checkConnection()
     this.$metamask.detectMetamask()
     this.styles()
+
+    routerV2Address = this.$protocolAddresses.getRouterAddress(this.$metamask.userCurrentChainId)
+    factoryV2Address = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
+    routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
+    factory = new web3.eth.Contract(factoryABI, factoryV2Address);
     window.addEventListener("resize", this.styles)
   },
   beforeDestroy() {
@@ -263,8 +269,7 @@ export default {
     },
 
     async getPair(addressA, addressB){
-      const factoryContract = new web3.eth.Contract(factoryABI, factoryAddress)
-      const pairAddress = await factoryContract.methods.getPair(addressA,addressB).call()
+      const pairAddress = await factory.methods.getPair(addressA,addressB).call()
       const pairExist = pairAddress !== '0x0000000000000000000000000000000000000000'
       if (pairExist) {
         return pairAddress

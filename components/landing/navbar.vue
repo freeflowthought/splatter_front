@@ -83,7 +83,7 @@ export default {
   mixins: [computeds, menuLogin],
   data() {
     return {
-      itemsBlockchain: [{name: 'Mainnet', id: 534352}, {name: 'Testnet', id: 534351}],
+      itemsBlockchain: [{name: 'Mainnet', id: '0x82750'}, {name: 'Testnet', id: '0x8274f'}],
       itemSelected: undefined,
       dataNavbar: [
         {
@@ -114,7 +114,7 @@ export default {
     }
   },
   created() {
-    this.itemSelected = this.$metamask.userCurrentChainId === 534352
+    this.itemSelected = this.$metamask.userCurrentChainId === '0x82750'
       ? this.itemsBlockchain[0]
       : this.itemsBlockchain[1]
   },
@@ -124,6 +124,9 @@ export default {
       this.wallet = this.$metamask.userAccount
       this.isLogged = false
     }
+    this.itemSelected = this.$metamask.userCurrentChainId === '0x82750'
+      ? this.itemsBlockchain[0]
+      : this.itemsBlockchain[1]
   },
 };
 </script>

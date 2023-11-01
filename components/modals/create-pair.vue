@@ -67,7 +67,7 @@ import scrollTokens from '~/static/tokens/scroll_alpha_tokens.json'
 import factoryABI  from '~/static/abis/factory.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
-const factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
+let factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
 
 
 export default {
@@ -106,7 +106,11 @@ export default {
       return scrollTokens.filter(item => item !== this.selectedItem1 ?? '')
     }
   },
-  mounted() {
+  async mounted() {
+    await this.$metamask.checkConnection()
+    this.userConnected = this.$metamask.userConnected
+    factoryV2Address = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
+    factory = new web3.eth.Contract(factoryABI, factoryV2Address);
   },
 
   methods: {

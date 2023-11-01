@@ -320,10 +320,6 @@ export default {
     this.userConnected = this.$metamask.userConnected
     routerV2Address = this.$protocolAddresses.getRouterAddress(this.$metamask.userCurrentChainId)
     factoryV2Address = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
-    console.log(this.$protocolAddresses.getRouterAddress(this.$metamask.userCurrentChainId), this.$metamask.userCurrentChainId)
-    console.log(routerV2Address)
-    console.log(this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId), this.$metamask.userCurrentChainId)
-    console.log(factoryV2Address)
     routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
     factory = new web3.eth.Contract(factoryABI, factoryV2Address);
     this.dataTable = await this.getAllPairs()
