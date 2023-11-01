@@ -78,6 +78,7 @@ export default {
     '~/services/metamask.js',
     '~/plugins/format-number.js',
     // '~/services/eth-provider.js',
+    '~/services/protocol-addresses.js',
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules

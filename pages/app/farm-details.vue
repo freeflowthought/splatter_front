@@ -174,8 +174,8 @@
             </div>
 
             <div>
-              <v-btn class="btn bold" :class="{ 'custom-button': index === 1 }">
-                {{item.btn_text}}
+              <v-btn class="btn bold" :class="{ 'custom-button': index === 1 }" @click="showModal(item)">
+                Deposit
               </v-btn>
             </div>
           </v-card>
@@ -195,10 +195,10 @@ import factoryABI from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
-const routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
-const factoryAddress = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
-const routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
-const factory = new web3.eth.Contract(factoryABI, factoryAddress);
+let routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
+let factoryV2Address = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
+let routerV2;
+let factory;
 
 export default {
   name: "FarmDetailsPage",
@@ -318,7 +318,16 @@ export default {
   async mounted() {
     await this.$metamask.checkConnection()
     this.userConnected = this.$metamask.userConnected
+    routerV2Address = this.$protocolAddresses.getRouterAddress(this.$metamask.userCurrentChainId)
+    factoryV2Address = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
+    console.log(this.$protocolAddresses.getRouterAddress(this.$metamask.userCurrentChainId), this.$metamask.userCurrentChainId)
+    console.log(routerV2Address)
+    console.log(this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId), this.$metamask.userCurrentChainId)
+    console.log(factoryV2Address)
+    routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
+    factory = new web3.eth.Contract(factoryABI, factoryV2Address);
     this.dataTable = await this.getAllPairs()
+
   },
   methods: {
     // TO-DO

@@ -12,7 +12,7 @@ const MMSDK = new MetaMaskSDK(
 );
 
 const ethereum = MMSDK.getProvider();
-/* const chainParams = {
+const chainParams = {
   534351: {
     chainId: '0x8274f',
     rpcUrls: 'https://scroll-sepolia.blockpi.network/v1/rpc/public',
@@ -33,7 +33,7 @@ const ethereum = MMSDK.getProvider();
       decimals: 18
     }
   },
-}; */
+};
 
 const metamask = {
   userConnected : false,
@@ -90,7 +90,7 @@ const metamask = {
   async checkConnection() {
     window.ethereum.on('accountsChanged', this.handleAccountsChanged);
     const accounts = await ethereum.request({ method: 'eth_accounts' })
-
+    this.updateChainId()
     this.handleAccountsChanged(accounts)
   },
 
@@ -120,7 +120,38 @@ const metamask = {
     this.userCurrentChainId = ethereum.chainId
   },
 
-  changeChain() {},
+  async switchToChain(id) {
+    console.log(id)
+    console.log(chainParams[id].chainId)
+    try {
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: chainParams[id].chainId }],
+      });
+
+    } catch (switchError) {
+      // The network has not been added to MetaMask
+      if (switchError.code === 4902) {
+        try {
+          await ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+                {
+                  chainId: chainParams[id].chainId,
+                  chainName: chainParams[id].chainName,
+                  rpcUrls: chainParams[id].rpcUrls,
+                  blockExplorerUrls: chainParams[id].blockExplorerUrls,
+                  nativeCurrency: chainParams[id].nativeCurrency
+                }
+              ]
+          });
+        } catch (err) {
+
+        }
+      }
+    }
+    this.updateChainId()
+  },
 
   changeUserCurrentChain: async () => {
 
@@ -155,6 +186,7 @@ const metamask = {
         }
       }
     }
+    this.updateChainId()
   },
 
 

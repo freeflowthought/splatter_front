@@ -48,13 +48,21 @@
           </template>
         </v-menu>
 
-        <!-- <v-select
-        v-model="itemSelected"
-        append-icon="mdi-chevron-down"
-        hide-details
-        :items="itemsBlockchain"
-        class="btn2"
-        ></v-select> -->
+        <v-select
+          v-model="itemSelected"
+          append-icon="mdi-chevron-down"
+          hide-details
+          :items="itemsBlockchain"
+          class="btn2"
+          @change="$metamask.switchToChain(itemSelected.id)"
+          >
+          <template #item="{ item }">
+            <span style="margin-left: 10px;">{{ item.name }}</span>
+          </template>
+          <template #selection="{ item }">
+            <span v-if="item" style="margin-left: 10px;">{{ item.name }}</span>
+          </template>
+        </v-select>
       </aside>
 
       <!-- mobile -->
@@ -75,8 +83,8 @@ export default {
   mixins: [computeds, menuLogin],
   data() {
     return {
-      itemSelected: 'Mainnet',
-      itemsBlockchain: ['Mainnet', 'Testnet'],
+      itemsBlockchain: [{name: 'Mainnet', id: 534352}, {name: 'Testnet', id: 534351}],
+      itemSelected: undefined,
       dataNavbar: [
         {
           name: "Swap",
@@ -104,6 +112,11 @@ export default {
     truncatedWallet() {
       return this.wallet.substring(1, 20);
     }
+  },
+  created() {
+    this.itemSelected = this.$metamask.userCurrentChainId === 534352
+      ? this.itemsBlockchain[0]
+      : this.itemsBlockchain[1]
   },
   async mounted() {
     await this.$metamask.checkConnection()
