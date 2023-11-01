@@ -109,8 +109,7 @@ export default {
   async mounted() {
     await this.$metamask.checkConnection()
     this.userConnected = this.$metamask.userConnected
-    factoryV2Address = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
-    factory = new web3.eth.Contract(factoryABI, factoryV2Address);
+    factoryAddress = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
   },
 
   methods: {
