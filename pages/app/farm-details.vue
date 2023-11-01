@@ -245,9 +245,9 @@ export default {
 
       tableHeaders: [
         { value: "poolName", text: "Pair",  sortable: false },
-        { value: "apr", text: "APR", align: "center", sortable: false },
+        /* { value: "apr", text: "APR", align: "center", sortable: false },
         { value: "tvl", text: "TVL", align: "center", sortable: false },
-        { value: "vol", text: "Volume (24h)", align: "center", sortable: false },
+        { value: "vol", text: "Volume (24h)", align: "center", sortable: false }, */
         { value: "rewards", text: "Rewards", align: "center", sortable: false },
         { value: "actions", align: "center", sortable: false },
       ],

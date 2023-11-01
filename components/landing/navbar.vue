@@ -48,13 +48,13 @@
           </template>
         </v-menu>
 
-        <v-select
+        <!-- <v-select
         v-model="itemSelected"
         append-icon="mdi-chevron-down"
         hide-details
         :items="itemsBlockchain"
         class="btn2"
-        ></v-select>
+        ></v-select> -->
       </aside>
 
       <!-- mobile -->
