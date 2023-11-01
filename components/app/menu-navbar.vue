@@ -39,7 +39,7 @@
       <template #content>
             <v-btn
               class="btn2"
-              style="position: absolute; width: 80%; margin-left: 10%; margin-top: 160px;"
+              style="position: absolute; width: 80%; margin-left: 10%; margin-top: 220px;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
               @click="isLogged ? $store.dispatch('modalConnect') : ''"
