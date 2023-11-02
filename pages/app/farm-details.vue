@@ -398,7 +398,6 @@ export default {
     },
 
     async getAllPairs() {
-      const allPairs = []
       const pairsCreated = await factory.methods.allPairsLength().call()
 
       const allFetch = []
@@ -407,13 +406,8 @@ export default {
         const fetch = this.fetchPair(i);
         allFetch.push(fetch);
       }
-
-      for (let i = 0; i < allFetch.length ; i++) {
-        const fetch = allFetch[i];
-        const pair = await fetch;
-        allPairs.push(pair)
-      }
-      return allPairs
+      
+      return Promise.all(allFetch)
     },
 
     async fetchPair(index) {
