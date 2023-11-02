@@ -193,7 +193,9 @@ import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import routerV2ABI from '~/static/abis/routerv2.json'
 import factoryABI from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
-import scrollTokens from '~/static/tokens/scroll_alpha_tokens.json'
+import scrollTokens from '~/static/tokens/scroll_tokens.json'
+import scrollSepoliaTokens from '~/static/tokens/scroll_alpha_tokens.json'
+
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
 let routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
@@ -206,8 +208,9 @@ export default {
   data() {
     return {
       windowStep: 1,
-      items1: scrollTokens,
-      items2: scrollTokens,
+      tokens: undefined,
+      items1: this.tokens,
+      items2: this.tokens,
       amountToken1: undefined,
       amountToken2: undefined,
       balanceToken1: 0,
@@ -216,7 +219,7 @@ export default {
       selectedItem2: null,
       selectedItemRemove1: null,
       selectedItemRemove2: null,
-      percent: 0.5,
+      percent: 0.25,
       midPrice1: 0,
       midPrice2: 0,
       dataCurrentlyLps:[
@@ -270,10 +273,10 @@ export default {
   },
   computed: {
     items1Filtered() {
-      return scrollTokens.filter(item => item !== this.selectedItem2 ?? '')
+      return this.tokens?.filter(item => item !== this.selectedItem2 ?? '')
     },
     items2Filtered() {
-      return scrollTokens.filter(item => item !== this.selectedItem1 ?? '')
+      return this.tokens?.filter(item => item !== this.selectedItem1 ?? '')
     }
   },
   async mounted() {
@@ -283,6 +286,11 @@ export default {
     factoryV2Address = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
     routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
     factory = new web3.eth.Contract(factoryABI, factoryV2Address);
+    if(this.$metamask.userCurrentChainId === '0x8274f'){
+      this.tokens = scrollSepoliaTokens
+    } else {
+      this.tokens = scrollTokens
+    }
     this.allPairs = await this.getAllPairs()
   },
   methods: {
@@ -334,20 +342,15 @@ export default {
       const allPairs = []
       const pairsCreated = await factory.methods.allPairsLength().call()
 
-      const allFetch = []
 
       for(let i = 0; i < pairsCreated; i++) {
         const fetch = this.fetchPair(i);
-        allFetch.push(fetch);
-      }
-
-      for (let i = 0; i < allFetch.length ; i++) {
-        const fetch = allFetch[i];
         const pair = await fetch;
         if (pair.poolName != null){
           allPairs.push(pair)
         }
       }
+
       return allPairs
     },
 
@@ -467,12 +470,9 @@ export default {
       const amountBMin = 1
       const percent = this.percent
       const totalLiquidity = await this.balanceOf(pairAddress)
-      console.log(totalLiquidity, "total")
-      const liquidity = totalLiquidity
+      let liquidity = totalLiquidity
       if(this.percent < 1){
-        console.log(this.percent, true)
-        const liquidity = (totalLiquidity * percent).toString()
-        console.log(liquidity, "liquidity")
+        liquidity = (totalLiquidity * percent).toString().replace(/[.,]/g, '')
       }
       if(liquidity){
         this.approve(pairAddress, liquidity, batch)

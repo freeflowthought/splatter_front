@@ -63,7 +63,8 @@
 </template>
 
 <script>
-import scrollTokens from '~/static/tokens/scroll_alpha_tokens.json'
+import scrollTokens from '~/static/tokens/scroll_tokens.json'
+import scrollSepoliaTokens from '~/static/tokens/scroll_alpha_tokens.json'
 import factoryABI  from '~/static/abis/factory.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
@@ -94,22 +95,28 @@ export default {
   data() {
     return {
       modalCreatePair: false,
+      tokens: undefined,
       selectedItem1: null,
       selectedItem2: null,
     };
   },
   computed: {
     items1Filtered() {
-      return scrollTokens.filter(item => item !== this.selectedItem2 ?? '')
+      return this.tokens?.filter(item => item !== this.selectedItem2 ?? '')
     },
     items2Filtered() {
-      return scrollTokens.filter(item => item !== this.selectedItem1 ?? '')
+      return this.tokens?.filter(item => item !== this.selectedItem1 ?? '')
     }
   },
   async mounted() {
     await this.$metamask.checkConnection()
     this.userConnected = this.$metamask.userConnected
     factoryAddress = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
+    if(this.$metamask.userCurrentChainId === '0x8274f'){
+      this.tokens = scrollSepoliaTokens
+    } else {
+      this.tokens = scrollTokens
+    }
   },
 
   methods: {

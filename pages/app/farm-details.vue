@@ -406,7 +406,7 @@ export default {
         const fetch = this.fetchPair(i);
         allFetch.push(fetch);
       }
-      
+
       return Promise.all(allFetch)
     },
 

@@ -121,15 +121,12 @@ const metamask = {
   },
 
   async switchToChain(id) {
-    console.log(id)
-    console.log(chainParams[id].chainId)
-    console.log(ethereum.chainId, "ethereum chain id")
     try {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: chainParams[id].chainId }],
       });
-
+      window.location.reload();
     } catch (switchError) {
       // The network has not been added to MetaMask
       if (switchError.code === 4902) {
@@ -152,6 +149,7 @@ const metamask = {
       }
     }
     this.updateChainId()
+    window.location.reload();
   },
 
   changeUserCurrentChain: async () => {

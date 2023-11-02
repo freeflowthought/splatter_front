@@ -129,7 +129,8 @@ import { numericFormat } from '@vuejs-community/vue-filter-numeric-format'
 import routerV2ABI  from '~/static/abis/routerv2.json'
 import factoryABI  from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
-import scrollTokens from '~/static/tokens/scroll_alpha_tokens.json'
+import scrollTokens from '~/static/tokens/scroll_tokens.json'
+import scrollSepoliaTokens from '~/static/tokens/scroll_alpha_tokens.json'
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
 let routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
@@ -146,8 +147,9 @@ export default {
       tokenInAmountUser: 0,
       tokenAmountIn: 0,
       tokenAmountOut: 0,
-      items1: scrollTokens,
-      items2: scrollTokens,
+      tokens: undefined,
+      items1: this.tokens,
+      items2: this.tokens,
       heightChart: undefined,
       swapFrom: {
         img: require('~/assets/sources/tokens/database.svg'),
@@ -181,21 +183,26 @@ export default {
   },
   computed: {
     items1Filtered() {
-      return scrollTokens.filter(item => item !== this.selectedItem2 ?? '')
+      return this.tokens?.filter(item => item !== this.selectedItem2 ?? '')
     },
     items2Filtered() {
-      return scrollTokens.filter(item => item !== this.selectedItem1 ?? '')
+      return this.tokens?.filter(item => item !== this.selectedItem1 ?? '')
     }
   },
-  mounted() {
-    this.$metamask.checkConnection()
-    this.$metamask.detectMetamask()
+  async mounted() {
+    await this.$metamask.checkConnection()
     this.styles()
 
     routerV2Address = this.$protocolAddresses.getRouterAddress(this.$metamask.userCurrentChainId)
     factoryV2Address = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
     routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
     factory = new web3.eth.Contract(factoryABI, factoryV2Address);
+
+    if(this.$metamask.userCurrentChainId === '0x8274f'){
+      this.tokens = scrollSepoliaTokens
+    } else {
+      this.tokens = scrollTokens
+    }
     window.addEventListener("resize", this.styles)
   },
   beforeDestroy() {

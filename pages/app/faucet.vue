@@ -39,6 +39,7 @@
 
 					<template #[`item.actions`]="{ item }">
 						<v-btn
+              v-if="testnet"
 							class="btn-faucet"
 							:disabled="disabled"
 							:loading="loading"
@@ -87,7 +88,7 @@ export default {
       },
       disabled: false,
       loading: false,
-
+      testnet: false,
     }
   },
   head() {
@@ -96,9 +97,10 @@ export default {
       title,
     }
   },
-  mounted() {
-    this.checkConnection()
+  async mounted() {
+    await this.checkConnection()
     this.fetch();
+    this.testnet = this.$metamask.userCurrentChainId === '0x8274f'
   },
   methods: {
     async checkConnection(){
@@ -147,7 +149,7 @@ export default {
             const tokenBalance = await tokenContract.methods.balanceOf(this.$metamask.userAccount).call();
             this.databalance.push(tokenBalance);
           } catch (error) {
-            console.log(error)
+
           }
         }
       }
