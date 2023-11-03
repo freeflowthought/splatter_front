@@ -97,6 +97,7 @@ export default {
       title,
     }
   },
+
   async mounted() {
     await this.checkConnection()
     this.fetch();
