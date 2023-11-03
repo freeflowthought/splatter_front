@@ -3,8 +3,8 @@
     <Alerts ref="alerts" />
     <ModalsConnect ref="connect" />
     <ModalsSwapModal ref="swap" />
-    <LandingNavbar ref="navbar" />
-    <LandingFooter ref="footer" />
+    <!-- <LandingNavbar ref="navbar" />
+    <LandingFooter ref="footer" /> -->
     
     <v-main :class="wrapperSpace?'with':'without'" class="parent">
       <!-- floating swap button -->
@@ -48,7 +48,7 @@
       <!-- routes -->
       <nuxt-child />
     </v-main>
-    <Footer ref="footer"></Footer>
+    <!-- <Footer ref="footer"></Footer> -->
   </v-app>
 </template>
 

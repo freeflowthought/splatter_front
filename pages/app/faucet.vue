@@ -51,13 +51,13 @@
 				</v-data-table>
 			</div>
 
-			<div class="img-container">
+			<!-- <div class="img-container">
 				<img
 					src="~/assets/sources/images/circleBottom.png"
 					alt="Circle"
 					class="circle-bottom"
 				/>
-			</div>
+			</div> -->
 		</section>
 	</div>
 </template>

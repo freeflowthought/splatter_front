@@ -57,7 +57,7 @@
           </aside>
 
           <aside class="fwrap space bold" style="gap: 10px; --max-w-child: 110px;">
-            <v-btn class="btn" style="border:1px solid #000000;">Deposit</v-btn>
+            <v-btn class="btn">Deposit</v-btn>
           </aside>
         </v-card>
       </section> -->
@@ -69,9 +69,10 @@
 
       <div style="margin-top:50px;">
         <div class="jspace acenter mobile-fields deletemobile">
-          <v-btn-toggle mandatory class="tooggle">
+          <v-btn class="btn-grey bold">Pairs</v-btn>
+          <!-- <v-btn-toggle mandatory class="tooggle">
             <v-btn class="btn-toggle">Pairs</v-btn>
-          </v-btn-toggle>
+          </v-btn-toggle> -->
 
           <div class="divrow center" style="gap:5px;">
             <v-text-field
@@ -82,7 +83,7 @@
               class="input-data-table"
             ></v-text-field>
 
-            <v-btn class="btn bold" style="--w:150px; border:solid 1px #000; --h: 55px; border-radius: 10px!important;" @click="showModalCreatePair">
+            <v-btn class="btn-grey bold" @click="showModalCreatePair">
               Create Pool
             </v-btn>
           </div>
@@ -124,7 +125,7 @@
                 Withdraw
               </v-btn> -->
               <v-btn
-              class="btn" style="--fs: 1em; --stroke: .4px; --br: 10px; --b:1px solid #000;"
+              class="btn" style="--fs: 1em; --stroke: .4px; --br: 10px;"
               @click="showModal(item)">
                 Deposit
               </v-btn>

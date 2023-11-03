@@ -37,21 +37,29 @@
       display: flex;
       gap: 2em;
       a {
-        font-weight: 700!important;
+        font-weight: 300!important;
         font-size: 20px;
         transition: .5s $ease;
         font-family: var(--font5);
         &.active {
-          background: linear-gradient(99.45deg, #A093F0 7.5%, #5A9FF7 94.48%) !important;
-          -webkit-background-clip: text !important;
-          -webkit-text-fill-color: transparent !important;
-          background-clip: text !important;
+          font-weight: 700!important;
         }
       }
     }
     .right {
       display: flex;
       gap: 1em;
+
+      .btn-nav{
+        background-color: #E1D8D1;
+        border: 2px solid #D7CBC1;
+        border-radius: 30px!important;
+        box-shadow: none;
+        max-height: 45px;
+        min-height: 45px;
+      }
+
+      
       .v-btn {
         --p: clamp(.8em, 1vw, 1em);
       }

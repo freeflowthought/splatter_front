@@ -1,5 +1,7 @@
 <template>
 	<div id="liquidity">
+    <h1 class="bold tcenter mb-10">Liquidty</h1>
+
 		<v-row class="center">
       <!-- <v-col xl="4" lg="4" md="4" cols="12">
         <v-card class="card">
@@ -106,7 +108,7 @@
             </v-window-item>
 
             <v-window-item :value="2" class="window-2 divcol acenter">
-              <h2 class="white-title mb-6">{{ percent * 100 }}%</h2>
+              <h2 class="bold mb-6">{{ percent * 100 }}%</h2>
 
               <div>
                 <v-tabs background-color="transparent d-flex center"  scrollable  :mobile-breakpoint="9999">
@@ -141,8 +143,10 @@
       </v-col>
 
       <v-col xl="4" lg="4" md="4" cols="12">
-        <v-card class="card">
+        <v-card class="card no-overflow">
           <p class="p bold-title mb-6">Currently LPs</p>
+
+          <hr class="hr">
 
           <!-- <div v-for="(item, index) in dataCurrentlyLps" :key="index" class="jspace mb-14">
             <div class="divrow center" style="gap: 10px;">
@@ -159,7 +163,13 @@
             </div>
           </div> -->
 
-          <div v-for="(item, index) in allPairs" :key="index" class="jspace mb-14 hoverable">
+          <div v-if="lengthPairs < 1" class="divcol center" style="gap: 15px;">
+            <p class="p bold mt-3">You dont have any LP’s</p>
+            <img src="~/assets/sources/images/not-lps.svg" alt="Not Lps">
+            <v-btn class="btn mt-2" style="min-width: 100%!important;">Swap Tokens</v-btn>
+          </div>
+
+          <div v-for="(item, index) in allPairs" :key="index" class="jspace mb-7  mt-7 hoverable border-bottom">
             <div class="divrow center" style="gap: 10px;" @click="selectPair(item)">
               <v-sheet class="dual-tokens" color="transparent" style="--h-sheet: 40px; width: 40px!important;">
                 <img :src="require(`~/assets/sources/tokens/btc.svg`)" :alt="`elipse token`" class="aspect" style="--p:0px; --w:25px;">
@@ -173,7 +183,6 @@
               <span class="light-span">{{ item.crypto_balance }}</span>
             </div>
           </div>
-
         </v-card>
       </v-col>
     </v-row>
@@ -207,6 +216,7 @@ export default {
   name: "LiquidityPage",
   data() {
     return {
+      lengthPairs: null,
       windowStep: 1,
       tokens: undefined,
       items1: this.tokens,
@@ -292,6 +302,7 @@ export default {
       this.tokens = scrollTokens
     }
     this.allPairs = await this.getAllPairs()
+    this.allPairs.length = this.lengthPairs
   },
   methods: {
     requiredRule(value) {
