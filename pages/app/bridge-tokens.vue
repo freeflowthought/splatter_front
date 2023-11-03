@@ -11,32 +11,31 @@
         <!-- left -->
         <v-card class="swap-card divcol center jspace">
 
-            <v-btn class="menu-btn">
+            <!-- <v-btn class="menu-btn">
               <img src="~/assets/sources/icons/menu-circle.svg" alt="menu">
-            </v-btn>
+            </v-btn> -->
             <span class="dm-400">
               From
             </span>
             <div class="swap-container">
-              <v-autocomplete
+              <v-select
                 ref="select1"
                 v-model="selectedItem1"
                 :items="items1Filtered"
                 item-text="text"
                 item-value="value"
                 class="input-auto"
-                append-icon="mdi-chevron-down"
                 @change="balanceOf(selectedItem1)"
               >
                 <template #item="{ item }">
                   <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
-                  <span style="margin-left: 10px; color: #000!important;">{{ item.name }}</span>
+                  <span style="margin-left: 10px;">{{ item.name }}</span>
                 </template>
                 <template #selection="{ item }">
                   <v-img v-if="item" :src="item.logoURI" style="max-width: 20px;"></v-img>
-                  <span v-if="item" style="margin-left: 10px; color: #000!important;">{{ item.symbol }}</span>
+                  <span v-if="item" style="margin-left: 10px;">{{ item.symbol }}</span>
                 </template>
-              </v-autocomplete>
+              </v-select>
 
               <v-text-field
                 v-model="tokenAmountIn"
@@ -44,8 +43,6 @@
                 class="input-number"
                 :value="0"
                 placeholder="0.00"
-                @input="calculateMidPrice()"
-
               ></v-text-field>
 
               <v-btn  class="btn-max" @click="setMaxValue">max</v-btn>
@@ -62,24 +59,23 @@
             </span>
 
             <div class="swap-container swap-container2">
-              <v-autocomplete
+              <v-select
                 ref="select2"
                 v-model="selectedItem2"
                 :items="items2Filtered"
-                append-icon="mdi-chevron-down"
                 item-text="text"
                 item-value="value"
                 class="input-auto"
               >
               <template #item="{ item }">
                 <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
-                <span style="margin-left: 10px; color: #000!important;">{{ item.name }}</span>
+                <span style="margin-left: 10px;">{{ item.name }}</span>
               </template>
               <template #selection="{ item }">
                 <v-img v-if="item" :src="item.logoURI" style="max-width: 20px;"></v-img>
-                <span v-if="item" style="margin-left: 10px; color: #000!important;">{{ item.symbol }}</span>
+                <span v-if="item" style="margin-left: 10px;">{{ item.symbol }}</span>
               </template>
-              </v-autocomplete>
+              </v-select>
 
               <v-text-field
                 v-model="tokenAmountOut" :rules="rules" class="input-number" :value="0" placeholder="0.00"
@@ -88,12 +84,12 @@
 
             <v-btn
               class="btn mobile-btn"
-              style="width: 350px!important; height: 50px!important; margin-top: 15px;"
+              style="width: 350px!important; height: 60px!important; margin-top: 15px;"
               @click="submitForm"
             >Swap
             </v-btn>
 
-            <div class="center mt-4 mb-4">
+            <div class="center">
               <a href="" class="atag">Add Splatter To Wallet</a>
               <div class="div-linea"></div>
             </div>
@@ -104,7 +100,7 @@
           <AppChartsSwapChart ref="chart" :height="heightChart" @model="$refs.modal.modalChart = true"></AppChartsSwapChart>
         </v-card>
 
-        <!-- <v-btn
+        <v-btn
         class="showmobile connect-btn bold"
         @click="!isLogged ? $store.dispatch('modalConnect') : ''"
         >
@@ -113,13 +109,13 @@
         </template>
 
         <template v-else>Connect wallet</template>
-        </v-btn> -->
+        </v-btn>
       </div>
       </v-form>
 
-      <!-- <div class="img-container">
+      <div class="img-container">
         <img src="~/assets/sources/images/circleBottom.png" alt="Circle" class="circle-bottom">
-      </div> -->
+      </div>
     </section>
   </div>
 </template>
@@ -306,8 +302,6 @@ export default {
     },
 
     async swapTokensForTokens(tokenIn, tokenOut) {
-      console.log(BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),)
-      console.log(BigInt((this.tokenAmountOut * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),)
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       this.approve(tokenIn.address, BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))
       const path = [tokenIn.address, tokenOut.address]

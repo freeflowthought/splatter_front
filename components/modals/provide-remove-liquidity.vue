@@ -123,18 +123,18 @@ export default {
     // TODO callbacks
     addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
       const batch = new web3.BatchRequest();
-      this.approve(tokenA.address, (amountADesired * 10 ** tokenA.decimals).toString(), batch)
-      this.approve(tokenB.address, (amountBDesired * 10 ** tokenB.decimals).toString(), batch)
+      this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals).toString()).replace(/[.,]/g, ''), batch)
+      this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals).toString()).replace(/[.,]/g, ''), batch)
       const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       batch.add(
         routerV2.methods.addLiquidity(
           tokenA.address,
           tokenB.address,
-          (amountADesired * 10 ** tokenA.decimals).toString(),
-          (amountBDesired * 10 ** tokenB.decimals).toString(),
-          (amountAMin * 10 ** tokenA.decimals).toString(),
-          (amountBMin * 10 ** tokenB.decimals).toString(),
+          BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
+          BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''),
+          BigInt((amountAMin * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
+          BigInt((amountBMin * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''),
           to,
           deadline
         ).send.request({from: this.$metamask.userAccount}, (err, res) => {
