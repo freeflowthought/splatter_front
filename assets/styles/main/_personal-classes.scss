@@ -975,11 +975,32 @@
 */
 
 
-.v-select-list .v-list-item--active {
-  background: var(--primary) !important;
-  --c:#fff!important;
+// .v-select-list .v-list-item--active {
+//   background: var(--primary) !important;
+//   --c:#fff!important;
+// }
+
+// .v-list{
+//   margin-top: 40px;
+// }
+
+
+.v-autocomplete__content.v-menu__content .v-select-list{
+  background-color: #EBE5E0!important;
+  border: 2px solid #D7CBC1!important;
+  margin-top: 0px;
+  min-width: 300px!important;
+
+  span{
+    color: #000!important;
+    font-weight: 700!important;
+  }
 }
 
-.v-list{
-  margin-top: 40px;
+.v-select-list .v-list-item--active {
+  background: transparent !important;
+}
+
+.theme--dark.v-list-item.v-list-item--highlighted::before {
+  opacity: 0;
 }

@@ -28,7 +28,7 @@
     .swap-title{
       font-weight: 500!important;
       font-family: var(--font7)!important;
-      margin-bottom: 80px;
+      margin-bottom: 40px;
       font-size: 32px!important;
     }
 
@@ -75,9 +75,9 @@
 
     .swap-card{
       background-color: var(--card);
-      border: 1px solid #000000;
+      border: 2px solid #D7CBC1;
       border-radius: 15px;
-      height: 360px;
+      height: 420px;
       max-width: 380px!important;
       padding-block: 20px;
       padding-inline: 20px;
@@ -122,7 +122,6 @@
 
       .swap-container{
         background-color: #E1D8D0;
-        border: 1px solid #000000;
         border-radius: 15px;
         max-height: 60px;
         display: flex;
@@ -155,12 +154,13 @@
           width: 40px;
           min-height: 20px!important;
           min-width: 25px!important;
-          border: 1px solid #000000;
           border-radius: 5px;
           background-color: #A194F1;
+          box-shadow: none;
           
           span{
-            font-weight: 700!important;
+            font-weight: 500!important;
+            color: #fff;
           }
         }
       }
@@ -168,8 +168,7 @@
       .atag{
         font-weight: 400!important;
         font-family: var(--font1)!important;
-        position: absolute;
-        bottom: -50px;
+        position: relative;
         background: linear-gradient(to bottom, #A093F0, #5A9FF7) !important;
         -webkit-background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
@@ -182,7 +181,7 @@
         width: 163px;
         height: 1px;
         position: absolute;
-        bottom: -50px;
+        bottom: 34px;
         background: linear-gradient(to bottom, #A093F0, #5A9FF7) !important;
         border-radius: 0px!important;
 
@@ -193,7 +192,6 @@
 
       .menu-btn{
         background-color: #E1D8D0;
-        border: 1px solid #000000;
         width: 30px;
         height: 30px;
         min-height: 1px;
@@ -201,7 +199,8 @@
         position: absolute;
         top: 10px;
         right: 10px;
-        border-radius: 11px;
+        border-radius: 10px;
+        box-shadow: none;
       }
     }
 

@@ -5,11 +5,11 @@
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
       <nuxt-link class="deletemobile" :to="basePath('/')">
-        <img src="~/assets/sources/logos/logo_black.svg" alt="logo" style="--w: 148px">
+        <img src="~/assets/sources/logos/logo_black.svg" alt="logo" style="--w: 120px">
       </nuxt-link>
       <!-- mobile -->
       <nuxt-link class="showmobile" :to="basePath('/')">
-        <img src="~/assets/sources/logos/logo_black.svg" alt="logo" style="--w: 120px">
+        <img src="~/assets/sources/logos/logo_black.svg" alt="logo" style="--w: 80px">
       </nuxt-link>
 
       <!-- desktop -->
@@ -33,14 +33,14 @@
         <v-menu bottom offset-y nudge-bottom="10px">
           <template #activator="{ on, attrs }">
             <v-btn
-              class="btn2"
+              class="btn-nav"
               style="min-width:125px!important;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
               @click="isLogged ? $store.dispatch('modalConnect') : ''"
               >
               <template v-if="isLogged">
-                <span>Login</span>
+                <span>Connect Wallet</span>
               </template>
 
               <template v-else>{{ truncatedWallet }} ...</template>
@@ -53,7 +53,7 @@
         append-icon="mdi-chevron-down"
         hide-details
         :items="itemsBlockchain"
-        class="btn2"
+        class="btn-nav"
         @change="$metamask.switchToChain(itemSelected.id)"
         >
         <template #item="{ item }">
