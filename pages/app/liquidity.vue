@@ -435,16 +435,16 @@ export default {
 
     addLiquidity(tokenA, tokenB, amountADesired, amountBDesired,) {
       const batch = new web3.BatchRequest();
-      this.approve(tokenA.address, (amountADesired * 10 ** tokenA.decimals).toString(), batch)
-      this.approve(tokenB.address, (amountBDesired * 10 ** tokenB.decimals).toString(), batch)
+      this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''), batch)
+      this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''), batch)
       const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       batch.add(
         routerV2.methods.addLiquidity(
           tokenA.address,
           tokenB.address,
-          (amountADesired * 10 ** tokenA.decimals).toString(),
-          (amountBDesired * 10 ** tokenB.decimals).toString(),
+          BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
+          BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''),
           (0 * 10 ** tokenA.decimals).toString(),
           (0 * 10 ** tokenB.decimals).toString(),
           to,
@@ -483,8 +483,8 @@ export default {
             tokenA.address,
             tokenB.address,
             liquidity,
-            (amountAMin * 10 ** tokenA.decimals).toString(),
-            (amountBMin * 10 ** tokenB.decimals).toString(),
+            BigInt((amountAMin * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
+            BigInt((amountBMin * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''),
             to,
             deadline
             ).send.request({from: this.$metamask.userAccount}, (err, res) => {

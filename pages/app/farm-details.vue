@@ -428,34 +428,6 @@ export default {
       return pair
     },
 
-    async removeLiquidity(tokenA, tokenB, amountAMin, amountBMin ) {
-      const batch = new web3.BatchRequest();
-      const pairAddress = factory.methods.getPair(tokenA.decimals, tokenB.decimals);
-      const liquidity = await this.balanceOf(pairAddress)
-      this.approve(pairAddress, liquidity, batch)
-      const to = this.$metamask.userAccount
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      batch.add(
-        routerV2.methods.removeLiquidity(
-          tokenA.address,
-          tokenB.address,
-          liquidity,
-          (amountAMin * 10 ** tokenA.decimals).toString(),
-          (amountBMin * 10 ** tokenB.decimals).toString(),
-          to,
-          deadline
-          ).send.request({from: this.$metamask.userAccount}, (err, res) => {
-            if (err) {
-              console.log(err)
-            }
-            if (res) {
-              this.$alert('success', 'Liquidity removed successfully')
-            }
-          }
-        )
-      )
-      batch.execute()
-    },
     async addLiquidityETH(token, amountTokenDesired, amountTokenMin, amountETHMin){
       // const to = this.$metamask.userAccount
       // const batch = new web3.BatchRequest();

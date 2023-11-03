@@ -43,8 +43,6 @@
                 class="input-number"
                 :value="0"
                 placeholder="0.00"
-                @input="calculateMidPrice()"
-
               ></v-text-field>
 
               <v-btn  class="btn-max" @click="setMaxValue">max</v-btn>
@@ -304,8 +302,6 @@ export default {
     },
 
     async swapTokensForTokens(tokenIn, tokenOut) {
-      console.log(BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),)
-      console.log(BigInt((this.tokenAmountOut * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),)
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       this.approve(tokenIn.address, BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))
       const path = [tokenIn.address, tokenOut.address]
