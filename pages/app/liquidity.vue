@@ -445,6 +445,7 @@ export default {
     },
 
     addLiquidity(tokenA, tokenB, amountADesired, amountBDesired,) {
+      console.log(tokenA.decimals, tokenB.decimals)
       const batch = new web3.BatchRequest();
       this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''), batch)
       this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''), batch)
@@ -466,7 +467,7 @@ export default {
 
           }
           if (res) {
-            this.$alert('success', 'Liquidity added successfully')
+            this.$alert('success', "Liquidity added successfully")
           }
 
         })

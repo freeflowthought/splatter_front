@@ -306,14 +306,12 @@ export default {
     },
 
     async swapTokensForTokens(tokenIn, tokenOut) {
-      console.log(BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),)
-      console.log(BigInt((this.tokenAmountOut * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),)
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      this.approve(tokenIn.address, BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))
+      this.approve(tokenIn.address, (this.tokenAmountIn * 10 ** tokenIn.decimals).toString())
       const path = [tokenIn.address, tokenOut.address]
       await routerV2.methods.swapExactTokensForTokens(
-        BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),
-        BigInt((this.tokenAmountOut * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),
+        (this.tokenAmountIn * 10 ** tokenIn.decimals).toString().slice(0, tokenIn.decimals).replace(/[.,]/g),
+        (this.tokenAmountOut * 10 ** tokenIn.decimals).toString().slice(0, tokenOut.decimals).replace(/[.,]/g),
         path,
         this.$metamask.userAccount,
         deadline).send({from: this.$metamask.userAccount})

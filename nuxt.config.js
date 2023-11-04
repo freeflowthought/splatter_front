@@ -4,6 +4,9 @@ import colors from 'vuetify/es5/util/colors'
 const development = process.env.NODE_ENV !== 'production'
 
 export default {
+  env: {
+    squidAxelarApi:  process.env.SQUID_AXELAR_API
+  },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -72,13 +75,13 @@ export default {
     '~/plugins/mixinsImport.js',
     '~/plugins/axios.js',
     '~/plugins/apexchart.js',
-    '~/plugins/google-maps.js',
     '~/plugins/vue-debounce.js',
     // services
     '~/services/metamask.js',
     '~/plugins/format-number.js',
     // '~/services/eth-provider.js',
     '~/services/protocol-addresses.js',
+    '~/services/squid-axelar.js',
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
