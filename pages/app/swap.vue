@@ -1,8 +1,5 @@
 <template>
   <div id="swap">
-    <!-- does this even work?
-    <ModalsSwap ref="modal"></ModalsSwap>
-    <ModalsTokens ref="tokens" :from="swapFrom" :to="swapTo"></ModalsTokens> -->
 
     <section id="swap-content" class="fwrap center divcol">
       <h1 class="swap-title">Swap Tokens</h1>
