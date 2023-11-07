@@ -9,7 +9,7 @@
       <h1 class="tcenter font1">Local Innovative <br> <span>Dex On</span> 📜 <span>Scroll</span></h1>
 
       <div class="divrow wrap container-btns center">
-        <v-btn v-for="(item,index) in dataBtns" :key="index" @click="item.name == 'Launch App' ? $router.push(basePath2(item.to)) : ''">
+        <v-btn v-for="(item,index) in dataBtns" :key="index" :href="item.url" target="_blank" @click="item.name == 'Launch App' ? $router.push(basePath2(item.to)) : ''">
           <img v-if="item.img" :src="item.img" :alt="item.alt" class="mr-1"> {{ item.name }}
         </v-btn>
       </div>
@@ -32,21 +32,25 @@ export default {
           img: require("~/assets/sources/icons/twitter.svg"),
           alt: "Twitter logo",
           name: "Twitter",
+          url: "https://x.com/Splatter_Proto?t=Q4ZOPNNTi3Jk9xF9l8CRLQ&s=08",
         },
         {
           img: require("~/assets/sources/icons/discord.svg"),
           alt: "Discord logo",
           name: "Discord",
+          url: "https://discord.com/invite/dDC8rYTFju"
         },
         {
           img: require("~/assets/sources/icons/medium.svg"),
           alt: "Medium logo",
           name: "Medium",
+          url: "https://medium.com/@splatterproto"
         },
         {
           img: require("~/assets/sources/icons/gitbook.png"),
           alt: "Gitbook logo",
           name: "Gitbook",
+          url: "https://yexlabs.gitbook.io/splatterprotocol/",
         },
       ]
     }

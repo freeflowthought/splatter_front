@@ -90,10 +90,10 @@
             >Swap
             </v-btn>
 
-            <div class="center mt-4 mb-4">
+            <!-- <div class="center mt-4 mb-4">
               <a href="" class="atag">Add Splatter To Wallet</a>
               <div class="div-linea"></div>
-            </div>
+            </div> -->
         </v-card>
 
         <!-- right -->

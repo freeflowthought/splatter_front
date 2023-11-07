@@ -38,14 +38,14 @@
 
       <template #content>
             <v-btn
-              class="btn2"
+              class="btn-nav"
               style="position: absolute; width: 80%; margin-left: 10%; margin-top: 220px;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
               @click="isLogged ? $store.dispatch('modalConnect') : ''"
               >
               <template v-if="isLogged">
-                <span>Login</span>
+                <span>Connect Wallet</span>
               </template>
 
               <template v-else>{{ wallet.substring(1, 20) }} ...</template>
@@ -81,7 +81,7 @@
 
         <div class="center">
           <v-btn v-for="(item,i) in dataSocial" :key="i" icon :href="item.url" target="_blank" class="ml-1 mr-1">
-            <img :src="require(`~/assets/sources/icons/${item.icon}.png`)" alt="social red">
+            <img :src="require(`~/assets/sources/icons/${item.icon}`)" alt="social red">
           </v-btn>
         </div>
       </template>
@@ -96,9 +96,10 @@ export default {
     return {
       drawer: false,
       dataSocial: [
-        // { icon:"discord", url:"#" },
-        { icon:"twitter", url:"#" },
-        // { icon:"telegram", url:"#" }
+        { icon:"discord.png", url:"https://discord.com/invite/dDC8rYTFju" },
+        { icon:"twitter.png", url:"https://x.com/Splatter_Proto?t=Q4ZOPNNTi3Jk9xF9l8CRLQ&s=08" },
+        { icon:"gitbook.png", url:"https://yexlabs.gitbook.io/splatterprotocol/" },
+        { icon:"medium.svg", url:"https://medium.com/@splatterproto" },
       ],
       wallet: this.$metamask.userAccount === undefined ? "Login": this.$metamask.userAccount,
       isLogged: true,

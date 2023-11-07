@@ -38,14 +38,14 @@
 
       <template #content>
             <v-btn
-              class="btn2"
+              class="btn-nav"
               style="position: absolute; width: 80%; margin-left: 10%; margin-top: 220px;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
               @click="isLogged ? $store.dispatch('modalConnect') : ''"
               >
               <template v-if="isLogged">
-                <span>Login</span>
+                <span>Connect Wallet</span>
               </template>
 
               <template v-else>{{ wallet.substring(1, 20) }} ...</template>
