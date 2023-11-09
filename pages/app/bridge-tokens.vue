@@ -129,6 +129,9 @@ import factoryABI  from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
 import scrollTokens from '~/static/tokens/scroll_tokens.json'
 import scrollSepoliaTokens from '~/static/tokens/scroll_alpha_tokens.json'
+const ethers = require("ethers")
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+const signer = provider.getSigner()
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
 let routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
@@ -140,14 +143,19 @@ export default {
   name: "SwapPage",
   data() {
     return {
+      chains: undefined,
       selectedItem1: null,
       selectedItem2: null,
       tokenInAmountUser: 0,
       tokenAmountIn: 0,
       tokenAmountOut: 0,
-      tokens: undefined,
-      items1: this.tokens,
-      items2: this.tokens,
+      allTokens: undefined,
+      chainFrom: undefined,
+      chainTo: undefined,
+      tokensFrom: undefined,
+      tokensTo: undefined,
+      items1: this.tokensFrom,
+      items2: this.tokensTo,
       heightChart: undefined,
       swapFrom: {
         img: require('~/assets/sources/tokens/database.svg'),
@@ -185,12 +193,18 @@ export default {
     },
     items2Filtered() {
       return this.tokens?.filter(item => item !== this.selectedItem1 ?? '')
+    },
+    chainsFromiltered() {
+      return this.chains?.filter(item => item !== this.chainTo)
+    },
+    chainsToFiltered() {
+      return this.chains?.filter(item => item !== this.chainFrom)
     }
   },
   async mounted() {
     await this.$metamask.checkConnection()
-    this.styles()
-
+    this.chains = await this.$squidAxelar.getChains(this)
+    this.allTokens = await this.$squidAxelar.getTokens(this)
     routerV2Address = this.$protocolAddresses.getRouterAddress(this.$metamask.userCurrentChainId)
     factoryV2Address = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
     routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
@@ -208,13 +222,13 @@ export default {
   },
   methods: {
 
+        async getSquidInfo() {
+      console.log(await this.$squidAxelar.getChains(this))
+      console.log(await this.$squidAxelar.getTokens(this))
+    },
+
     submitForm() {
-     if (this.$refs.form.validate()){
-      this.swapTokensForTokens(
-        this.$refs.select1.internalValue,
-        this.$refs.select2.internalValue
-      )
-     }
+    
     },
 
     setMaxValue() {
@@ -222,17 +236,6 @@ export default {
       this.calculateMidPrice()
     },
 
-    styles() {
-      // height chart calculator
-      /* const
-        container = this.$refs.target_swap_chart.$el,
-        header = container.querySelector(".charts-header"),
-        footer = container.querySelector(".charts-footer");
-      this.heightChart = `
-        ${container.getBoundingClientRect().height -
-        (header.getBoundingClientRect().height + footer.getBoundingClientRect().height + 48 + 15)}px
-      ` */
-    },
     switchTokens() {
       const temp = this.selectedItem1
       this.selectedItem1 = this.selectedItem2
@@ -255,16 +258,9 @@ export default {
     // we have problems using uniSDK have to about think about some ways of getting an oracle working
     // so we have amountOut in order to use a direct contract call
 
-    async approve(tokenAddress, amount) {
-      const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddress);
-      await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount }).then(
-        function (value) {
-
-        },
-        function (reason) {
-
-        },
-      );
+    async approve(tokenAddres, amount) {
+      const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
+      await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount })
     },
 
     async balanceOf(token) {
@@ -280,7 +276,6 @@ export default {
         return pairAddress
       } else {
         this.$alert('cancel', 'Pair does not exist')
-
       }
     },
 
@@ -302,15 +297,23 @@ export default {
     },
 
     async swapTokensForTokens(tokenIn, tokenOut) {
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      this.approve(tokenIn.address, BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))
-      const path = [tokenIn.address, tokenOut.address]
-      await routerV2.methods.swapExactTokensForTokens(
-        BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),
-        BigInt((this.tokenAmountOut * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),
-        path,
-        this.$metamask.userAccount,
-        deadline).send({from: this.$metamask.userAccount})
+      const route = await this.$squidAxelar.getRoute(this, {})
+      const transactionRequest = route.transactionRequest;
+
+      // Execute the swap transaction
+      const contract = new ethers.Contract(
+        transactionRequest.targetAddress,
+        [],
+        signer
+      );
+
+      const tx = await contract.send(transactionRequest.data, {
+        value: transactionRequest.value,
+        gasPrice: await provider.getGasPrice(),
+        gasLimit: transactionRequest.gasLimit,
+      });
+      const txReceipt = await tx.wait();
+      console.log(txReceipt)
     },
 
     swapETHForTokens() {},

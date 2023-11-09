@@ -3,7 +3,7 @@ import Vue from 'vue'
 
 const squidAxelar = {
   async getChains (context) {
-    const result = await context.$context.$.get('https://v2.api.squidrouter.com/v2/chains', {
+    const result = await context.$axios.get('https://v2.api.squidrouter.com/v2/chains', {
       headers: {
         'x-integrator-id': process.env.squidAxelarApi,
       },
@@ -17,7 +17,6 @@ const squidAxelar = {
         'x-integrator-id': process.env.squidAxelarApi,
       },
     });
-    console.log(result)
     return result.data;
   },
 

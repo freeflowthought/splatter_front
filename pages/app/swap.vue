@@ -259,16 +259,9 @@ export default {
     // we have problems using uniSDK have to about think about some ways of getting an oracle working
     // so we have amountOut in order to use a direct contract call
 
-    async approve(tokenAddress, amount) {
-      const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddress);
-      await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount }).then(
-        function (value) {
-
-        },
-        function (reason) {
-
-        },
-      );
+    async approve(tokenAddres, amount) {
+      const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
+      await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount })
     },
 
     async balanceOf(token) {
@@ -307,11 +300,11 @@ export default {
 
     async swapTokensForTokens(tokenIn, tokenOut) {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      this.approve(tokenIn.address, (this.tokenAmountIn * 10 ** tokenIn.decimals).toString())
+      this.approve(tokenIn.address, BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))
       const path = [tokenIn.address, tokenOut.address]
       await routerV2.methods.swapExactTokensForTokens(
-        (this.tokenAmountIn * 10 ** tokenIn.decimals).toString().slice(0, tokenIn.decimals).replace(/[.,]/g),
-        (this.tokenAmountOut * 10 ** tokenIn.decimals).toString().slice(0, tokenOut.decimals).replace(/[.,]/g),
+        BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),
+        BigInt((this.tokenAmountOut * 10 ** tokenOut.decimals)).toString().replace(/[.,]/g, ''),
         path,
         this.$metamask.userAccount,
         deadline).send({from: this.$metamask.userAccount})
