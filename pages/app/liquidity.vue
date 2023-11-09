@@ -302,7 +302,7 @@ export default {
       this.tokens = scrollTokens
     }
     this.allPairs = await this.getAllPairs()
-    this.allPairs.length = this.lengthPairs
+    this.lengthPairs = this.allPairs.length
   },
   methods: {
     requiredRule(value) {
@@ -373,17 +373,17 @@ export default {
         if(userHasBalance) {
 
           const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pair.address);
-      const [token0Address, token1Address] = await Promise.all([
-        pairContract.methods.token0().call(),
-        pairContract.methods.token1().call()])
+          const [token0Address, token1Address] = await Promise.all([
+          pairContract.methods.token0().call(),
+          pairContract.methods.token1().call()])
 
-        const [token0, token1] = await Promise.all([
-          this.getTokenData(token0Address),
-          this.getTokenData(token1Address)
-        ])
-        pair.token0 = token0
-        pair.token1 = token1
-        pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
+          const [token0, token1] = await Promise.all([
+            this.getTokenData(token0Address),
+            this.getTokenData(token1Address)
+          ])
+          pair.token0 = token0
+          pair.token1 = token1
+          pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
       }
       return pair
     },

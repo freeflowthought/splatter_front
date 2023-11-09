@@ -1,8 +1,5 @@
 <template>
   <div id="swap">
-    <!-- does this even work?
-    <ModalsSwap ref="modal"></ModalsSwap>
-    <ModalsTokens ref="tokens" :from="swapFrom" :to="swapTo"></ModalsTokens> -->
 
     <section id="swap-content" class="fwrap center divcol">
       <h1 class="swap-title">Swap Tokens</h1>
@@ -93,10 +90,10 @@
             >Swap
             </v-btn>
 
-            <div class="center mt-4 mb-4">
+            <!-- <div class="center mt-4 mb-4">
               <a href="" class="atag">Add Splatter To Wallet</a>
               <div class="div-linea"></div>
-            </div>
+            </div> -->
         </v-card>
 
         <!-- right -->
