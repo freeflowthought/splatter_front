@@ -102,6 +102,10 @@ export default {
           name: "Liquidity",
           to: "/liquidity"
         },
+        /* {
+          name: "Multichain Swap",
+          to: "/bridge-tokens"
+        }, */
       ],
       wallet: "Login",
       isLogged: true,
@@ -115,7 +119,7 @@ export default {
   },
   created() {
 
-    
+
   },
   async mounted() {
     await this.$metamask.checkConnection()

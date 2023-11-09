@@ -33,6 +33,7 @@ const chainParams = {
       decimals: 18
     }
   },
+
 };
 
 const metamask = {
@@ -45,12 +46,12 @@ const metamask = {
     return new Promise((resolve, reject) => {
       ethereum
         .request({ method: 'eth_requestAccounts', params: [] })
-        .then((userAccounts) => {
-          localStorage.accountId = userAccounts[0];
-          localStorage.setItem("wallet", userAccounts[0]);
-          localStorage.setItem("chainId", ethereum.chainId);
+        .then(async (userAccounts) => {
           this.userAccount = userAccounts[0];
-          this.userCurrentChainId = ethereum.chainId;
+          this.userCurrentChainId = await window.ethereum.request({
+            "method": "eth_chainId",
+            "params": []
+          });
           resolve(userAccounts[0]); // Resolve the promise with the account address
         })
         .catch((err) => {
@@ -90,7 +91,7 @@ const metamask = {
   async checkConnection() {
     window.ethereum.on('accountsChanged', this.handleAccountsChanged);
     const accounts = await ethereum.request({ method: 'eth_accounts' })
-    this.updateChainId()
+    await this.updateChainId()
     this.handleAccountsChanged(accounts)
   },
 
@@ -116,8 +117,11 @@ const metamask = {
     });
   },
 
-  updateChainId() {
-    this.userCurrentChainId = ethereum.chainId
+  async updateChainId() {
+    this.userCurrentChainId = await window.ethereum.request({
+      "method": "eth_chainId",
+      "params": []
+    });
   },
 
   async switchToChain(id) {
@@ -126,7 +130,6 @@ const metamask = {
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: chainParams[id].chainId }],
       });
-      window.location.reload();
     } catch (switchError) {
       // The network has not been added to MetaMask
       if (switchError.code === 4902) {
@@ -148,8 +151,39 @@ const metamask = {
         }
       }
     }
-    this.updateChainId()
+    await this.updateChainId()
     window.location.reload();
+  },
+
+  async switchToChainBySquidParams(chain) {
+    try {
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: "0x" + Number(chain.chainId).toString(16) }],
+      });
+    } catch (switchError) {
+      // The network has not been added to MetaMask
+      if (switchError.code === 4902) {
+        try {
+          await ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+                {
+                  chainId: "0x" + Number(chain.chainId).toString(16),
+                  chainName: chain.networkName,
+                  rpcUrls: chain.rpc,
+                  blockExplorerUrls: chain.blockExplorerUrls,
+                  nativeCurrency: chain.nativeCurrency,
+                }
+              ]
+          });
+        } catch (err) {
+
+        }
+      }
+    }
+    await this.updateChainId()
+
   },
 
   changeUserCurrentChain: async () => {
@@ -185,7 +219,7 @@ const metamask = {
         }
       }
     }
-    this.updateChainId()
+    await this.updateChainId()
   },
 
 

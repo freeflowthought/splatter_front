@@ -332,6 +332,9 @@ export default {
       const temp = this.selectedItem1;
       this.selectedItem1 = this.selectedItem2;
       this.selectedItem2 = temp;
+      this.getPricing()
+      this.getUserBalance(1)
+      this.getUserBalance(2)
     },
 
     async getTokenData(tokenAddress) {
@@ -428,9 +431,6 @@ export default {
           {
             const balance1 = await this.balanceOf(this.selectedItem1.address)
             this.balanceToken1 = balance1 / 10 ** this.selectedItem1.decimals
-
-
-
           }
           break;
 
@@ -441,7 +441,6 @@ export default {
           }
           break;
       }
-
     },
 
     addLiquidity(tokenA, tokenB, amountADesired, amountBDesired,) {

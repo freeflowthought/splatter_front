@@ -147,8 +147,6 @@ export default {
       tokenAmountIn: 0,
       tokenAmountOut: 0,
       tokens: undefined,
-      items1: this.tokens,
-      items2: this.tokens,
       heightChart: undefined,
       swapFrom: {
         img: require('~/assets/sources/tokens/database.svg'),

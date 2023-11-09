@@ -5,11 +5,11 @@
     <ModalsTokens ref="tokens" :from="swapFrom" :to="swapTo"></ModalsTokens> -->
 
     <section id="swap-content" class="fwrap center divcol">
-      <h1 class="swap-title">Swap Tokens</h1>
+      <h1 class="swap-title">Bridge Tokens</h1>
       <v-form ref="form">
         <div class="divrow mobile-column" style="gap:20px;">
-        <!-- left -->
-        <v-card class="swap-card divcol center jspace">
+          <!-- left -->
+          <v-card class="swap-card divcol center jspace">
 
             <!-- <v-btn class="menu-btn">
               <img src="~/assets/sources/icons/menu-circle.svg" alt="menu">
@@ -19,13 +19,29 @@
             </span>
             <div class="swap-container">
               <v-select
+                v-model="chainFrom"
+                :items="chainsFromFiltered"
+                :rules="[requiredRules]"
+                style="width: 80px;"
+                >
+                <template #item="{ item }">
+                  <v-img :src="item.chainIconURI" style="max-width: 20px;"></v-img>
+                  <span style="margin-left: 10px;">{{ item.axelarChainName }}</span>
+                </template>
+
+                <template #selection="{ item }">
+                  <v-img v-if="item" :src="item.chainIconURI" style="max-width: 20px;"></v-img>
+                </template>
+              </v-select>
+
+              <v-select
                 ref="select1"
                 v-model="selectedItem1"
+                no-data-text="Please select a blockchain first"
                 :items="items1Filtered"
                 item-text="text"
                 item-value="value"
                 class="input-auto"
-                @change="balanceOf(selectedItem1)"
               >
                 <template #item="{ item }">
                   <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
@@ -60,25 +76,42 @@
 
             <div class="swap-container swap-container2">
               <v-select
+                v-model="chainTo"
+                :items="chainsToFiltered"
+                :rules="[requiredRules]"
+                style="width: 80px;"
+                >
+                <template #item="{ item }">
+                  <v-img :src="item.chainIconURI" style="max-width: 20px;"></v-img>
+                  <span style="margin-left: 10px;">{{ item.axelarChainName }}</span>
+                </template>
+
+                <template #selection="{ item }">
+                  <v-img v-if="item" :src="item.chainIconURI" style="max-width: 20px;"></v-img>
+                </template>
+              </v-select>
+
+              <v-select
                 ref="select2"
                 v-model="selectedItem2"
+                no-data-text="Please select a blockchain first"
                 :items="items2Filtered"
                 item-text="text"
                 item-value="value"
                 class="input-auto"
               >
-              <template #item="{ item }">
-                <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
-                <span style="margin-left: 10px;">{{ item.name }}</span>
-              </template>
-              <template #selection="{ item }">
-                <v-img v-if="item" :src="item.logoURI" style="max-width: 20px;"></v-img>
-                <span v-if="item" style="margin-left: 10px;">{{ item.symbol }}</span>
-              </template>
+                <template #item="{ item }">
+                  <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
+                  <span style="margin-left: 10px;">{{ item.name }}</span>
+                </template>
+                <template #selection="{ item }">
+                  <v-img v-if="item" :src="item.logoURI" style="max-width: 20px;"></v-img>
+                  <span v-if="item" style="margin-left: 10px;">{{ item.symbol }}</span>
+                </template>
               </v-select>
 
               <v-text-field
-                v-model="tokenAmountOut" :rules="rules" class="input-number" :value="0" placeholder="0.00"
+                v-model="tokenAmountOut" :rules="[rules[1]]" class="input-number" :value="0" placeholder="0.00" disabled="true"
               ></v-text-field>
             </div>
 
@@ -88,29 +121,24 @@
               @click="submitForm"
             >Swap
             </v-btn>
+          </v-card>
 
-            <div class="center">
-              <a href="" class="atag">Add Splatter To Wallet</a>
-              <div class="div-linea"></div>
-            </div>
-        </v-card>
+          <!-- right -->
+          <v-card v-if="false" ref="target_swap_chart" class="right card">
+            <AppChartsSwapChart ref="chart" :height="heightChart" @model="$refs.modal.modalChart = true"></AppChartsSwapChart>
+          </v-card>
 
-        <!-- right -->
-        <v-card v-if="false" ref="target_swap_chart" class="right card">
-          <AppChartsSwapChart ref="chart" :height="heightChart" @model="$refs.modal.modalChart = true"></AppChartsSwapChart>
-        </v-card>
+          <v-btn
+          class="showmobile connect-btn bold"
+          @click="!isLogged ? $store.dispatch('modalConnect') : ''"
+          >
+          <template v-if="isLogged">
+            {{user.accountId}}
+          </template>
 
-        <v-btn
-        class="showmobile connect-btn bold"
-        @click="!isLogged ? $store.dispatch('modalConnect') : ''"
-        >
-        <template v-if="isLogged">
-          {{user.accountId}}
-        </template>
-
-        <template v-else>Connect wallet</template>
-        </v-btn>
-      </div>
+          <template v-else>Connect wallet</template>
+          </v-btn>
+        </div>
       </v-form>
 
       <div class="img-container">
@@ -124,20 +152,10 @@
 // import isMobile from '~/mixins/isMobile'
 import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import { numericFormat } from '@vuejs-community/vue-filter-numeric-format'
-import routerV2ABI  from '~/static/abis/routerv2.json'
-import factoryABI  from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
-import scrollTokens from '~/static/tokens/scroll_tokens.json'
-import scrollSepoliaTokens from '~/static/tokens/scroll_alpha_tokens.json'
 const ethers = require("ethers")
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner()
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
-let routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
-let factoryV2Address = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
-let routerV2;
-let factory;
 
 export default {
   name: "SwapPage",
@@ -149,13 +167,11 @@ export default {
       tokenInAmountUser: 0,
       tokenAmountIn: 0,
       tokenAmountOut: 0,
-      allTokens: undefined,
+      tokens: undefined,
       chainFrom: undefined,
       chainTo: undefined,
       tokensFrom: undefined,
       tokensTo: undefined,
-      items1: this.tokensFrom,
-      items2: this.tokensTo,
       heightChart: undefined,
       swapFrom: {
         img: require('~/assets/sources/tokens/database.svg'),
@@ -189,32 +205,21 @@ export default {
   },
   computed: {
     items1Filtered() {
-      return this.tokens?.filter(item => item !== this.selectedItem2 ?? '')
+      return this.tokens?.filter(item => item.chainId === this.chainFrom?.chainId ?? '')
     },
     items2Filtered() {
-      return this.tokens?.filter(item => item !== this.selectedItem1 ?? '')
+      return this.tokens?.filter(item => item.chainId === this.chainTo?.chainId ?? '')
     },
-    chainsFromiltered() {
-      return this.chains?.filter(item => item !== this.chainTo)
+    chainsFromFiltered() {
+      return this.chains?.filter(item => item !== this.chainTo ?? '')
     },
     chainsToFiltered() {
-      return this.chains?.filter(item => item !== this.chainFrom)
+      return this.chains?.filter(item => item !== this.chainFrom ?? '')
     }
   },
   async mounted() {
     await this.$metamask.checkConnection()
-    this.chains = await this.$squidAxelar.getChains(this)
-    this.allTokens = await this.$squidAxelar.getTokens(this)
-    routerV2Address = this.$protocolAddresses.getRouterAddress(this.$metamask.userCurrentChainId)
-    factoryV2Address = this.$protocolAddresses.getFactoryAddress(this.$metamask.userCurrentChainId)
-    routerV2 = new web3.eth.Contract(routerV2ABI, routerV2Address);
-    factory = new web3.eth.Contract(factoryABI, factoryV2Address);
-
-    if(this.$metamask.userCurrentChainId === '0x8274f'){
-      this.tokens = scrollSepoliaTokens
-    } else {
-      this.tokens = scrollTokens
-    }
+    await this.getSquidInfo()
     window.addEventListener("resize", this.styles)
   },
   beforeDestroy() {
@@ -222,13 +227,55 @@ export default {
   },
   methods: {
 
-        async getSquidInfo() {
-      console.log(await this.$squidAxelar.getChains(this))
-      console.log(await this.$squidAxelar.getTokens(this))
+    async rightChain() {
+      const chainFromHex = "0x" + Number(this.chainFrom.chainId).toString(16)
+      const currentChain = await window.ethereum.request({
+        "method": "eth_chainId",
+        "params": []
+      });
+      if (currentChain !== chainFromHex) {
+        await this.$metamask.switchToChainBySquidParams(this.chainFrom)
+      }
+
+      return currentChain === chainFromHex
     },
 
-    submitForm() {
-    
+    async getSquidInfo() {
+      const [Squidchains, SquidTokens] = await Promise.all([
+        this.$squidAxelar.getChains(this),
+        this.$squidAxelar.getTokens(this)
+      ])
+      this.chains = Squidchains.chains
+      this.tokens = SquidTokens.tokens
+    },
+
+    async getRoute() {
+      const routeResult = await this.$squidAxelar.getRoute(
+        this,
+        {
+          fromChain: this.chainFrom.chainId,
+          toChain: this.chainTo.chainId,
+          fromToken: this.selectedItem1.tokenAddres,
+          toToken: this.selectedItem2.tokenAddres,
+          fromAmount: BigInt((this.tokenAmountIn * 10 ** this.selectedItem1.decimals)).toString().replace(/[.,]/g, ''),
+          fromAddress: this.$metamask.userAccount,
+          toAddress: this.$metamask.userAccount,
+          slippageConfig: {
+            autoMode: 1
+          }
+        }
+      )
+      /* const route = routeResult.data.route;
+      const requestId = routeResult.requestId;
+      console.log("Calculated route:", route);
+      console.log("requestId:", requestId); */
+      return routeResult
+    },
+
+    async submitForm() {
+      if (this.$refs.form.validate()){
+        await this.swapTokens()
+      }
     },
 
     setMaxValue() {
@@ -247,29 +294,26 @@ export default {
       this.swapTo.amount = (event / 1.5).toFixed(2)
     },
 
-
-
     swapValues() {
       const temp = this.$refs.select1.internalValue;
       this.$refs.select1.internalValue = this.$refs.select2.internalValue;
       this.$refs.select2.internalValue = temp;
     },
 
-    // we have problems using uniSDK have to about think about some ways of getting an oracle working
-    // so we have amountOut in order to use a direct contract call
-
-    async approve(tokenAddres, amount) {
+    /* async approve(tokenAddres, amount, chainId) {
       const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
       await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount })
-    },
+    }, */
 
     async balanceOf(token) {
-      const tokenContract = new web3.eth.Contract(ERC20ABI, token.address);
-      const balance = await tokenContract.methods.balanceOf(this.$metamask.userAccount).call()
-      this.tokenInAmountUser = balance / 10 ** token.decimals
+      if(this.rightChain()) {
+        const tokenContract = new web3.eth.Contract(ERC20ABI, token.address);
+        const balance = await tokenContract.methods.balanceOf(this.$metamask.userAccount).call()
+        this.tokenInAmountUser = balance / 10 ** token.decimals
+      }
     },
 
-    async getPair(addressA, addressB){
+    /* async getPair(addressA, addressB){
       const pairAddress = await factory.methods.getPair(addressA,addressB).call()
       const pairExist = pairAddress !== '0x0000000000000000000000000000000000000000'
       if (pairExist) {
@@ -277,7 +321,7 @@ export default {
       } else {
         this.$alert('cancel', 'Pair does not exist')
       }
-    },
+    }, */
 
     async getReserves(tokenInAddress, tokenOutAddress) {
 
@@ -287,37 +331,42 @@ export default {
       return res
     },
 
-    async calculateMidPrice() {
+    /* async calculateMidPrice() {
       if(this.tokenAmountIn > 0 && this.tokenAmountIn && this.selectedItem1 != null && this.selectedItem2 != null) {
         const reserves = await this.getReserves(this.selectedItem1.address, this.selectedItem2.address)
         const midPrice = await (routerV2.methods.getAmountOut(BigInt((this.tokenAmountIn * 10 ** this.selectedItem1.decimals)).toString(), reserves.reserve0, reserves.reserve1).call())
         this.tokenAmountOut = midPrice / 10 ** this.selectedItem2.decimals
 
       }
+    }, */
+
+    async swapTokens() {
+      if(this.rightChain()) {
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner()
+
+        const route = await this.getRoute()
+        const transactionRequest = route.transactionRequest;
+
+        // Execute the swap transaction
+        const contract = new ethers.Contract(
+          transactionRequest.targetAddress,
+          [],
+          signer
+        );
+
+        const tx = await contract.send(transactionRequest.data, {
+          value: transactionRequest.value,
+          gasPrice: await provider.getGasPrice(),
+          gasLimit: transactionRequest.gasLimit,
+        });
+        const txReceipt = await tx.wait();
+        console.log(txReceipt)
+      } else {
+        this.$alert('cancel', 'Please switch to' + this.chainFrom.network + "network")
+      }
     },
-
-    async swapTokensForTokens(tokenIn, tokenOut) {
-      const route = await this.$squidAxelar.getRoute(this, {})
-      const transactionRequest = route.transactionRequest;
-
-      // Execute the swap transaction
-      const contract = new ethers.Contract(
-        transactionRequest.targetAddress,
-        [],
-        signer
-      );
-
-      const tx = await contract.send(transactionRequest.data, {
-        value: transactionRequest.value,
-        gasPrice: await provider.getGasPrice(),
-        gasLimit: transactionRequest.gasLimit,
-      });
-      const txReceipt = await tx.wait();
-      console.log(txReceipt)
-    },
-
-    swapETHForTokens() {},
-    swapTokensForETH() {},
   }
 };
 </script>
