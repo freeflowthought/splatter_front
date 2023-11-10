@@ -151,9 +151,7 @@
 <script>
 // import isMobile from '~/mixins/isMobile'
 import { numericFormat } from '@vuejs-community/vue-filter-numeric-format'
-
 import ERC20ABI from '~/static/abis/erc20.json'
-
 const ethers = require("ethers")
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
@@ -273,6 +271,9 @@ export default {
         /* const requestId = routeResult.requestId;
         console.log("Calculated route:", route);
         console.log("requestId:", requestId); */
+      console.log("getroute squid")
+      console.log(routeResult)
+      console.log("------------")
 
       return routeResult
     },
@@ -331,19 +332,11 @@ export default {
         const signer = provider.getSigner()
         await this.getRoute()
         const transactionRequest = this.route.transactionRequest;
-
+        console.log(transactionRequest)
         // Execute the swap transaction
         const contract = new ethers.Contract(
           transactionRequest.target,
-          [{
-              "constant": false,
-              "inputs": [],
-              "name": "send",
-              "outputs": [],
-              "payable": false,
-              "stateMutability": "nonpayable",
-              "type": "function"
-          },],
+          [],
           signer
         );
         /* console.log("--------")

@@ -305,6 +305,21 @@ export default {
     this.lengthPairs = this.allPairs.length
   },
   methods: {
+
+
+    async getGasAmountForContractCall(myMethod) {
+      const gasPrice = await web3.eth.getGasPrice();
+      const gasAmount = await myMethod.estimateGas({ from: this.$metamask.userAccount });
+      console.log(gasAmount, gasPrice)
+      console.log("---------gasAmount-------")
+      console.log(gasAmount, gasPrice)
+      const fee = gasPrice * gasAmount;
+      console.log(fee)
+
+      return gasAmount
+    },
+
+
     requiredRule(value) {
       return !!value || 'This field is required';
     },
@@ -443,15 +458,15 @@ export default {
       }
     },
 
-    addLiquidity(tokenA, tokenB, amountADesired, amountBDesired,) {
+    async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired,) {
+
       console.log(tokenA.decimals, tokenB.decimals)
       const batch = new web3.BatchRequest();
       this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''), batch)
       this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''), batch)
       const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      batch.add(
-        routerV2.methods.addLiquidity(
+      const myMethod = routerV2.methods.addLiquidity(
           tokenA.address,
           tokenB.address,
           BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
@@ -460,7 +475,14 @@ export default {
           (0 * 10 ** tokenB.decimals).toString(),
           to,
           deadline
-        ).send.request({from: this.$metamask.userAccount}, (err, res) => {
+        )
+
+        const gaslimit = await this.getGasAmountForContractCall(myMethod)
+        console.log(myMethod)
+        console.log("-----")
+
+      batch.add(
+        myMethod.send.request({from: this.$metamask.userAccount, gasLimit: gaslimit }, (err, res) => {
           if (err) {
             this.$alert('cancel', 'Something went wrong')
 

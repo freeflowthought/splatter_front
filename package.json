@@ -13,6 +13,7 @@
     "lintfix": "prettier --write --list-different . && npm run lint:js -- --fix"
   },
   "dependencies": {
+    "@babel/eslint-parser": "^7.16.3",
     "@0xsquid/sdk": "2.8.0-beta.0",
     "@0xsquid/squid-types": "0.1.31",
     "@metamask/detect-provider": "^2.0.0",
