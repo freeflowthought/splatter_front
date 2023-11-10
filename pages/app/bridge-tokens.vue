@@ -21,7 +21,7 @@
               <v-select
                 v-model="chainFrom"
                 :items="chainsFromFiltered"
-                :rules="[requiredRules]"
+                :rules="[rules[0]]"
                 style="width: 80px;"
                 >
                 <template #item="{ item }">
@@ -78,7 +78,7 @@
               <v-select
                 v-model="chainTo"
                 :items="chainsToFiltered"
-                :rules="[requiredRules]"
+                :rules="[rules[0]]"
                 style="width: 80px;"
                 >
                 <template #item="{ item }">
@@ -111,7 +111,7 @@
               </v-select>
 
               <v-text-field
-                v-model="tokenAmountOut" :rules="[rules[1]]" class="input-number" :value="0" placeholder="0.00" disabled="true"
+                v-model="tokenAmountOut" :rules="[rules[1]]" class="input-number" :value="0" placeholder="0.00" :disabled="true"
               ></v-text-field>
             </div>
 
@@ -150,9 +150,10 @@
 
 <script>
 // import isMobile from '~/mixins/isMobile'
-import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import { numericFormat } from '@vuejs-community/vue-filter-numeric-format'
+
 import ERC20ABI from '~/static/abis/erc20.json'
+
 const ethers = require("ethers")
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
@@ -172,6 +173,8 @@ export default {
       chainTo: undefined,
       tokensFrom: undefined,
       tokensTo: undefined,
+      route: undefined,
+      requestId: undefined,
       heightChart: undefined,
       swapFrom: {
         img: require('~/assets/sources/tokens/database.svg'),
@@ -255,8 +258,8 @@ export default {
         {
           fromChain: this.chainFrom.chainId,
           toChain: this.chainTo.chainId,
-          fromToken: this.selectedItem1.tokenAddres,
-          toToken: this.selectedItem2.tokenAddres,
+          fromToken: this.selectedItem1.address,
+          toToken: this.selectedItem2.address,
           fromAmount: BigInt((this.tokenAmountIn * 10 ** this.selectedItem1.decimals)).toString().replace(/[.,]/g, ''),
           fromAddress: this.$metamask.userAccount,
           toAddress: this.$metamask.userAccount,
@@ -264,11 +267,13 @@ export default {
             autoMode: 1
           }
         }
-      )
-      /* const route = routeResult.data.route;
-      const requestId = routeResult.requestId;
-      console.log("Calculated route:", route);
-      console.log("requestId:", requestId); */
+        )
+        this.route = routeResult.data.route;
+        this.requestId = routeResult.requestId;
+        /* const requestId = routeResult.requestId;
+        console.log("Calculated route:", route);
+        console.log("requestId:", requestId); */
+
       return routeResult
     },
 
@@ -287,11 +292,6 @@ export default {
       const temp = this.selectedItem1
       this.selectedItem1 = this.selectedItem2
       this.selectedItem2 = temp
-    },
-    calcPriceTo(event) {
-      const item = this.swapFrom
-      console.log(item)
-      this.swapTo.amount = (event / 1.5).toFixed(2)
     },
 
     swapValues() {
@@ -323,39 +323,32 @@ export default {
       }
     }, */
 
-    async getReserves(tokenInAddress, tokenOutAddress) {
-
-      const pairAddress = await this.getPair(tokenInAddress, tokenOutAddress)
-      const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
-      const res = await pairContract.methods.getReserves().call()
-      return res
-    },
-
-    /* async calculateMidPrice() {
-      if(this.tokenAmountIn > 0 && this.tokenAmountIn && this.selectedItem1 != null && this.selectedItem2 != null) {
-        const reserves = await this.getReserves(this.selectedItem1.address, this.selectedItem2.address)
-        const midPrice = await (routerV2.methods.getAmountOut(BigInt((this.tokenAmountIn * 10 ** this.selectedItem1.decimals)).toString(), reserves.reserve0, reserves.reserve1).call())
-        this.tokenAmountOut = midPrice / 10 ** this.selectedItem2.decimals
-
-      }
-    }, */
 
     async swapTokens() {
       if(this.rightChain()) {
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner()
-
-        const route = await this.getRoute()
-        const transactionRequest = route.transactionRequest;
+        await this.getRoute()
+        const transactionRequest = this.route.transactionRequest;
 
         // Execute the swap transaction
         const contract = new ethers.Contract(
-          transactionRequest.targetAddress,
-          [],
+          transactionRequest.target,
+          [{
+              "constant": false,
+              "inputs": [],
+              "name": "send",
+              "outputs": [],
+              "payable": false,
+              "stateMutability": "nonpayable",
+              "type": "function"
+          },],
           signer
         );
-
+        /* console.log("--------")
+        console.log(contract)
+        console.log("--------") */
         const tx = await contract.send(transactionRequest.data, {
           value: transactionRequest.value,
           gasPrice: await provider.getGasPrice(),
