@@ -306,20 +306,6 @@ export default {
   },
   methods: {
 
-
-    async getGasAmountForContractCall(myMethod) {
-      const gasPrice = await web3.eth.getGasPrice();
-      const gasAmount = await myMethod.estimateGas({ from: this.$metamask.userAccount });
-      console.log(gasAmount, gasPrice)
-      console.log("---------gasAmount-------")
-      console.log(gasAmount, gasPrice)
-      const fee = gasPrice * gasAmount;
-      console.log(fee)
-
-      return gasAmount
-    },
-
-
     requiredRule(value) {
       return !!value || 'This field is required';
     },
@@ -406,13 +392,9 @@ export default {
       return pair
     },
 
-    approve(tokenAddres, amount, batch) {
+    async approve(tokenAddres, amount) {
       const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
-      batch.add(tokenInContract.methods.approve(routerV2Address, amount).send.request({ from: this.$metamask.userAccount }, (err) => {
-          if (err) {
-            throw err
-          }
-      }))
+      await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount })
     },
 
     async getReserves(tokenInAddress, tokenOutAddress) {
@@ -429,8 +411,6 @@ export default {
         const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** this.selectedItem2.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
         this.midPrice1 = midPrice1 / 10 ** this.selectedItem2.decimals
         this.midPrice2 = midPrice2 / 10 ** this.selectedItem1.decimals
-
-
       }
     },
 
@@ -461,12 +441,14 @@ export default {
     async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired,) {
 
       console.log(tokenA.decimals, tokenB.decimals)
-      const batch = new web3.BatchRequest();
-      this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''), batch)
-      this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''), batch)
-      const to = this.$metamask.userAccount
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      const myMethod = routerV2.methods.addLiquidity(
+      await Promise.all([
+        this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, '')),
+        this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''))
+      ])
+      .then(async () => {
+        const to = this.$metamask.userAccount
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
+        const myMethod = routerV2.methods.addLiquidity(
           tokenA.address,
           tokenB.address,
           BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
@@ -477,27 +459,16 @@ export default {
           deadline
         )
 
-        const gaslimit = await this.getGasAmountForContractCall(myMethod)
-        console.log(myMethod)
-        console.log("-----")
+        const gasLimit = await myMethod.estimateGas({ from: this.$metamask.userAccount }) + 5000
+        await myMethod.send({from: this.$metamask.userAccount, gasLimit })
+      })
+      .catch(error => {
+        this.$alert('cancel', error.message)
+      })
 
-      batch.add(
-        myMethod.send.request({from: this.$metamask.userAccount, gasLimit: gaslimit }, (err, res) => {
-          if (err) {
-            this.$alert('cancel', 'Something went wrong')
-
-          }
-          if (res) {
-            this.$alert('success', "Liquidity added successfully")
-          }
-
-        })
-      )
-      batch.execute()
     },
 
     async removeLiquidity(tokenA, tokenB) {
-      const batch = new web3.BatchRequest();
       const pairAddress = await factory.methods.getPair(tokenA.address, tokenB.address).call();
       const amountAMin = 1
       const amountBMin = 1
@@ -508,29 +479,20 @@ export default {
         liquidity = (totalLiquidity * percent).toString().replace(/[.,]/g, '')
       }
       if(liquidity){
-        this.approve(pairAddress, liquidity, batch)
+        await this.approve(pairAddress, liquidity)
         const to = this.$metamask.userAccount
         const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-        batch.add(
-          routerV2.methods.removeLiquidity(
-            tokenA.address,
-            tokenB.address,
-            liquidity,
-            BigInt((amountAMin * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
-            BigInt((amountBMin * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''),
-            to,
-            deadline
-            ).send.request({from: this.$metamask.userAccount}, (err, res) => {
-              if (err) {
-                this.$alert('cancel', 'Something went wrong')
-              }
-              if (res) {
-                this.$alert('success', 'Liquidity removed successfully')
-              }
-            }
-          )
+        const myMethod = routerV2.methods.removeLiquidity(
+          tokenA.address,
+          tokenB.address,
+          liquidity,
+          BigInt((amountAMin * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
+          BigInt((amountBMin * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''),
+          to,
+          deadline
         )
-        batch.execute()
+        const gasLimit = await myMethod.estimateGas({ from: this.$metamask.userAccount }) + 5000
+        await myMethod.send({from: this.$metamask.userAccount, gasLimit })
       }
     },
   }
