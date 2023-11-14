@@ -4,6 +4,16 @@ import colors from 'vuetify/es5/util/colors'
 const development = process.env.NODE_ENV !== 'production'
 
 export default {
+  typescript: {
+    loaders: {
+      ts: {
+        silent: true
+      },
+      tsx: {
+        silent: true
+      }
+    }
+  },
   env: {
     squidAxelarApi:  process.env.SQUID_AXELAR_API
   },

@@ -295,14 +295,17 @@ export default {
 
     async swapTokensForTokens(tokenIn, tokenOut) {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      this.approve(tokenIn.address, BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))
+      await this.approve(tokenIn.address, BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))
       const path = [tokenIn.address, tokenOut.address]
-      await routerV2.methods.swapExactTokensForTokens(
+      const myMethod =routerV2.methods.swapExactTokensForTokens(
         BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),
         BigInt((this.tokenAmountOut * 10 ** tokenOut.decimals)).toString().replace(/[.,]/g, ''),
         path,
         this.$metamask.userAccount,
-        deadline).send({from: this.$metamask.userAccount})
+        deadline
+      )
+      const gasLimit = await myMethod.estimateGas({ from: this.$metamask.userAccount }) + 5000
+      await myMethod.send({from: this.$metamask.userAccount, gasLimit})
     },
 
     swapETHForTokens() {},

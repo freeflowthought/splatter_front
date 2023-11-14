@@ -148,7 +148,9 @@ export default {
 
     async createPair(addressA, addressB){
       const factoryContract = new web3.eth.Contract(factoryABI, factoryAddress)
-      await factoryContract.methods.createPair(addressA,addressB).send( {from: this.$metamask.userAccount})
+      const myMethod = factoryContract.methods.createPair(addressA,addressB)
+      const gasLimit = await myMethod.estimateGas({ from: this.$metamask.userAccount }) + 5000
+      await myMethod.send( {from: this.$metamask.userAccount, gasLimit})
       .then( () => {
         this.$alert('success', 'Pair created successfully')
         this.modalCreatePair = false

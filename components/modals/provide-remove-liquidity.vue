@@ -112,42 +112,30 @@ export default {
      }
     },
 
-    approve(tokenAddres, amount, batch) {
+    async approve(tokenAddres, amount) {
       const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
-      batch.add(tokenInContract.methods.approve(routerV2Address, amount).send.request({ from: this.$metamask.userAccount }, (err) => {
-          if (err) {
-            throw err
-          }
-      }))
+      await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount })
     },
-    // TODO callbacks
-    addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
-      const batch = new web3.BatchRequest();
-      this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals).toString()).replace(/[.,]/g, ''), batch)
-      this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals).toString()).replace(/[.,]/g, ''), batch)
+
+    async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin) {
+      await Promise.all([
+        this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals).toString()).replace(/[.,]/g, '')),
+        this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals).toString()).replace(/[.,]/g, ''))
+      ])
       const to = this.$metamask.userAccount
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      batch.add(
-        routerV2.methods.addLiquidity(
-          tokenA.address,
-          tokenB.address,
-          BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
-          BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''),
-          BigInt((amountAMin * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
-          BigInt((amountBMin * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''),
-          to,
-          deadline
-        ).send.request({from: this.$metamask.userAccount}, (err, res) => {
-          if (err) {
-            console.log(err)
-          }
-          if (res) {
-            this.$alert('success', 'Liquidity added successfully')
-          }
-
-        })
+      const myMethod = routerV2.methods.addLiquidity(
+        tokenA.address,
+        tokenB.address,
+        BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
+        BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''),
+        BigInt((amountAMin * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, ''),
+        BigInt((amountBMin * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''),
+        to,
+        deadline
       )
-      batch.execute()
+      const gasLimit = await myMethod.estimateGas({ from: this.$metamask.userAccount }) + 5000
+      await myMethod.send({from: this.$metamask.userAccount, gasLimit})
     },
   }
 };

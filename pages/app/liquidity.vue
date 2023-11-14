@@ -440,7 +440,6 @@ export default {
 
     async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired,) {
 
-      console.log(tokenA.decimals, tokenB.decimals)
       await Promise.all([
         this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, '')),
         this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''))
@@ -470,16 +469,19 @@ export default {
 
     async removeLiquidity(tokenA, tokenB) {
       const pairAddress = await factory.methods.getPair(tokenA.address, tokenB.address).call();
-      const amountAMin = 1
-      const amountBMin = 1
+      const amountAMin = 0
+      const amountBMin = 0
       const percent = this.percent
-      const totalLiquidity = await this.balanceOf(pairAddress)
+      const totalLiquidity = await this.balanceOf(pairAddress) / 10 ** 18
       let liquidity = totalLiquidity
       if(this.percent < 1){
-        liquidity = (totalLiquidity * percent).toString().replace(/[.,]/g, '')
+        liquidity = ((totalLiquidity * percent) * 10 ** 18 ).toString().split(".")[0]
       }
       if(liquidity){
         await this.approve(pairAddress, liquidity)
+        .catch(error => {
+          this.$alert('cancel', error.message)
+        })
         const to = this.$metamask.userAccount
         const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
         const myMethod = routerV2.methods.removeLiquidity(
@@ -492,7 +494,10 @@ export default {
           deadline
         )
         const gasLimit = await myMethod.estimateGas({ from: this.$metamask.userAccount }) + 5000
-        await myMethod.send({from: this.$metamask.userAccount, gasLimit })
+        await myMethod.send({from: this.$metamask.userAccount, gasLimit})
+        .catch(error => {
+          this.$alert('cancel', error.message)
+        })
       }
     },
   }
