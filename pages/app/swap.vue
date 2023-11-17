@@ -23,7 +23,7 @@
                 item-value="value"
                 class="input-auto"
                 append-icon="mdi-chevron-down"
-                @change="balanceOf(selectedItem1)"
+                @change="balanceOf(selectedItem1), getPricing()"
               >
                 <template #item="{ item }">
                   <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
@@ -41,8 +41,7 @@
                 class="input-number"
                 :value="0"
                 placeholder="0.00"
-                @input="calculateMidPrice()"
-
+                @input="calculateTokenAmount(1)"
               ></v-text-field>
 
               <v-btn  class="btn-max" @click="setMaxValue">max</v-btn>
@@ -50,7 +49,7 @@
 
             <div class="divrow center jspace mobile-btn" style="width:350px;">
               <v-icon @click="swapValues()">mdi-swap-vertical</v-icon>
-              <!-- <span class="dm-light">ETH > SPTL = 1290.03 UDC </span> -->
+              <span class="dm-light">{{ token0?.symbol }} = {{ midPrice2 | numericFormat(numericFormatConfig) }} {{ token1?.symbol }} </span>
             </div>
 
 
@@ -67,6 +66,7 @@
                 item-text="text"
                 item-value="value"
                 class="input-auto"
+                @change="getPricing()"
               >
               <template #item="{ item }">
                 <v-img :src="item.logoURI" style="max-width: 20px;"></v-img>
@@ -79,7 +79,11 @@
               </v-autocomplete>
 
               <v-text-field
-                v-model="tokenAmountOut" :rules="rules" class="input-number" :value="0" placeholder="0.00"
+                v-model="tokenAmountOut"
+                :rules="rules"
+                class="input-number"
+                :value="0" placeholder="0.00"
+                @input="calculateTokenAmount(2)"
               ></v-text-field>
             </div>
 
@@ -146,6 +150,10 @@ export default {
       tokenInAmountUser: 0,
       tokenAmountIn: 0,
       tokenAmountOut: 0,
+      token0: undefined,
+      token1: undefined,
+      midPrice1: 0,
+      midPrice2: 0,
       tokens: undefined,
       heightChart: undefined,
       swapFrom: {
@@ -218,7 +226,7 @@ export default {
 
     setMaxValue() {
       this.tokenAmountIn = this.tokenInAmountUser | numericFormat(this.numericFormatConfig);
-      this.calculateMidPrice()
+      this.getPricing()
     },
 
     styles() {
@@ -249,6 +257,7 @@ export default {
       const temp = this.$refs.select1.internalValue;
       this.$refs.select1.internalValue = this.$refs.select2.internalValue;
       this.$refs.select2.internalValue = temp;
+      this.getPricing()
     },
 
     // we have problems using uniSDK have to about think about some ways of getting an oracle working
@@ -275,6 +284,19 @@ export default {
 
       }
     },
+    async getTokenData(tokenAddress) {
+      const token = {}
+      const tokenContract = new web3.eth.Contract(ERC20ABI,tokenAddress)
+      token.address = tokenAddress
+      const [name, symbol, decimals] = await Promise.all([
+        tokenContract.methods.name().call(),
+        tokenContract.methods.symbol().call(),
+        tokenContract.methods.decimals().call()])
+      token.name = name
+      token.symbol = symbol
+      token.decimals = decimals
+      return token
+    },
 
     async getReserves(tokenInAddress, tokenOutAddress) {
 
@@ -284,12 +306,52 @@ export default {
       return res
     },
 
-    async calculateMidPrice() {
-      if(this.tokenAmountIn > 0 && this.tokenAmountIn && this.selectedItem1 != null && this.selectedItem2 != null) {
-        const reserves = await this.getReserves(this.selectedItem1.address, this.selectedItem2.address)
-        const midPrice = await (routerV2.methods.getAmountOut(BigInt((this.tokenAmountIn * 10 ** this.selectedItem1.decimals)).toString(), reserves.reserve0, reserves.reserve1).call())
-        this.tokenAmountOut = midPrice / 10 ** this.selectedItem2.decimals
+    async getPricing() {
+      const pairAddress = await factory.methods.getPair(this.selectedItem1.address, this.selectedItem2.address).call()
+      const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
+      const [token0Address, token1Address] = await Promise.all([
+        pairContract.methods.token0().call(),
+        pairContract.methods.token1().call()])
 
+      const [token0, token1] = await Promise.all([
+        this.getTokenData(token0Address),
+        this.getTokenData(token1Address)
+      ])
+
+      if(this.selectedItem1 != null && this.selectedItem2 != null) {
+        const reserves = await this.getReserves(token0.address, token1.address)
+        const midPrice1 = await (routerV2.methods.getAmountOut((1 * 10 ** token0.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
+        const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** token1.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
+        if(this.selectedItem1.symbol === token0.symbol){
+          this.midPrice1 = midPrice1 / 10 ** token1.decimals
+          this.midPrice2 = midPrice2 / 10 ** token0.decimals
+          this.token0 = token0
+          this.token1 = token1
+        }else {
+          this.midPrice1 = midPrice2 / 10 ** token0.decimals
+          this.midPrice2 = midPrice1 / 10 ** token1.decimals
+          this.token0 = token1
+          this.token1 = token0
+        }
+      }
+    },
+
+    calculateTokenAmount(key) {
+      let amount = 0
+      switch (key) {
+        case 1:
+          amount = this.tokenAmountIn * this.midPrice2
+          if(amount >= 0) {
+            this.tokenAmountOut = amount
+          }
+        break;
+
+        case 2:
+          amount = this.tokenAmountOut * this.midPrice1
+          if(amount >= 0) {
+            this.tokenAmountIn = amount
+          }
+        break;
       }
     },
 

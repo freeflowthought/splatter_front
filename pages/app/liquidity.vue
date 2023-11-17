@@ -45,6 +45,8 @@
                     solo
                     class="input"
                     placeholder="-.--"
+                    :rules="rules"
+                    @input="calculateTokenAmount(1)"
                     ></v-text-field>
                     <p class="p light-span">Balance: {{balanceToken1 | numericFormat(numericFormatConfig)}}</p>
                   </div>
@@ -83,6 +85,8 @@
                     solo
                     class="input"
                     placeholder="-.--"
+                    :rules="rules"
+                    @input="calculateTokenAmount(2)"
                     ></v-text-field>
                     <p class="p light-span">Balance: {{balanceToken2 | numericFormat(numericFormatConfig)}}</p>
                   </div>
@@ -92,11 +96,11 @@
               <div v-if="selectedItem1 && selectedItem2" class="container-select mt-4 mb-4 divrow jspace">
                 <div  class="divcol astart" style="gap: 5px;">
                   <span class="bold font13">{{ midPrice1 | numericFormat(numericFormatConfig) }}</span>
-                  <span class="font13">{{ selectedItem1.symbol }} per {{ selectedItem2.symbol }}</span>
+                  <span class="font13">{{ token0?.symbol }} per {{ token1?.symbol }}</span>
                 </div>
                 <div class="divcol astart" style="gap: 5px;">
                   <span class="bold font13">{{ midPrice2 | numericFormat(numericFormatConfig) }}</span>
-                  <span class="font13">{{ selectedItem2.symbol }} per {{ selectedItem1.symbol }}</span>
+                  <span class="font13">{{ token1?.symbol }} per {{ token0?.symbol }}</span>
                 </div>
                 <!-- <div class="divcol astart" style="gap: 5px;">
                   <span class="bold font13">0%</span>
@@ -227,6 +231,8 @@ export default {
       balanceToken2: 0,
       selectedItem1: null,
       selectedItem2: null,
+      token0: undefined,
+      token1: undefined,
       selectedItemRemove1: null,
       selectedItemRemove2: null,
       percent: 0.25,
@@ -402,15 +408,53 @@ export default {
       const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
       const res = await pairContract.methods.getReserves().call()
       return res
-      },
+    },
 
-      async getPricing() {
+    async getPricing() {
+      const pairAddress = await factory.methods.getPair(this.selectedItem1.address, this.selectedItem2.address).call()
+      const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
+      const [token0Address, token1Address] = await Promise.all([
+        pairContract.methods.token0().call(),
+        pairContract.methods.token1().call()])
+
+      const [token0, token1] = await Promise.all([
+        this.getTokenData(token0Address),
+        this.getTokenData(token1Address)
+      ])
+
       if(this.selectedItem1 != null && this.selectedItem2 != null) {
-        const reserves = await this.getReserves(this.selectedItem1.address, this.selectedItem2.address)
-        const midPrice1 = await (routerV2.methods.getAmountOut((1 * 10 ** this.selectedItem1.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
-        const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** this.selectedItem2.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
-        this.midPrice1 = midPrice1 / 10 ** this.selectedItem2.decimals
-        this.midPrice2 = midPrice2 / 10 ** this.selectedItem1.decimals
+        const reserves = await this.getReserves(token0.address, token1.address)
+        const midPrice1 = await (routerV2.methods.getAmountOut((1 * 10 ** token0.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
+        const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** token1.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
+        if(this.selectedItem1.symbol === token0.symbol){
+          this.midPrice1 = midPrice1 / 10 ** token1.decimals
+          this.midPrice2 = midPrice2 / 10 ** token0.decimals
+          this.token0 = token0
+          this.token1 = token1
+        }else {
+          this.midPrice1 = midPrice2 / 10 ** token0.decimals
+          this.midPrice2 = midPrice1 / 10 ** token1.decimals
+          this.token0 = token1
+          this.token1 = token0
+        }
+      }
+    },
+    calculateTokenAmount(key) {
+      let amount = 0
+      switch (key) {
+        case 1:
+          amount = this.amountToken1 * this.midPrice2
+          if(amount >= 0) {
+            this.amountToken2 = amount
+          }
+        break;
+
+        case 2:
+          amount = this.amountToken2 * this.midPrice1
+          if(amount >= 0) {
+            this.amountToken1 = amount
+          }
+        break;
       }
     },
 
