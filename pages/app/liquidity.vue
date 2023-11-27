@@ -1,6 +1,6 @@
 <template>
 	<div id="liquidity">
-    <h1 class="bold tcenter mb-10">Liquidty</h1>
+    <h1 class="bold tcenter mb-10">Liquidity</h1>
 
 		<v-row class="center">
       <!-- <v-col xl="4" lg="4" md="4" cols="12">

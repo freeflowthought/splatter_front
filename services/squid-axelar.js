@@ -59,6 +59,27 @@ const squidAxelar = {
     }
   },
 
+  async executeRoute({ data, params }) {
+    const { route: { transactionRequest }, overrides } = data;
+    const { target, value, data: _data } = transactionRequest;
+    const signer = data.signer;
+  
+    const gasData = this.getGasData({
+      transactionRequest: data.route.transactionRequest,
+      overrides
+    });
+  
+    const tx = {
+      to: target,
+      data: _data,
+      value,
+      ...gasData
+    };
+  
+    return await signer.sendTransaction(tx);
+  },
+  
+
 }
 Vue.prototype.$squidAxelar = squidAxelar
 
