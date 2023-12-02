@@ -235,6 +235,22 @@ export default {
       config.module.rules.push({
         exclude: /(node_modules)/,
       })
+      config.module.rules.push({
+        test: /\.(c|m)?jsx?$/i,
+        include: [/node_modules.*?(@0xsquid)|(cosmjs-types)|(ethers)|(@cosmjs)/],
+        // exclude: /node_modules\/ethers\/lib.esm\/providers\/provider-browser.js/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            // Babel options...
+            presets: [["@babel/preset-env", {
+              "targets": {
+                ie: 9
+              }
+            }]],
+          },
+        },
+      }, ),
       config.node = {
         fs: 'empty'
       }

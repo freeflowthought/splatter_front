@@ -1,6 +1,8 @@
 import Vue from 'vue'
 // Get the swap route using Squid API
 
+import { Squid } from "@0xsquid/sdk"
+
 const squidAxelar = {
   async getChains (context) {
     const result = await context.$axios.get('https://v2.api.squidrouter.com/v2/chains', {
