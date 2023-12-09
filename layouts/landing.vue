@@ -3,7 +3,6 @@
     <Alerts ref="alerts" />
     <ModalsConnect ref="connect" />
     <ModalsSwapModal ref="swap" />
-    <!-- <LandingFooter ref="footer" /> -->
     
     <v-main class="parent">
       <LandingNavbar ref="navbar" />
@@ -100,7 +99,7 @@ export default {
     },
     footerHeightListener() {
       setTimeout(() => {
-        const footer = document.querySelector('#footer');
+        const footer = document.querySelector('#footer-landing');
         document.documentElement.style.setProperty(
           '--h-footer', `${footer.getBoundingClientRect().height}px`
         );

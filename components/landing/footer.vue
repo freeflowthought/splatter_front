@@ -1,5 +1,5 @@
 <template>
-  <v-footer id="footer" absolute class="font2">
+  <v-footer id="footer-landing" absolute class="font2">
     <div class="d-flex flex-column align-center mb-16">
       <h2>Stay up to date with Splatter Protocol</h2>
       <v-btn>Join Discord</v-btn>
