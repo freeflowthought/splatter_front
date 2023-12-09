@@ -1,7 +1,7 @@
 <template>
   <div>
-    <LandingMenuNavbar ref="menu"></LandingMenuNavbar>
-    
+    <AppMenuNavbar ref="menu"></AppMenuNavbar>
+
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <nuxt-link to="/">
         <img src="~/assets/sources/logos/logo-new.svg" alt="logo">
@@ -31,13 +31,13 @@
               style="min-width:125px!important;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
-              @click="!isLogged ? $store.dispatch('modalConnect') : ''">
+              @click="isLogged ? $store.dispatch('modalConnect') : ''"
+              >
               <template v-if="isLogged">
-                <span>{{user.accountId}}</span>
-                <v-icon>mdi-chevron-down</v-icon>
+                <span>Login</span>
               </template>
-              
-              <template v-else>Login</template>
+
+              <template v-else>{{ truncatedWallet }} ...</template>
             </v-btn>
           </template>
 
@@ -65,11 +65,14 @@
 import computeds from '~/mixins/computeds'
 import menuLogin from '~/mixins/menuLogin'
 
+
 export default {
   name: "NavbarComponent",
   mixins: [computeds, menuLogin],
   data() {
     return {
+      itemsBlockchain: [{name: 'Mainnet', id: '0x82750'}, {name: 'Testnet', id: '0x8274f'}],
+      itemSelected: undefined,
       dataNavbar: [
         // {
         //   name: "swap",
@@ -95,23 +98,30 @@ export default {
           name: "Developers",
         },
       ],
+      wallet: "Login",
+      isLogged: true,
+
     };
   },
-  // created() {
-  //   const theme = localStorage.getItem("theme");
-  //   if (theme) {
-  //     setTimeout(() => {
-  //       this.$store.commit("switchTheme", theme);
-  //     }, 100);
-  //   }
-  //   if (theme === "light") {this.themeButton = true}
-  //   else {this.themeButton = false}
-  // },
-  methods: {
-    // changeTheme(theme) {
-    //   this.$store.commit("switchTheme", theme);
-    //   this.themeButton = !this.themeButton;
-    // },
+  computed: {
+    truncatedWallet() {
+      return this.wallet.substring(1, 20);
+    }
+  },
+  created() {
+    this.itemSelected = this.$metamask.userCurrentChainId === '0x82750'
+      ? this.itemsBlockchain[0]
+      : this.itemsBlockchain[1]
+  },
+  async mounted() {
+    await this.$metamask.checkConnection()
+    if(this.$metamask.userAccount !== undefined) {
+      this.wallet = this.$metamask.userAccount
+      this.isLogged = false
+    }
+    this.itemSelected = this.$metamask.userCurrentChainId === '0x82750'
+      ? this.itemsBlockchain[0]
+      : this.itemsBlockchain[1]
   },
 };
 </script>

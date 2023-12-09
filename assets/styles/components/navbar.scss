@@ -40,23 +40,57 @@
         --fw: 700;
         font-size: 14.193px;
         transition: .5s $ease;
+        font-family: var(--font5);
         &.active {
-          background: linear-gradient(99.45deg, #A093F0 7.5%, #5A9FF7 94.48%) !important;
-          -webkit-background-clip: text !important;
-          -webkit-text-fill-color: transparent !important;
-          background-clip: text !important;
+          font-weight: 700!important;
         }
       }
     }
     .right {
       display: flex;
       gap: 1em;
+
+      .btn-nav{
+        background-color: #E1D8D1;
+        border: 2px solid #D7CBC1;
+        border-radius: 30px!important;
+        box-shadow: none;
+        max-height: 45px;
+        min-height: 45px;
+      }
+
+      
       .v-btn {
         --max-w: 100px;
         --h: 32px;
         --min-h: 32px;
         --br: 30px;
         --fs: 14.193px;
+      }
+
+      .v-btn__content{
+        height: 30px!important;
+      }
+
+      .v-select{
+        padding-inline: 10px;
+        border-radius: 30px;
+        width: 130px!important;
+        
+        .v-select__selection{
+          background: linear-gradient(99.45deg, #A093F0 7.5%, #5A9FF7 94.48%) !important;
+          -webkit-background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+          background-clip: text !important;
+          font-weight: 700!important;
+        }
+
+        input{
+          margin-top: 5px;
+        }
+        i{
+          margin-top: 5px;
+        }
       }
     }
   }

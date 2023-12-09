@@ -1,0 +1,124 @@
+// html{
+//   width: 100vw;
+//   overflow: hidden;
+// }
+
+#home{
+  .circle{
+    position: absolute;
+    left: -10px;
+    z-index: 999;
+    top: calc(0px - 160px);
+
+    @include media(max, 960px){
+      display: none;
+    }
+  }
+  
+  .circle2{
+    position: absolute;
+    right: -20px;
+    z-index: 999;
+    top: calc(0px - 160px);
+    @include media(max, 960px){
+      display: none;
+    }
+  }
+
+  .section1-landing{
+    position: relative;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+
+    .logo{
+      width: 250px;
+
+      @include media(max, 660px){
+        width: 150px;
+      }
+    }
+
+    h1{
+      font-size: 65px;
+      font-weight: 700!important;
+      @include media(max, 660px){
+        font-size: 55px;
+        line-height: 65px;
+      }
+
+      span {
+        font-weight: 700!important;
+        background-image: linear-gradient(to bottom, #A093F0, #5A9FF7);
+        -webkit-background-clip: text;
+        color: transparent; 
+      }
+    }
+
+    .container-btns{
+      max-width: 600px;
+      gap: 20px;
+
+      .v-btn{
+        min-width: 160px;
+        max-width: 160px;
+        background-color: #EBE5E0;
+        border: 2px solid #E1D8D1;
+        box-shadow: none;
+        border-radius: 10px;
+        height: 51px;
+        max-height: 51px;
+        @include media(max, 660px){
+          min-width: 140px;
+          max-width: 140px;
+        }
+
+        img{
+          width: 15px;
+        }
+
+        span{
+          font-weight: 700!important;
+          font-size: 14px;
+        }
+      }
+
+      .v-btn:first-child {
+        @include media(max, 660px){
+          min-width: 300px;
+          max-width: 300px;
+          background: linear-gradient(99.45deg, #A093F0 7.5%, #5A9FF7 94.48%) !important;
+          
+          span{
+            color: #fff;
+          }
+        }
+      }
+
+      .v-btn:nth-last-child(-n+2) {
+        @include media(max, 660px){
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+////////Barrita transversal del input/////////
+//////////////////////////////////////////////
+
+
+.v-input__slot:before{
+  border-color: #fff!important;
+}
+
+.v-text-field > .v-input__control > .v-input__slot:before, 
+.v-text-field > .v-input__control > .v-input__slot:after {
+  width: 0%;
+}

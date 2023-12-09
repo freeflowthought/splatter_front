@@ -4,6 +4,19 @@ import colors from 'vuetify/es5/util/colors'
 const development = process.env.NODE_ENV !== 'production'
 
 export default {
+  typescript: {
+    loaders: {
+      ts: {
+        silent: true
+      },
+      tsx: {
+        silent: true
+      }
+    }
+  },
+  env: {
+    squidAxelarApi:  process.env.SQUID_AXELAR_API
+  },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -72,10 +85,13 @@ export default {
     '~/plugins/mixinsImport.js',
     '~/plugins/axios.js',
     '~/plugins/apexchart.js',
-    '~/plugins/google-maps.js',
     '~/plugins/vue-debounce.js',
     // services
-    // '~/services/near-api',
+    '~/services/metamask.js',
+    '~/plugins/format-number.js',
+    // '~/services/eth-provider.js',
+    '~/services/protocol-addresses.js',
+    '~/services/squid-axelar.js',
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -91,7 +107,16 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/i18n',
+    '@nuxtjs/apollo',
   ],
+
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+      }
+    }
+  },
 
   // we3-nuxt: https://www.npmjs.com/package/nuxt-web3
   publicRuntimeConfig: {
@@ -210,6 +235,26 @@ export default {
       config.module.rules.push({
         exclude: /(node_modules)/,
       })
+      config.module.rules.push({
+        test: /\.(c|m)?jsx?$/i,
+        include: [/node_modules.*?(@0xsquid)|(cosmjs-types)|(ethers)|(@cosmjs)/],
+        // exclude: /node_modules\/ethers\/lib.esm\/providers\/provider-browser.js/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            // Babel options...
+            presets: [["@babel/preset-env", {
+              "targets": {
+                ie: 9
+              }
+            }]],
+          },
+        },
+      }, ),
+      config.node = {
+        fs: 'empty'
+      }
     },
+
   },
 }

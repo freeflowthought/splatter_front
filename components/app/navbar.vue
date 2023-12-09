@@ -1,15 +1,15 @@
 <template>
   <div>
     <AppMenuNavbar ref="menu"></AppMenuNavbar>
-    
+
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
-      <nuxt-link class="deletemobile" :to="basePath('/swap')">
-        <img src="~/assets/sources/logos/logotype.svg" alt="logo" style="--w: 148px">
+      <nuxt-link class="deletemobile" :to="basePath('/')">
+        <img src="~/assets/sources/logos/logo_black.svg" alt="logo" style="--w: 120px">
       </nuxt-link>
       <!-- mobile -->
-      <nuxt-link class="showmobile" :to="basePath('/swap')">
-        <img src="~/assets/sources/logos/logotype.svg" alt="logo" style="--w: 120px">
+      <nuxt-link class="showmobile" :to="basePath('/')">
+        <img src="~/assets/sources/logos/logo_black.svg" alt="logo" style="--w: 80px">
       </nuxt-link>
 
       <!-- desktop -->
@@ -33,31 +33,36 @@
         <v-menu bottom offset-y nudge-bottom="10px">
           <template #activator="{ on, attrs }">
             <v-btn
-              class="btn2"
+              class="btn-nav"
               style="min-width:125px!important;"
               v-bind="isLogged ? attrs : ''"
               v-on="isLogged ? on : ''"
-              @click="!isLogged ? $store.dispatch('modalConnect') : ''"
+              @click="isLogged ? $store.dispatch('modalConnect') : ''"
               >
               <template v-if="isLogged">
-                <span>{{user.accountId}}</span>
-                <v-icon>mdi-chevron-down</v-icon>
+                <span>Connect Wallet</span>
               </template>
-              
-              <template v-else>Login</template>
+
+              <template v-else>{{ truncatedWallet }} ...</template>
             </v-btn>
           </template>
-
-          <v-list class="font2" color="var(--secondary)" style="--c:#fff">
-            <v-list-item-group active-class="activeClass">
-              <v-list-item
-                v-for="(item,i) in dataMenuLogin" :key="i"
-                @click="item.key==='logout' ? $store.commit('signOut') : $router.push(basePath(key))">
-                <v-list-item-title>{{item.name}}</v-list-item-title>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
         </v-menu>
+
+        <v-select
+        v-model="itemSelected"
+        append-icon="mdi-chevron-down"
+        hide-details
+        :items="itemsBlockchain"
+        class="btn-nav"
+        @change="$metamask.switchToChain(itemSelected.id)"
+        >
+        <template #item="{ item }">
+          <span style="margin-left: 10px;">{{ item.name }}</span>
+        </template>
+        <template #selection="{ item }">
+          <span v-if="item" style="margin-left: 10px;">{{ item.name }}</span>
+        </template>
+        </v-select>
       </aside>
 
       <!-- mobile -->
@@ -72,44 +77,59 @@
 import computeds from '~/mixins/computeds'
 import menuLogin from '~/mixins/menuLogin'
 
+
 export default {
   name: "NavbarComponent",
   mixins: [computeds, menuLogin],
   data() {
     return {
+      itemsBlockchain: [{name: 'Mainnet', id: '0x82750'}, {name: 'Testnet', id: '0x8274f'}],
+      itemSelected: undefined,
       dataNavbar: [
         {
-          name: "swap",
+          name: "Swap",
           to: "/swap"
         },
         {
-          name: "earn",
+          name: "Earn",
           to: "/farm-details"
         },
         {
-          name: "placeholder",
+          name: "Claim faucet",
+          to: "/faucet"
         },
         {
-          name: "placeholder",
+          name: "Liquidity",
+          to: "/liquidity"
         },
+        /* {
+          name: "Multichain Swap",
+          to: "/bridge-tokens"
+        }, */
       ],
+      wallet: "Login",
+      isLogged: true,
+
     };
   },
-  // created() {
-  //   const theme = localStorage.getItem("theme");
-  //   if (theme) {
-  //     setTimeout(() => {
-  //       this.$store.commit("switchTheme", theme);
-  //     }, 100);
-  //   }
-  //   if (theme === "light") {this.themeButton = true}
-  //   else {this.themeButton = false}
-  // },
-  methods: {
-    // changeTheme(theme) {
-    //   this.$store.commit("switchTheme", theme);
-    //   this.themeButton = !this.themeButton;
-    // },
+  computed: {
+    truncatedWallet() {
+      return this.wallet.substring(1, 20);
+    }
+  },
+  created() {
+
+
+  },
+  async mounted() {
+    await this.$metamask.checkConnection()
+    if(this.$metamask.userAccount !== undefined) {
+      this.wallet = this.$metamask.userAccount
+      this.isLogged = false
+    }
+    this.itemSelected = this.$metamask.userCurrentChainId === '0x82750'
+      ? this.itemsBlockchain[0]
+      : this.itemsBlockchain[1]
   },
 };
 </script>

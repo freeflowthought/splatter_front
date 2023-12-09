@@ -1,20 +1,13 @@
 export const state = () => ({
   theme: "light",
   overlay: { opacity: 0.2, color: "black" },
-  isLogged: undefined, // temporary
+  isLogged: localStorage.getItem("isLogged") !== true ? undefined:  true, // temporary
   dataUser: {
     banner: undefined,
     avatar: undefined,
     accountId: undefined,
     username: undefined,
-    email: undefined,
-    discord: undefined,
-    instagram: undefined,
-    twitter: undefined,
-    telegram: undefined,
-    tier: 2,
-    balance: 0,
-    dataSocial: [],
+    chainId: undefined,
   },
   swapReview: {
     tokenFrom: undefined,
@@ -42,8 +35,10 @@ export const mutations = {
     //   state.dataUser.avatar = require('~/assets/sources/avatars/avatar.png');
     //   state.dataUser.accountId = data;
     // };
+    state.dataUser.accountId = data;
+
   },
-  signIn(state, data = "0x392832131231239302") {
+  signIn(state, data) {
     try {
       // make login <-----------------------------------------
       if (/0+x/.test(data)) state.dataUser.accountId = data.cutString(7, 4);

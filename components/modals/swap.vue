@@ -15,11 +15,11 @@
             <template #activator="{on, attrs}">
               <img src="~/assets/sources/icons/info.svg" alt="info" v-bind="attrs" v-on="on">
             </template>
-            
+
             <span>your transaction will revert if the price changes unfavourably by more than it’s percentage</span>
           </v-tooltip>
         </label>
-        
+
         <div class="space wrap" style="gap: 10px 0">
           <v-btn
             v-for="item in dataSlippage" :key="item" plain class="btn2"
@@ -30,7 +30,7 @@
 
       <div class="divcol" style="gap: 5px">
         <label class="plain">Transaction Deadline</label>
-        
+
         <div class="acenter" style="gap: inherit">
           <v-text-field
             v-model="deadlineSelection"

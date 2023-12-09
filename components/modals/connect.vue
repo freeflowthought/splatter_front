@@ -9,14 +9,23 @@
     </aside>
 
     <v-sheet class="grid" color="transparent">
-      <v-btn plain @click="$store.commit('signIn')">
+      <v-btn plain @click="connectMetamask(), $store.commit('signIn')">
+        <img src="~/assets/sources/logos/metamask-icon.svg" alt="metamask logo">
+        
+        <div class="divcol astart" style="gap: 5px">
+          <span class="h12_em bold">metamask</span>
+          <span class="h13_em">metamask.org</span>
+        </div>
+      </v-btn>
+
+      <!-- <v-btn plain @click="$store.commit('signIn')">
         <img src="~/assets/sources/logos/sender-icon.svg" alt="near">
         
         <div class="divcol astart" style="gap: 5px">
           <span class="h12_em bold">connect</span>
           <span class="h13_em">connect.org</span>
         </div>
-      </v-btn>
+      </v-btn> -->
     </v-sheet>
   </v-dialog>
 </template>
@@ -32,6 +41,22 @@ export default {
   mounted() {
   },
   methods: {
+    async connectMetamask() {
+      // console.log(this.$metamask.userAccount)
+       if (this.$metamask.detectMetamask()) {
+        alert("Please install metamask wallet");
+      } 
+      await this.$metamask.connect().then(() => {
+          // Refresh the site after a successful login
+          this.modalConnect = false
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error('Error initializing MetaMask:', error);
+        });
+      // console.log(this.$metamask.userAccounts)
+      // console.log(this.$metamask.userAccount)
+    },
   }
 };
 </script>
