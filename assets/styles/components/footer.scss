@@ -1,7 +1,7 @@
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
 // // // footer // // // 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
-.v-footer {
+#footer {
   transition: 0.5s $ease-return;
   padding: clamp(2em, 4vw, 4em);
   @include media(max, small) {font-size: 18px !important}

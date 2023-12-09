@@ -1,0 +1,88 @@
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+// // // footer // // // 
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+#footer {
+  transition: 0.5s $ease-return;
+  border-radius: 6.25em 6.25em 0px 0px;
+  min-height: 35.3125em;
+  padding: 3.125em 6.25em;
+  @media (max-width: 400px) { padding: 3.125em 3.25em }
+  background: #EBE5E0 !important;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+
+  @media (max-width: 600px) { font-size: 10px !important }
+
+  > * { width: 100% !important }
+
+  h2 {
+    color: #000;
+    font-family: "Poppins", sans-serif;
+    font-size: 2.225em;
+    font-weight: 500 !important;
+    text-align: center;
+
+    + .v-btn {
+      border-radius: 94.692px;
+      border: 1.189px solid #000;
+      background: #000;
+      min-width: 178.968px;
+      min-height: 56.815px !important;
+      padding: 11.892px !important;
+
+      span {
+        color: #FFF;
+        font-family: "Poppins", sans-serif;
+        font-size: 1.1891875em;
+        font-weight: 600 !important;
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  h5 {
+    color: #000;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.3125em;
+    font-weight: 400 !important;
+    text-transform: capitalize;
+
+    @media (max-width: 400px) { text-align: center; }
+  }
+
+  section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.3125em;
+    max-width: 750px;
+    
+    @media (max-width: 400px) { justify-content: center; }
+
+    .v-chip {
+      min-width: 131px;
+      height: 48px;
+      padding: 10px;
+      border-radius: 30px;
+      background: #E1D8D0 !important;
+      justify-content: center;
+      
+      &__content {
+        color: rgba(0, 0, 0, 0.66);
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.875em;
+        font-weight: 400;
+        text-transform: capitalize;
+        gap: 8px;
+      }
+    }
+  }
+
+  aside span {
+    color: rgba(0, 0, 0, 0.66);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.875em;
+    font-weight: 400;
+    text-transform: capitalize;
+  }
+}

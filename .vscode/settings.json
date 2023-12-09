@@ -1,7 +1,7 @@
 {
 	// Auto fix warning code at save
 	"editor.codeActionsOnSave": {
-		"source.fixAll": true
+		"source.fixAll": "explicit"
 	},
 
 	// Causes the debug view to automatically appear when a breakpoint is hit. This
@@ -50,7 +50,7 @@
 		// current file when a language service does not provide its own completions.
 		// This results in code completion suggesting words when editing comments and
 		// strings. This setting will prevent that.
-		"editor.wordBasedSuggestions": false,
+		"editor.wordBasedSuggestions": "off",
 	},
 	"todo-tree.tree.showBadges": true,
 }

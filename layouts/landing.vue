@@ -1,12 +1,13 @@
 <template>
-  <v-app id="layout" class="relative">
+  <v-app id="landing-layout" class="relative">
     <Alerts ref="alerts" />
     <ModalsConnect ref="connect" />
     <ModalsSwapModal ref="swap" />
-    <LandingNavbar ref="navbar" />
     <!-- <LandingFooter ref="footer" /> -->
     
-    <v-main :class="wrapperSpace?'with':'without'" class="parent">
+    <v-main class="parent">
+      <LandingNavbar ref="navbar" />
+
       <!-- floating swap button -->
       <!-- <v-btn
         v-show="!$route.path.includes('/swap')" id="swap-floating-button" class="btn" @click="$refs.swap.modalSwap = true"
@@ -16,7 +17,7 @@
       </v-btn> -->
 
       <!-- connect button -->
-      <v-menu top offset-y>
+      <!-- <v-menu top offset-y>
         <template #activator="{ on, attrs }">
           <v-btn
             id="account-floating-button" class="btn showmobile"
@@ -43,12 +44,12 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-      </v-menu>
+      </v-menu> -->
 
       <!-- routes -->
       <nuxt-child />
     </v-main>
-    <Footer ref="footer"></Footer>
+    <LandingFooter ref="footer"></LandingFooter>
   </v-app>
 </template>
 
@@ -71,13 +72,13 @@ export default {
   },
   mounted() {
     this.scrollX();
-    // this.footerHeightListener();
+    this.footerHeightListener();
     
     // resize listener
-    // window.addEventListener("resize", this.footerHeightListener);
+    window.addEventListener("resize", this.footerHeightListener);
   },
   beforeDestroy() {
-    // window.removeEventListener("resize", this.footerHeightListener);
+    window.removeEventListener("resize", this.footerHeightListener);
   },
   methods: {
     scrollX() {
@@ -97,16 +98,16 @@ export default {
         }
       }
     },
-    // footerHeightListener() {
-    //   setTimeout(() => {
-    //     const footer = document.querySelector('#footer');
-    //     document.documentElement.style.setProperty(
-    //       '--h-footer', `${footer.getBoundingClientRect().height}px`
-    //     );
-    //   }, 400);
-    // },
+    footerHeightListener() {
+      setTimeout(() => {
+        const footer = document.querySelector('#footer');
+        document.documentElement.style.setProperty(
+          '--h-footer', `${footer.getBoundingClientRect().height}px`
+        );
+      }, 400);
+    },
   },
 }
 </script>
 
-<style src="~/assets/styles/layouts/default.scss" lang="scss" />
+<style src="~/assets/styles/layouts/landing.scss" lang="scss" />

@@ -3,34 +3,28 @@
     <LandingMenuNavbar ref="menu"></LandingMenuNavbar>
     
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
-      <!-- desktop -->
-      <nuxt-link class="deletemobile" :to="basePath('/swap')">
-        <img src="~/assets/sources/logos/logotype.svg" alt="logo" style="--w: 148px">
-      </nuxt-link>
-      <!-- mobile -->
-      <nuxt-link class="showmobile" :to="basePath('/swap')">
-        <img src="~/assets/sources/logos/logotype.svg" alt="logo" style="--w: 120px">
+      <nuxt-link to="/">
+        <img src="~/assets/sources/logos/logo-new.svg" alt="logo">
       </nuxt-link>
 
       <!-- desktop -->
       <aside class="middle tcap deletemobile">
         <a
           v-for="(item, i) in dataNavbar" :key="i"
-          :class="{active: $route.path.includes(item.to)}"
-          @click="$router.push(item.to)">
+          :class="{active: $route.path.includes(item.to)}">
           {{item.name}}
+          <v-icon size="16">mdi-chevron-down</v-icon>
         </a>
       </aside>
 
       <!-- desktop -->
       <aside class="right deletemobile" :class="isLogged ? 'font2' : 'font1'">
-        <!-- <v-btn class="btn2">
-          <img src="~/assets/sources/logos/honeypot.svg" alt="token" class="aspect" style="--w: 1.533125em">
-          <span>${{user.balance}}</span>
-        </v-btn> -->
+        <v-btn class="btn" style="min-width:125px!important;">
+          Discord
+        </v-btn>
 
         <!-- connect button -->
-        <v-menu bottom offset-y nudge-bottom="10px">
+        <!-- <v-menu bottom offset-y nudge-bottom="10px">
           <template #activator="{ on, attrs }">
             <v-btn
               class="btn2"
@@ -56,7 +50,7 @@
               </v-list-item>
             </v-list-item-group>
           </v-list>
-        </v-menu>
+        </v-menu> -->
       </aside>
 
       <!-- mobile -->
@@ -77,36 +71,28 @@ export default {
   data() {
     return {
       dataNavbar: [
+        // {
+        //   name: "swap",
+        //   to: "app/swap"
+        // },
+        // {
+        //   name: "earn",
+        //   to: "app/farm-details"
+        // },
+        // {
+        //   name: "placeholder",
+        // },
+        // {
+        //   name: "placeholder",
+        // },
         {
-          name: "swap",
-          to: "app/swap"
+          name: "Dapps",
         },
         {
-          name: "earn",
-          to: "app/farm-details"
+          name: "Community",
         },
         {
-          name: "placeholder",
-        },
-        {
-          name: "placeholder",
-        },
-      ],
-
-      dataNavbarMobile: [
-        {
-          name: "swap",
-          to: "/swap"
-        },
-        {
-          name: "earn",
-          to: "/farm-details"
-        },
-        {
-          name: "placeholder",
-        },
-        {
-          name: "placeholder",
+          name: "Developers",
         },
       ],
     };

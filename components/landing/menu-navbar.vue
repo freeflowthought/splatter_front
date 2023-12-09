@@ -4,7 +4,7 @@
     <AppCustomeDrawer :model="drawer" @update="drawer = $event">
       <template #header>
         <a class="center" @click="$router.push(basePath('/')); $scrollTo('home')">
-          <img src="~/assets/sources/logos/logo.svg" alt="logo" style="--w: 100%">
+          <img src="~/assets/sources/logos/logo-new.svg" alt="logo">
         </a>
         
         <!-- connect button -->
@@ -39,8 +39,7 @@
       <template #content>
         <v-expansion-panels focusable accordion class="anim_moveleft">
           <v-expansion-panel
-            v-for="(item, i) in $parent.dataNavbarMobile" :key="i"
-            @click="$router.push(basePath2(item.to))"
+            v-for="(item, i) in $parent.dataNavbar" :key="i"
           >
             <v-expansion-panel-header class="h10_em" expand-icon="mdi-menu-down" :hide-actions="item.to ? true : false">
               {{ item.name }}
@@ -63,7 +62,7 @@
       </template>
 
 
-      <template #footer>
+      <!-- <template #footer>
         <span class="h10_em clr_inv">Join us on:</span>
 
         <div class="center">
@@ -71,7 +70,7 @@
             <img :src="require(`~/assets/sources/icons/${item.icon}.svg`)" alt="social red">
           </v-btn>
         </div>
-      </template>
+      </template> -->
     </AppCustomeDrawer>
   </div>
 </template>

@@ -1,24 +1,22 @@
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
-// // // landing-layout // // // 
+// // // layout // // // 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
 #landing-layout {
   // overflow: hidden;
   //- responsive font size -//
+
   .v-main {
+    max-width: 1440px !important;
+    width: 100% !important;
+    margin-inline: auto !important;
+    // footer margin modifiable
+    padding-block: 0 var(--h-footer, 565px) !important;
+
     & > * {
       @include media(max,small) {
         font-size: var(--resizer-mobile)
       }
     }
-  }
-  // footer margin modifiable
-  & .with {
-    padding-block: calc(var(--h-navbar) + 60px) var(--h-footer, 80px) !important;
-    @include media(max, small) {padding-block: var(--h-navbar) var(--h-footer, 80px) !important}
-  }
-  & .without {
-    padding-block: calc(var(--h-navbar) + 60px) 0 !important;
-    @include media(max, small) {padding-block: var(--h-navbar) 0 !important}
   }
 
   #swap-floating-button {

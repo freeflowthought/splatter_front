@@ -18,9 +18,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    @include parent;
-    padding-inline: var(--margin-global);
+    gap: 22px;
+    padding-inline: 60px;
     height: var(--h-navbar) !important;
     // overflow: hidden;
     // line
@@ -35,10 +34,11 @@
     }
     .middle {
       display: flex;
-      gap: 2em;
+      margin-left: auto;
+      gap: 22px;
       a {
         --fw: 700;
-        font-size: 1.3125em;
+        font-size: 14.193px;
         transition: .5s $ease;
         &.active {
           background: linear-gradient(99.45deg, #A093F0 7.5%, #5A9FF7 94.48%) !important;
@@ -52,7 +52,11 @@
       display: flex;
       gap: 1em;
       .v-btn {
-        --p: clamp(.8em, 1vw, 1em);
+        --max-w: 100px;
+        --h: 32px;
+        --min-h: 32px;
+        --br: 30px;
+        --fs: 14.193px;
       }
     }
   }
@@ -61,3 +65,7 @@
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
 // // // menu navbar // // // 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
+
+#menuNavbar {
+  i { color: #000 !important }
+}

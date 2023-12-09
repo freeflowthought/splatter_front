@@ -1,145 +1,55 @@
 <template>
-  <div>
-    <section class="section1-landing">
-      <img src="~/assets/sources/images/Circulos.png" alt="circle" class="circle">
+  <div id="landing-new">
+    <section id="hero">
+      <div v-for="n in 4" :key="n" :class="`decoration-${n}`" />
 
-      <div class="divcol astart div-title">
-        <h1 class="title">
-          Number One Dex On Scroll
-        </h1>
-        <p class="poppins">
-          Lorem ipsum dolor sit amet consectetur. Viverra quis nec quis hendrerit.
-        </p>
-        <v-btn class="btn-black">
-          Launch App <v-icon>mdi-arrow-right</v-icon>
-        </v-btn>
-      </div>
-
-      <div class="div-swap-card">
-
-        <v-card class="grey-card"></v-card>
-        <img src="~/assets/sources/images/blur.png" alt="Blur" class="blur-img">
-
-        <v-card class="swap-card divcol center jspace">
-          <span class="swap-text">
-            Swap
-          </span>
-          <span class="dm-400">
-            From
-          </span>
-          <div class="swap-container">
-            <v-autocomplete
-              v-model="selectedItem"
-              :items="items"
-              item-text="text"
-              item-value="value"
-              class="input-auto"
-            >
-            <template #item="{ item }">
-              <v-img :src="item.icon" style="max-width: 20px;"></v-img>
-              <span style="margin-left: 10px;">{{ item.text }}</span>
-            </template>
-            <template #selection="{ item }">
-              <v-img v-if="item" :src="item.icon" style="max-width: 20px;"></v-img>
-              <span v-if="item" style="margin-left: 10px;">{{ item.text }}</span>
-            </template>
-            </v-autocomplete>
-
-            <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
-            ></v-text-field>
-
-            <v-btn class="btn-max" @click="setMaxValue">max</v-btn>  
-          </div>
-
-          <div class="divrow center jspace mobile-btn" style="width:350px;">
-            <v-icon>mdi-swap-vertical</v-icon>
-            <span class="dm-light">ETH > SPTL = 1290.03 UDC </span>
-          </div>
-
-          <span class="dm-400">
-            To
-          </span>
-
-          <div class="swap-container">
-            <v-autocomplete
-              v-model="selectedItem"
-              :items="items"
-              item-text="text"
-              item-value="value"
-              class="input-auto"
-            >
-            <template #item="{ item }">
-              <v-img :src="item.icon" style="max-width: 20px;"></v-img>
-              <span style="margin-left: 10px;">{{ item.text }}</span>
-            </template>
-            <template #selection="{ item }">
-              <v-img v-if="item" :src="item.icon" style="max-width: 20px;"></v-img>
-              <span v-if="item" style="margin-left: 10px;">{{ item.text }}</span>
-            </template>
-            </v-autocomplete>
-
-            <v-text-field class="input-number" :value="inputNumber" placeholder="0.00"
-            ></v-text-field>
-
-            <v-btn class="btn-max" @click="setMaxValue">max</v-btn>  
-          </div>
-
-          <v-btn class="btn mobile-btn" style="width: 350px!important; height: 60px!important; margin-top: 15px;">Swap</v-btn>
-        </v-card>
-      </div>
-    </section>
-
-    <section class="section2-landing">
       <div>
-        <h1 class="title">
-          Creating a new experience
+        <h1>
+          The next Generation<br>
+          <span>Dapps Infrastructure.</span>
         </h1>
-      </div>
 
-      <div class="container-cards">
-        <v-card class="card-check" style="position: relative;">
-          <img src="~/assets/sources/images/check_purple.png" alt="Purple Check" class="chechk-img">
-          <p class="title-card">
-            Fork-less upgrades
-          </p>
-          <p class="description-card">
-            Lorem ipsum dolor sit amet consectetur. Viverra quis nec quis hendrerit.
-          </p>
-        </v-card>
+        <p>a community driven Dapps’s Hub On Scroll.  Featuring SocialFi, DeFi, GasFi & more.</p>
 
-        <v-card class="card-check margin-bottom">
-          <img src="~/assets/sources/images/check_blue.png" alt="Blue Check" class="chechk-img">
-          <p class="title-card">
-            Fork-less upgrades
-          </p>
-          <p class="description-card">
-            Lorem ipsum dolor sit amet consectetur. Viverra quis nec quis hendrerit.
-          </p>
-        </v-card>
+        <aside class="d-flex flex-wrap justify-center align-center mt-14" style="gap: 16px;">
+          <v-btn>
+            Lorem Impus
+          </v-btn>
 
-        <v-card class="card-check">
-          <img src="~/assets/sources/images/check_green.png" alt="Green Check" class="chechk-img">
-          <p class="title-card">
-            Fork-less upgrades
-          </p>
-          <p class="description-card">
-            Lorem ipsum dolor sit amet consectetur. Viverra quis nec quis hendrerit.
-          </p>
-        </v-card>
+          <a>
+            Explore Docs
+            <v-icon size="16">mdi-chevron-right</v-icon>
+          </a>
+        </aside>
       </div>
     </section>
 
-    <section class="section3-landing">
-      <h1 class="title">
-        See an overview of all your assets
-      </h1>
-      <div class="preview-container">
-        <img src="~/assets/sources/images/preview.png" alt="preview" class="preview-img">
+
+    <section id="content">
+      
+      <aside id="prom-bar">
+        <h6>TRUSTED BY</h6>
+
+        <div class="d-flex justify-space-between scrollx" style="gap: 30px;">
+          <img v-for="(item, i) in promLogos" :key="i" :src="item.img" :alt="item.alt">
+        </div>
+      </aside>
+
+
+      <h6 class="text-gradient text-center">UNLIMITED POSSIBILITIES</h6>
+      <h3 class="text-center" style="margin-bottom: 73px;">
+        Explore Dapps that support developers, founders, and communities.
+      </h3>
+
+      <div class="grid" style="row-gap: 30px; column-gap: 40px;">
+        <v-card v-for="(item, i) in dataExplore" :key="i">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.desc }}</p>
+          <a class="text-gradient">Learn More</a>
+
+          <img :src="item.img" :alt="`${item.title} icon`">
+        </v-card>
       </div>
-      <v-btn class="btn btn-launch">
-        Launch App <v-icon>mdi-arrow-right</v-icon>
-      </v-btn>
-      <img src="~/assets/sources/images/circles2.png" alt="circle" class="circle2">
     </section>
   </div>
 </template>
@@ -150,11 +60,47 @@ export default {
   layout:'landing',
   data() {
     return {
-      selectedItem: null,
-      inputNumber: 1,
-      items: [
-        { text: 'Ethereum', value: 1, icon: require('~/assets/sources/icons/Ellipse.svg') },
-        { text: 'Splatter', value: 2, icon: require('~/assets/sources/icons/Ellipse.svg') },
+      promLogos: [
+        {
+          img: require("@/assets/sources/logos/omnikingdoms.svg"),
+          alt: "omnikingdoms logo",
+        },
+        {
+          img: require("@/assets/sources/logos/axelar.svg"),
+          alt: "axelar logo",
+        },
+        {
+          img: require("@/assets/sources/logos/prom-logo.svg"),
+          alt: "logo",
+        },
+        {
+          img: require("@/assets/sources/logos/chainlink.svg"),
+          alt: "chainlink logo",
+        },
+        {
+          img: require("@/assets/sources/logos/rhino.svg"),
+          alt: "rhino logo",
+        },
+      ],
+      dataExplore: [
+        {
+          title: "XSwap",
+          desc: "Our DEX provides seamless trading with efficient liquidity management, empowering users to engage in decentralized exchanges effortlessly.",
+          img: require("@/assets/sources/images/bg-xswap.svg"),
+          to: "",
+        },
+        {
+          title: "XStarter",
+          desc: "Launching your Individual Sovereign Tokens with splatter protocol.",
+          img: require("@/assets/sources/images/bg-xstarter.svg"),
+          to: "",
+        },
+        {
+          title: "XDAO",
+          desc: "A Community-run DAO with built-in trust layer to improve Ethereum Scalability.",
+          img: require("@/assets/sources/images/bg-xdao.svg"),
+          to: "",
+        },
       ],
     }
   },
@@ -165,11 +111,8 @@ export default {
     }
   },
   methods: {
-    setMaxValue() {
-      this.inputNumber = 9999;
-    },
   }
 };
 </script>
 
-<style src="~/assets/styles/pages/landing.scss" lang="scss" />
+<style src="~/assets/styles/pages/landing-new.scss" lang="scss" />
