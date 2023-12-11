@@ -184,7 +184,8 @@
 
             <div class="divcol center">
               <span v-if="item.fiat" class="bold-title mb-2">{{ item.fiat }}</span>
-              <span class="light-span">{{ item.crypto_balance }}</span>
+              <span class="light-span">{{ item.token0Balance | numericFormat(numericFormatConfig) }} {{ item.token0.symbol }}</span>
+              <span class="light-span">{{ item.token1Balance | numericFormat(numericFormatConfig) }} {{ item.token1.symbol }}</span>
             </div>
           </div>
         </v-card>
@@ -208,13 +209,15 @@ import factoryABI from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
 import scrollTokens from '~/static/tokens/scroll_tokens.json'
 import scrollSepoliaTokens from '~/static/tokens/scroll_alpha_tokens.json'
-
 const Web3 = require('web3')
 const web3 = new Web3(window.ethereum);
 let routerV2Address = "0x2f2f7197d19A13e8c72c1087dD29d555aBE76C5C"
 let factoryV2Address = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
 let routerV2;
 let factory;
+
+// TODO estimate how much tokens user provided to LP and Show them under each pool.
+// show user LP shares or participation
 
 export default {
   name: "LiquidityPage",
@@ -357,6 +360,23 @@ export default {
       token.decimals = decimals
       return token
     },
+
+    async getUserPoolBalance(pairAddress) {
+      const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress);
+      /* console.log("await pairContract.methods.getReserves().call()")
+      console.log(await pairContract.methods.getReserves().call())
+      console.log("await pairContract.methods.getReserves().call()") */
+      const {reserve0, reserve1} = await pairContract.methods.getReserves().call()
+      const totalSupply = await pairContract.methods.totalSupply().call()
+      const LPTokenBalance = await this.balanceOf(pairAddress)
+      const LPtoken0Balance = reserve0 * LPTokenBalance / totalSupply
+      const LPtoken1Balance = reserve1 * LPTokenBalance / totalSupply
+      /* console.log("---------------------")
+      console.log(reserve0, LPTokenBalance,  totalSupply, "reserve0, LPTokenBalance,  totalSupply")
+      console.log("---------------------")
+      console.log(reserve0 * LPTokenBalance / totalSupply, "reserve0 * LPTokenBalance / totalSupply") */
+      return {LPtoken0Balance, LPtoken1Balance}
+    },
     // we can not get user pools but we can findout in wich pool our user has LPTokens
 
     async getAllPairs() {
@@ -387,13 +407,17 @@ export default {
           pairContract.methods.token0().call(),
           pairContract.methods.token1().call()])
 
-          const [token0, token1] = await Promise.all([
+          const [token0, token1, {LPtoken0Balance, LPtoken1Balance}] = await Promise.all([
             this.getTokenData(token0Address),
-            this.getTokenData(token1Address)
+            this.getTokenData(token1Address),
+            this.getUserPoolBalance(pair.address)
           ])
           pair.token0 = token0
+          pair.token0Balance = LPtoken0Balance / 10 ** token0.decimals
           pair.token1 = token1
+          pair.token1Balance = LPtoken1Balance / 10 ** token1.decimals
           pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
+          console.log(pair.token0Balance, pair.token1Balance)
       }
       return pair
     },
@@ -445,14 +469,15 @@ export default {
         case 1:
           amount = this.amountToken1 * this.midPrice2
           if(amount >= 0) {
-            this.amountToken2 = amount
+            this.amountToken2 =  (Math.round(amount * 100) / 100).toFixed(2)
+
           }
         break;
 
         case 2:
           amount = this.amountToken2 * this.midPrice1
           if(amount >= 0) {
-            this.amountToken1 = amount
+            this.amountToken1 = (Math.round(amount * 100) / 100).toFixed(2)
           }
         break;
       }
@@ -518,9 +543,9 @@ export default {
       const percent = this.percent
       const totalLiquidity = await this.balanceOf(pairAddress) / 10 ** 18
       let liquidity = totalLiquidity
-      if(this.percent < 1){
+
         liquidity = ((totalLiquidity * percent) * 10 ** 18 ).toString().split(".")[0]
-      }
+
       if(liquidity){
         await this.approve(pairAddress, liquidity)
         .catch(error => {

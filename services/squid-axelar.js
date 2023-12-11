@@ -3,23 +3,24 @@ import Vue from 'vue'
 
 import { Squid } from "@0xsquid/sdk"
 
+const squid = new Squid({
+  baseUrl: "https://v2.api.squidrouter.com",
+  integratorId: process.env.squidAxelarApi
+})
+
+
 const squidAxelar = {
-  async getChains (context) {
-    const result = await context.$axios.get('https://v2.api.squidrouter.com/v2/chains', {
-      headers: {
-        'x-integrator-id': process.env.squidAxelarApi,
-      },
-    });
-    return result.data;
+  async init() {
+    await squid.init()
+
   },
 
-  async getTokens (context) {
-    const result = await context.$axios.get('https://v2.api.squidrouter.com/v2/tokens', {
-      headers: {
-        'x-integrator-id': process.env.squidAxelarApi,
-      },
-    });
-    return result.data;
+  getChains () {
+    return squid.chains
+  },
+
+  getTokens () {
+    return squid.tokens
   },
 
   /*
@@ -37,8 +38,9 @@ const squidAxelar = {
     }
   }
   */
-  async getRoute (context, params) {
-    try {
+  async getRoute ( params) {
+
+    /* try {
       const result = await context.$axios.post(
         "https://v2.api.squidrouter.com/v2/route",
         params,
@@ -58,29 +60,22 @@ const squidAxelar = {
       }
       console.error("Error with parameters:", params);
       throw error;
-    }
+    } */
+    const { route, requestId } = await squid.getRoute(params);
+    return { route, requestId }
   },
 
-  async executeRoute({ data, params }) {
-    const { route: { transactionRequest }, overrides } = data;
-    const { target, value, data: _data } = transactionRequest;
-    const signer = data.signer;
-  
-    const gasData = this.getGasData({
-      transactionRequest: data.route.transactionRequest,
-      overrides
-    });
-  
-    const tx = {
-      to: target,
-      data: _data,
-      value,
-      ...gasData
-    };
-  
-    return await signer.sendTransaction(tx);
+  async executeRoute(signer, route) {
+
+  const tx = (await squid.executeRoute({
+    signer,
+    route,
+  }));
+  const txReceipt = await tx.wait();
+
+    return await txReceipt;
   },
-  
+
 
 }
 Vue.prototype.$squidAxelar = squidAxelar

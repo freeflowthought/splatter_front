@@ -59,6 +59,7 @@
                 class="input-number"
                 :value="0"
                 placeholder="0.00"
+                @change="getRoute"
               ></v-text-field>
 
               <v-btn  class="btn-max" @click="setMaxValue">max</v-btn>
@@ -242,40 +243,42 @@ export default {
     },
 
     async getSquidInfo() {
-      const [Squidchains, SquidTokens] = await Promise.all([
-        this.$squidAxelar.getChains(this),
-        this.$squidAxelar.getTokens(this)
-      ])
-      this.chains = Squidchains.chains
-      this.tokens = SquidTokens.tokens
+      await this.$squidAxelar.init()
+      const Squidchains = this.$squidAxelar.getChains()
+      const SquidTokens = this.$squidAxelar.getTokens()
+      console.log( Squidchains, SquidTokens)
+      this.chains = Squidchains
+      this.tokens = SquidTokens
     },
 
     async getRoute() {
-      const routeResult = await this.$squidAxelar.getRoute(
-        this,
-        {
-          fromChain: this.chainFrom.chainId,
-          toChain: this.chainTo.chainId,
-          fromToken: this.selectedItem1.address,
-          toToken: this.selectedItem2.address,
-          fromAmount: BigInt((this.tokenAmountIn * 10 ** this.selectedItem1.decimals)).toString().replace(/[.,]/g, ''),
-          fromAddress: this.$metamask.userAccount,
-          toAddress: this.$metamask.userAccount,
-          slippageConfig: {
-            autoMode: 1
+      if(this.selectedItem1 && this.selectedItem2) {
+        try {
+          const routeResult = await this.$squidAxelar.getRoute(
+          {
+            fromChain: this.chainFrom.chainId,
+            toChain: this.chainTo.chainId,
+            fromToken: this.selectedItem1.address,
+            toToken: this.selectedItem2.address,
+            fromAmount: BigInt((this.tokenAmountIn * 10 ** this.selectedItem1.decimals)).toString().replace(/[.,]/g, ''),
+            fromAddress: this.$metamask.userAccount,
+            toAddress: this.$metamask.userAccount,
+            slippageConfig: {
+              slippage: 1.5
+            }
           }
-        }
         )
-        this.route = routeResult.data.route;
-        this.requestId = routeResult.requestId;
-        /* const requestId = routeResult.requestId;
-        console.log("Calculated route:", route);
-        console.log("requestId:", requestId); */
-      console.log("getroute squid")
-      console.log(routeResult)
-      console.log("------------")
 
-      return routeResult
+        this.route = routeResult.route;
+        this.requestId = routeResult.requestId;
+        this.tokenAmountOut = (routeResult.route.estimate.toAmount / 10 ** this.selectedItem2.decimals)
+
+        return routeResult
+        } catch (error) {
+          this.$alert('cancel', error)
+        }
+
+      }
     },
 
     async submitForm() {
@@ -328,27 +331,20 @@ export default {
     async swapTokens() {
       if(this.rightChain()) {
 
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner()
-        await this.getRoute()
-        const transactionRequest = this.route.transactionRequest;
-        console.log(transactionRequest)
-        // Execute the swap transaction
-        const contract = new ethers.Contract(
-          transactionRequest.target,
-          [],
-          signer
-        );
-        /* console.log("--------")
-        console.log(contract)
-        console.log("--------") */
-        const tx = await contract.send(transactionRequest.data, {
-          value: transactionRequest.value,
-          gasPrice: await provider.getGasPrice(),
-          gasLimit: transactionRequest.gasLimit,
-        });
-        const txReceipt = await tx.wait();
-        console.log(txReceipt)
+        try {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const signer = provider.getSigner()
+
+
+          // Execute the swap transaction
+          const txReceipt = await this.$squidAxelar.executeRoute(signer, this.route)
+
+          console.log("-----txReceipt----")
+          console.log(txReceipt)
+        } catch (error) {
+
+          this.$alert('cancel', error.toString().split(":")[1])
+        }
       } else {
         this.$alert('cancel', 'Please switch to' + this.chainFrom.network + "network")
       }

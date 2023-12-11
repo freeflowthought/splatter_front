@@ -108,7 +108,7 @@ export default {
       await this.$metamask.checkConnection()
     },
     async claimFaucet(item) {
-      if (window.ethereum.networkVersion !== "534351") {
+      if (!this.testnet) {
         this.$metamask.changeUserCurrentChain()
       } else {
         this.disabled = true;
