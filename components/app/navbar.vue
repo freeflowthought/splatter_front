@@ -102,10 +102,10 @@ export default {
           name: "Liquidity",
           to: "/liquidity"
         },
-        /* {
-          name: "Multichain Swap",
+        {
+          name: "Crosschain Swap",
           to: "/bridge-tokens"
-        }, */
+        },
       ],
       wallet: "Login",
       isLogged: true,

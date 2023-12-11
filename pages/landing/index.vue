@@ -12,11 +12,11 @@
         <p>a community driven Dapps’s Hub On Scroll.  Featuring SocialFi, DeFi, GasFi & more.</p>
 
         <aside class="d-flex flex-wrap justify-center align-center mt-14" style="gap: 16px;">
-          <v-btn>
-            Lorem Impus
+          <v-btn href="https://yexlabs.vercel.app/launching" target="_blank">
+            XStarter Beta Testing
           </v-btn>
 
-          <a>
+          <a href="https://yexlabs.gitbook.io/splatterprotocol/">
             Explore Docs
             <v-icon size="16">mdi-chevron-right</v-icon>
           </a>
@@ -26,7 +26,7 @@
 
 
     <section id="content">
-      
+
       <aside id="prom-bar">
         <h6>TRUSTED BY</h6>
 

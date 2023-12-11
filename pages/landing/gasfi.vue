@@ -10,7 +10,7 @@
 
         <v-btn>Lorem Impus</v-btn>
       </div>
-      
+
       <template v-for="n in 3">
         <img
           :key="n"
@@ -26,7 +26,7 @@
 
     <section id="content">
       <h6 class="text-gradient">FEATURES & BENIFITS</h6>
-      <h3 style="max-width: 719px;">Lorem Impus.</h3>
+      <h3 style="max-width: 719px;">Latest News</h3>
 
       <div class="grid">
         <v-card v-for="(item, i) in dataFeatures" :key="i" style="gap: 8px;">

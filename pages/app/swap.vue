@@ -49,7 +49,7 @@
 
             <div class="divrow center jspace mobile-btn" style="width:350px;">
               <v-icon @click="swapValues()">mdi-swap-vertical</v-icon>
-              <span class="dm-light">{{ token0?.symbol }} = {{ midPrice2 | numericFormat(numericFormatConfig) }} {{ token1?.symbol }} </span>
+              <span v-if=" token0?.symbol && midPrice2 && token1?.symbol" class="dm-light">{{ token0?.symbol }} = {{ midPrice2 | numericFormat(numericFormatConfig) }} {{ token1?.symbol }} </span>
             </div>
 
 
@@ -80,7 +80,7 @@
 
               <v-text-field
                 v-model="tokenAmountOut"
-                :rules="rules"
+                :rules="[rules]"
                 class="input-number"
                 :value="0" placeholder="0.00"
                 @input="calculateTokenAmount(2)"
@@ -128,7 +128,6 @@
 <script>
 // import isMobile from '~/mixins/isMobile'
 import IUniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json'
-import { numericFormat } from '@vuejs-community/vue-filter-numeric-format'
 import routerV2ABI  from '~/static/abis/routerv2.json'
 import factoryABI  from '~/static/abis/factory.json'
 import ERC20ABI from '~/static/abis/erc20.json'
@@ -225,7 +224,7 @@ export default {
     },
 
     setMaxValue() {
-      this.tokenAmountIn = this.tokenInAmountUser | numericFormat(this.numericFormatConfig);
+      this.tokenAmountIn = (Math.round(this.tokenInAmountUser * 100) / 100).toFixed(2)
       this.getPricing()
     },
 
@@ -244,6 +243,8 @@ export default {
       const temp = this.selectedItem1
       this.selectedItem1 = this.selectedItem2
       this.selectedItem2 = temp
+      this.getPricing()
+      this.calculateTokenAmount(1)
     },
     calcPriceTo(event) {
       const item = this.swapFrom
@@ -307,31 +308,42 @@ export default {
     },
 
     async getPricing() {
-      const pairAddress = await factory.methods.getPair(this.selectedItem1.address, this.selectedItem2.address).call()
-      const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
-      const [token0Address, token1Address] = await Promise.all([
-        pairContract.methods.token0().call(),
-        pairContract.methods.token1().call()])
-
-      const [token0, token1] = await Promise.all([
-        this.getTokenData(token0Address),
-        this.getTokenData(token1Address)
-      ])
-
       if(this.selectedItem1 != null && this.selectedItem2 != null) {
-        const reserves = await this.getReserves(token0.address, token1.address)
-        const midPrice1 = await (routerV2.methods.getAmountOut((1 * 10 ** token0.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
-        const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** token1.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
-        if(this.selectedItem1.symbol === token0.symbol){
-          this.midPrice1 = midPrice1 / 10 ** token1.decimals
-          this.midPrice2 = midPrice2 / 10 ** token0.decimals
-          this.token0 = token0
-          this.token1 = token1
-        }else {
-          this.midPrice1 = midPrice2 / 10 ** token0.decimals
-          this.midPrice2 = midPrice1 / 10 ** token1.decimals
-          this.token0 = token1
-          this.token1 = token0
+        const pairAddress = await factory.methods.getPair(this.selectedItem1.address, this.selectedItem2.address).call()
+        const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress)
+        const [token0Address, token1Address] = await Promise.all([
+          pairContract.methods.token0().call(),
+          pairContract.methods.token1().call()])
+
+        const [token0, token1] = await Promise.all([
+          this.getTokenData(token0Address),
+          this.getTokenData(token1Address)
+        ])
+
+
+        try {
+          const reserves = await this.getReserves(token0.address, token1.address)
+
+          const midPrice1 = await (routerV2.methods.getAmountOut((1 * 10 ** token0.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
+          const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** token1.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
+          if(this.selectedItem1.symbol === token0.symbol){
+            this.midPrice1 = midPrice1 / 10 ** token1.decimals
+            this.midPrice2 = midPrice2 / 10 ** token0.decimals
+            this.token0 = token0
+            this.token1 = token1
+          }else {
+            this.midPrice1 = midPrice2 / 10 ** token0.decimals
+            this.midPrice2 = midPrice1 / 10 ** token1.decimals
+            this.token0 = token1
+            this.token1 = token0
+          }
+        } catch  {
+
+          this.$alert('cancel', 'Insuficient liquidity unable to swap ' + token0.symbol + "" + token1.symbol)
+          this.midPrice1 = 0
+          this.midPrice2 = 0
+          this.token0 =  {}
+          this.token1 =  {}
         }
       }
     },
@@ -342,26 +354,29 @@ export default {
         case 1:
           amount = this.tokenAmountIn * this.midPrice2
           if(amount >= 0) {
-            this.tokenAmountOut = amount
+            this.tokenAmountOut = (Math.round(amount * 10000) / 10000).toFixed(2)
           }
         break;
 
         case 2:
           amount = this.tokenAmountOut * this.midPrice1
           if(amount >= 0) {
-            this.tokenAmountIn = amount
+            this.tokenAmountIn = (Math.round(amount * 100) / 100).toFixed(2)
           }
         break;
       }
     },
 
     async swapTokensForTokens(tokenIn, tokenOut) {
+      const amountIn = this.tokenAmountIn.toFixed(tokenIn.decimals)
+      const amountOut = this.tokenAmountOut.toFixed(tokenOut.decimals)
+
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      await this.approve(tokenIn.address, BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))
+      await this.approve(tokenIn.address, BigInt((amountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))
       const path = [tokenIn.address, tokenOut.address]
       const myMethod =routerV2.methods.swapExactTokensForTokens(
-        BigInt((this.tokenAmountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''),
-        BigInt((this.tokenAmountOut * 10 ** tokenOut.decimals)).toString().replace(/[.,]/g, ''),
+        BigInt((amountIn * 10 ** tokenIn.decimals)).toString(),
+        BigInt((amountOut - (amountOut* 0.015)) * 10 ** tokenOut.decimals).toString(),
         path,
         this.$metamask.userAccount,
         deadline
