@@ -1,7 +1,7 @@
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
-// // // navbar // // // 
+// // // navbar // // //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
-#navbar {
+#navbar-landing {
   font-size: var(--resizer);
   height: var(--h-navbar) !important;
   animation: movedown .5s $ease-return;
@@ -59,7 +59,7 @@
         min-height: 45px !important;
       }
 
-      
+
       .v-btn {
         --max-w: 100px;
         --h: 32px;
@@ -76,7 +76,7 @@
         padding-inline: 10px;
         border-radius: 30px;
         width: 130px!important;
-        
+
         .v-select__selection{
           background: linear-gradient(99.45deg, #A093F0 7.5%, #5A9FF7 94.48%) !important;
           -webkit-background-clip: text !important;
@@ -97,7 +97,7 @@
 }
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
-// // // menu navbar // // // 
+// // // menu navbar // // //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // /
 
 #menuNavbar {
