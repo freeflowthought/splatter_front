@@ -107,6 +107,10 @@ export default {
           }
         }
       }
+
+      .v-list-item--active {
+        background: linear-gradient(99deg, rgba(160, 147, 240, 0.10) 7.5%, rgba(90, 159, 247, 0.10) 94.48%) !important;
+      }
     }
 
     &--footer {

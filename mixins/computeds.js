@@ -3,9 +3,9 @@ export default {
     baseUrl() {
       return this.$axios.defaults.baseURL
     },
-    isLogged() {
-      return this.$store.state.isLogged
-    },
+    // isLogged() {
+    //   return this.$store.state.isLogged
+    // },
     user() {
       return this.$store.state.dataUser
     },

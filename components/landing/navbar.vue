@@ -1,23 +1,55 @@
 <template>
   <div>
-    <AppMenuNavbar ref="menu"></AppMenuNavbar>
+    <LandingMenuNavbar ref="menu"></LandingMenuNavbar>
 
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <nuxt-link to="/">
         <img src="~/assets/sources/logos/logo-new.svg" alt="logo">
       </nuxt-link>
 
-      <!-- desktop -->
       <aside class="middle tcap deletemobile">
-        <a
-          v-for="(item, i) in dataNavbar" :key="i"
-          :class="{active: $route.path.includes(item.to)}">
-          {{item.name}}
-          <v-icon size="16">mdi-chevron-down</v-icon>
-        </a>
+        <v-menu
+          v-for="(item, i) in dataNavbar"
+          :key="i"
+          bottom
+          offset-y
+          content-class="landing-menu"
+          nudge-bottom="10px">
+          <template #activator="{ on, attrs }">
+            <a
+              :class="{active: $route.path.includes(item.to)}"
+              v-bind="attrs"
+              v-on="on">
+              {{item.name}}
+              <v-icon size="16">mdi-chevron-down</v-icon>
+            </a>
+          </template>
+
+          <v-list>
+            <v-list-item
+              v-for="(item2, i2) in item.children"
+              :key="i2"
+              :to="item2.to"
+              :href="item2.href"
+              :target="item2.href ? '_blank' : '_self'"
+              @click="action(item2)"
+            >
+              <img
+                v-if="item2.icon"
+                :src="item2.icon"
+                :alt="`${item2.name} icon`"
+                :style="`width: ${item2.iconSize} !important; margin-right: 6px`"
+              >
+
+              <div class="d-flex flex-column" style="gap: 4px;">
+                <h6>{{ item2.name }}</h6>
+                <p v-if="item2.desc">{{ item2.desc }}</p>
+              </div>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </aside>
 
-      <!-- desktop -->
       <aside class="right deletemobile" :class="isLogged ? 'font2' : 'font1'">
         <v-btn class="btn" style="min-width:125px!important;">
           Discord
@@ -90,12 +122,75 @@ export default {
         // },
         {
           name: "Dapps",
+          children: [
+            {
+              name: "XStarter",
+              desc: "Description of product",
+              icon: require("@/assets/sources/icons/ball-icon.svg"),
+              iconSize: "20px",
+              to: "/landing/xstarter",
+            },
+            {
+              name: "XDao",
+              desc: "Description of product",
+              icon: require("@/assets/sources/icons/comunity-icon.svg"),
+              iconSize: "22px",
+              commingSoon: true,
+            },
+            {
+              name: "XSwap",
+              desc: "Description of product",
+              icon: require("@/assets/sources/icons/ticket-icon.svg"),
+              iconSize: "18px",
+              to: "/landing/xswap",
+            },
+            {
+              name: "XGasfi",
+              desc: "Description of product",
+              icon: require("@/assets/sources/icons/location-icon.svg"),
+              iconSize: "14px",
+              to: "/landing/gasfi",
+            }
+          ]
         },
         {
           name: "Community",
+          children: [
+            {
+              name: "Discord",
+              icon: require("@/assets/sources/logos/discord-logo.svg"),
+              iconSize: "20px",
+              href: "https://linktr.ee/splatter_protocol",
+            },
+            {
+              name: "Twitter",
+              icon: require("@/assets/sources/logos/twitter-logo.svg"),
+              iconSize: "19px",
+              href: "https://linktr.ee/splatter_protocol",
+            },
+            {
+              name: "Medium",
+              icon: require("@/assets/sources/logos/medium-logo.svg"),
+              iconSize: "24px",
+              href: "https://linktr.ee/splatter_protocol",
+            },
+          ]
         },
         {
           name: "Developers",
+          children: [
+            {
+              name: "Gitbook",
+              href: "https://linktr.ee/splatter_protocol",
+            },
+            {
+              name: "Whitepaper",
+              href: "https://www.dropbox.com/scl/fi/2mg84oe4218rpnw0oo5qo/Batch_A2MM.pdf?rlkey=i4my4orx6rssy0v5fpwitsxov&dl=0",
+            },
+            {
+              name: "Github"
+            },
+          ]
         },
       ],
       wallet: "Login",
@@ -123,6 +218,13 @@ export default {
       ? this.itemsBlockchain[0]
       : this.itemsBlockchain[1]
   },
+  methods: {
+    action(item) {
+      if (!item.commingSoon) return
+      
+      this.$alert('warning', "comming soon")
+    }
+  }
 };
 </script>
 

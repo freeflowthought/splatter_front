@@ -37,19 +37,6 @@
 
 
       <template #content>
-            <v-btn
-              class="btn-nav"
-              style="position: absolute; width: 80%; margin-left: 10%; margin-top: 220px;"
-              v-bind="isLogged ? attrs : ''"
-              v-on="isLogged ? on : ''"
-              @click="isLogged ? $store.dispatch('modalConnect') : ''"
-              >
-              <template v-if="isLogged">
-                <span>Connect Wallet</span>
-              </template>
-
-              <template v-else>{{ wallet.substring(1, 20) }} ...</template>
-            </v-btn>
         <v-expansion-panels focusable accordion class="anim_moveleft">
           <v-expansion-panel
             v-for="(item, i) in $parent.dataNavbar" :key="i"
@@ -61,8 +48,11 @@
             <v-expansion-panel-content v-if="!item.to">
               <v-list>
                 <v-list-item
-                  v-for="(item2,i2) in item.selection" :key="i2" :ripple="false"
-                  :to="basePath(item2.to)" @click="drawer = false"
+                  v-for="(item2,i2) in item.children" :key="i2" :ripple="false"
+                  :to="item2.to"
+                  :href="item2.href"
+                  :target="item2.href ? '_blank' : '_self'"
+                  @click="action(item2)"
                 >
                   <v-list-item-title class="center h10_em">
                     <span>{{ item2.name}}</span>
@@ -72,6 +62,18 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
+
+        <v-btn
+          class="btn-nav"
+          style="margin-inline: 20px;"
+          @click="isLogged ? $store.dispatch('modalConnect') : ''"
+          >
+          <template v-if="isLogged">
+            <span>Connect Wallet</span>
+          </template>
+
+          <template v-else>{{ wallet.substring(1, 20) }} ...</template>
+        </v-btn>
       </template>
 
 
@@ -110,6 +112,12 @@ export default {
     }
   },
   methods: {
+    action(item) {
+      this.drawer = false
+      if (!item.commingSoon) return
+      
+      this.$alert('warning', "comming soon")
+    }
   },
 };
 </script>
