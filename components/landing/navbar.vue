@@ -228,4 +228,4 @@ export default {
 };
 </script>
 
-<style src="~/assets/styles/components/navbar.scss" lang="scss" />
+<style src="~/assets/styles/components/landing/navbar.scss" lang="scss" />
