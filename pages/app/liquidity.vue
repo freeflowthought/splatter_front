@@ -80,8 +80,15 @@
                   </v-autocomplete>
 
                   <div class="divcol">
-                    <p class="p bold-title">-.--</p>
-                    <p class="p light-span">Balance: 0.00</p>
+                    <v-text-field
+                    v-model="amountToken2"
+                    solo
+                    class="input"
+                    placeholder="-.--"
+                    :rules="rules"
+                    @input="calculateTokenAmount(2)"
+                    ></v-text-field>
+                    <p class="p light-span">Balance: {{balanceToken2 | numericFormat(numericFormatConfig)}}</p>
                   </div>
                 </div>
               </v-form>
@@ -510,8 +517,8 @@ export default {
     },
 
     async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired,) {
-      amountADesired.toFixed(tokenA.decimals)
-      amountBDesired.toFixed(tokenB.decimals)
+      Number(amountADesired).toFixed(tokenA.decimals)
+      Number(amountBDesired).toFixed(tokenB.decimals)
       await Promise.all([
         this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, '')),
         this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''))

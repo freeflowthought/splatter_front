@@ -368,8 +368,8 @@ export default {
     },
 
     async swapTokensForTokens(tokenIn, tokenOut) {
-      const amountIn = this.tokenAmountIn.toFixed(tokenIn.decimals)
-      const amountOut = this.tokenAmountOut.toFixed(tokenOut.decimals)
+      const amountIn = Number(this.tokenAmountIn).toFixed(tokenIn.decimals)
+      const amountOut = Number(this.tokenAmountOut).toFixed(tokenOut.decimals)
 
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
       await this.approve(tokenIn.address, BigInt((amountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))

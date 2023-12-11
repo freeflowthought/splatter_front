@@ -2,7 +2,7 @@
   <div>
     <LandingMenuNavbar ref="menu"></LandingMenuNavbar>
 
-    <v-app-bar id="navbar" color="transparent" absolute class="isolate">
+    <v-app-bar id="navbar-landing" color="transparent" absolute class="isolate">
       <nuxt-link to="/">
         <img src="~/assets/sources/logos/logo-new.svg" alt="logo">
       </nuxt-link>
