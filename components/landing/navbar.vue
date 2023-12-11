@@ -145,7 +145,7 @@ export default {
               to: "/landing/xswap",
             },
             {
-              name: "XGasfi",
+              name: "XGasplani",
               desc: "Description of product",
               icon: require("@/assets/sources/icons/location-icon.svg"),
               iconSize: "14px",
@@ -160,19 +160,19 @@ export default {
               name: "Discord",
               icon: require("@/assets/sources/logos/discord-logo.svg"),
               iconSize: "20px",
-              href: "https://linktr.ee/splatter_protocol",
+              href: "https://discord.com/invite/dDC8rYTFju",
             },
             {
               name: "Twitter",
               icon: require("@/assets/sources/logos/twitter-logo.svg"),
               iconSize: "19px",
-              href: "https://linktr.ee/splatter_protocol",
+              href: "https://twitter.com/Splatter_Proto",
             },
             {
               name: "Medium",
               icon: require("@/assets/sources/logos/medium-logo.svg"),
               iconSize: "24px",
-              href: "https://linktr.ee/splatter_protocol",
+              href: "https://medium.com/@splatterproto",
             },
           ]
         },
@@ -181,7 +181,7 @@ export default {
           children: [
             {
               name: "Gitbook",
-              href: "https://linktr.ee/splatter_protocol",
+              href: "https://yexlabs.gitbook.io/splatterprotocol/",
             },
             {
               name: "Whitepaper",
@@ -221,7 +221,7 @@ export default {
   methods: {
     action(item) {
       if (!item.commingSoon) return
-      
+
       this.$alert('warning', "comming soon")
     }
   }

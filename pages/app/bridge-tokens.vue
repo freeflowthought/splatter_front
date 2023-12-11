@@ -246,7 +246,6 @@ export default {
       await this.$squidAxelar.init()
       const Squidchains = this.$squidAxelar.getChains()
       const SquidTokens = this.$squidAxelar.getTokens()
-      console.log( Squidchains, SquidTokens)
       this.chains = Squidchains
       this.tokens = SquidTokens
     },
@@ -339,8 +338,7 @@ export default {
           // Execute the swap transaction
           const txReceipt = await this.$squidAxelar.executeRoute(signer, this.route)
 
-          console.log("-----txReceipt----")
-          console.log(txReceipt)
+          this.$alert('cancel', txReceipt.toString())
         } catch (error) {
 
           this.$alert('cancel', error.toString().split(":")[1])

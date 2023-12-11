@@ -8,7 +8,7 @@
 
         <p class="mb-14">Seamless transactions & liquidity management at your fingertips</p>
 
-        <v-btn>Test Prototype</v-btn>
+        <v-btn @click="$router.push(basePath2('/swap'))">Test Prototype</v-btn>
       </div>
 
       <img src="@/assets/sources/images/bg-xswap.svg">
@@ -49,7 +49,7 @@ export default {
           img: require("@/assets/sources/icons/ticket-icon.svg"),
           title: "Single-side liquidity support (coming soon)",
           desc: "Users would be able to add single-side liquidity since V2, this is the feature that we have to combat the impermanent losses. ",
-          linkText: "Test Prototype",
+          linkText: "https://yexlabs.vercel.app/swap",
         },
         {
           img: require("@/assets/sources/icons/ball-icon.svg"),

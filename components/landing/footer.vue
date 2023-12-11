@@ -2,7 +2,7 @@
   <v-footer id="footer-landing" absolute class="font2">
     <div class="d-flex flex-column align-center mb-16">
       <h2>Stay up to date with Splatter Protocol</h2>
-      <v-btn>Join Discord</v-btn>
+      <v-btn href="https://discord.com/channels/@me/1105813905701355531/1183785111326568469" target="_blank">Join Discord</v-btn>
     </div>
 
     <div class="d-flex flex-column mb-14">
@@ -52,7 +52,7 @@ export default {
           commingSoon: true,
         },
         {
-          name: "XGasFi",
+          name: "XGasplani",
           to: "/landing/gasfi",
         },
         {
@@ -75,7 +75,7 @@ export default {
         {
           name: "Discord",
           icon: require("@/assets/sources/logos/discord-icon.svg"),
-          href: "https://linktr.ee/splatter_protocol",
+          href: "https://discord.com/channels/@me/1105813905701355531/1183785111326568469",
         },
       ],
     }
@@ -83,7 +83,7 @@ export default {
   methods: {
     action(item) {
       if (!item.commingSoon) return
-      
+
       this.$alert('warning', "comming soon")
     }
   }
