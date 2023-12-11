@@ -57,11 +57,11 @@ export default {
         },
         {
           name: "Gitbook",
-          href: "https://linktr.ee/splatter_protocol",
+          href: "https://yexlabs.gitbook.io/splatterprotocol/",
         },
         {
           name: "Medium",
-          href: "https://linktr.ee/splatter_protocol",
+          href: "https://medium.com/@splatterproto",
         },
         {
           name: "Whitepaper",
@@ -70,7 +70,7 @@ export default {
         {
           name: "Twitter",
           icon: require("@/assets/sources/logos/twitter-icon.svg"),
-          href: "https://linktr.ee/splatter_protocol",
+          href: "https://twitter.com/Splatter_Proto",
         },
         {
           name: "Discord",

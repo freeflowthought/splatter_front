@@ -80,15 +80,8 @@
                   </v-autocomplete>
 
                   <div class="divcol">
-                    <v-text-field
-                    v-model="amountToken2"
-                    solo
-                    class="input"
-                    placeholder="-.--"
-                    :rules="rules"
-                    @input="calculateTokenAmount(2)"
-                    ></v-text-field>
-                    <p class="p light-span">Balance: {{balanceToken2 | numericFormat(numericFormatConfig)}}</p>
+                    <p class="p bold-title">-.--</p>
+                    <p class="p light-span">Balance: 0.00</p>
                   </div>
                 </div>
               </v-form>
@@ -447,20 +440,29 @@ export default {
       ])
 
       if(this.selectedItem1 != null && this.selectedItem2 != null) {
-        const reserves = await this.getReserves(token0.address, token1.address)
-        const midPrice1 = await (routerV2.methods.getAmountOut((1 * 10 ** token0.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
-        const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** token1.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
-        if(this.selectedItem1.symbol === token0.symbol){
-          this.midPrice1 = midPrice1 / 10 ** token1.decimals
-          this.midPrice2 = midPrice2 / 10 ** token0.decimals
-          this.token0 = token0
-          this.token1 = token1
-        }else {
-          this.midPrice1 = midPrice2 / 10 ** token0.decimals
-          this.midPrice2 = midPrice1 / 10 ** token1.decimals
-          this.token0 = token1
-          this.token1 = token0
+        try {
+          const reserves = await this.getReserves(token0.address, token1.address)
+          const midPrice1 = await (routerV2.methods.getAmountOut((1 * 10 ** token0.decimals).toString(), reserves.reserve0, reserves.reserve1).call())
+          const midPrice2 = await (routerV2.methods.getAmountOut((1 * 10 ** token1.decimals).toString(), reserves.reserve1, reserves.reserve0).call())
+          if(this.selectedItem1.symbol === token0.symbol){
+            this.midPrice1 = midPrice1 / 10 ** token1.decimals
+            this.midPrice2 = midPrice2 / 10 ** token0.decimals
+            this.token0 = token0
+            this.token1 = token1
+          }else {
+            this.midPrice1 = midPrice2 / 10 ** token0.decimals
+            this.midPrice2 = midPrice1 / 10 ** token1.decimals
+            this.token0 = token1
+            this.token1 = token0
+          }
+        } catch (error) {
+          this.$alert('cancel', 'Insuficient liquidity unable to swap ' + token0.symbol + "" + token1.symbol)
+          this.midPrice1 = 0
+          this.midPrice2 = 0
+          this.token0 =  {}
+          this.token1 =  {}
         }
+
       }
     },
     calculateTokenAmount(key) {
@@ -508,7 +510,8 @@ export default {
     },
 
     async addLiquidity(tokenA, tokenB, amountADesired, amountBDesired,) {
-
+      amountADesired.toFixed(tokenA.decimals)
+      amountBDesired.toFixed(tokenB.decimals)
       await Promise.all([
         this.approve(tokenA.address, BigInt((amountADesired * 10 ** tokenA.decimals)).toString().replace(/[.,]/g, '')),
         this.approve(tokenB.address, BigInt((amountBDesired * 10 ** tokenB.decimals)).toString().replace(/[.,]/g, ''))
