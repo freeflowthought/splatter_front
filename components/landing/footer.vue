@@ -52,7 +52,7 @@ export default {
           commingSoon: true,
         },
         {
-          name: "XGasplani",
+          name: "XGasplan",
           to: "/landing/gasfi",
         },
         {
