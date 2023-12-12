@@ -4,7 +4,7 @@
 
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
-      <nuxt-link class="deletemobile" :to="basePath('/')">
+      <nuxt-link class="deletemobile" :to="basePath('/landing/xswap')">
         <img src="~/assets/sources/logos/logo_black.svg" alt="logo" style="--w: 120px">
       </nuxt-link>
       <!-- mobile -->

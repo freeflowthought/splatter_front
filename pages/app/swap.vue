@@ -90,6 +90,7 @@
             <v-btn
               class="btn mobile-btn"
               style="width: 350px!important; height: 50px!important; margin-top: 15px;"
+              :loading="swapInProgress"
               @click="submitForm"
             >Swap
             </v-btn>
@@ -154,6 +155,7 @@ export default {
       midPrice1: 0,
       midPrice2: 0,
       tokens: undefined,
+      swapInProgress: false,
       heightChart: undefined,
       swapFrom: {
         img: require('~/assets/sources/tokens/database.svg'),
@@ -172,7 +174,7 @@ export default {
       ],
       numericFormatConfig: {
         decimalSeparator: ".",
-        fractionDigitsMax: 2,
+        fractionDigitsMax: 6,
         fractionDigitsMin: 2,
         fractionDigitsSeparator: "",
         thousandsDigitsSeparator: ","
@@ -266,8 +268,11 @@ export default {
     // so we have amountOut in order to use a direct contract call
 
     async approve(tokenAddres, amount) {
-      const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
+      try {
+        const tokenInContract = new web3.eth.Contract(ERC20ABI, tokenAddres);
       await tokenInContract.methods.approve(routerV2Address, amount).send({ from: this.$metamask.userAccount })
+      } catch (error) {
+      }
     },
 
     async balanceOf(token) {
@@ -368,21 +373,27 @@ export default {
     },
 
     async swapTokensForTokens(tokenIn, tokenOut) {
+      this.swapInProgress = true
       const amountIn = Number(this.tokenAmountIn).toFixed(tokenIn.decimals)
       const amountOut = Number(this.tokenAmountOut).toFixed(tokenOut.decimals)
+      await this.approve(tokenIn.address, BigInt((amountIn * 10 ** tokenIn.decimals)).toString())
 
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
-      await this.approve(tokenIn.address, BigInt((amountIn * 10 ** tokenIn.decimals)).toString().replace(/[.,]/g, ''))
-      const path = [tokenIn.address, tokenOut.address]
-      const myMethod =routerV2.methods.swapExactTokensForTokens(
-        BigInt((amountIn * 10 ** tokenIn.decimals)).toString(),
-        BigInt((amountOut - (amountOut* 0.015)) * 10 ** tokenOut.decimals).toString(),
-        path,
-        this.$metamask.userAccount,
-        deadline
-      )
-      const gasLimit = await myMethod.estimateGas({ from: this.$metamask.userAccount }) + 5000
-      await myMethod.send({from: this.$metamask.userAccount, gasLimit})
+      try {
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins time
+        const path = [tokenIn.address, tokenOut.address]
+        const myMethod =routerV2.methods.swapExactTokensForTokens(
+          BigInt((amountIn * 10 ** tokenIn.decimals)).toString(),
+          BigInt((amountOut - (amountOut* 0.015)) * 10 ** tokenOut.decimals).toString(),
+          path,
+          this.$metamask.userAccount,
+          deadline
+        )
+        const gasLimit = await myMethod.estimateGas({ from: this.$metamask.userAccount }) + 5000
+        await myMethod.send({from: this.$metamask.userAccount, gasLimit})
+      } catch (error) {
+          this.$alert('cancel', error.toString().split("message:")[1])
+      }
+      this.swapInProgress = false
     },
 
     swapETHForTokens() {},

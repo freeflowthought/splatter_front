@@ -51,7 +51,7 @@
       </aside>
 
       <aside class="right deletemobile" :class="isLogged ? 'font2' : 'font1'">
-        <v-btn class="btn" style="min-width:125px!important;">
+        <v-btn href="https://discord.com/invite/dDC8rYTFju" target="_blank" class="btn" style="min-width:125px!important;">
           Discord
         </v-btn>
 
@@ -142,10 +142,10 @@ export default {
               // desc: "Description of product",
               icon: require("@/assets/sources/icons/ticket-icon.svg"),
               iconSize: "18px",
-              to: "/landing/xswap",
+              to: "/app/xswap",
             },
             {
-              name: "XGasplani",
+              name: "XGasplan",
               // desc: "Description of product",
               icon: require("@/assets/sources/icons/location-icon.svg"),
               iconSize: "14px",
