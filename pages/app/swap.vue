@@ -226,6 +226,7 @@ export default {
     setMaxValue() {
       this.tokenAmountIn = (Math.round(this.tokenInAmountUser * 100) / 100).toFixed(2)
       this.getPricing()
+      this.calculateTokenAmount(1)
     },
 
     styles() {
@@ -282,7 +283,6 @@ export default {
         return pairAddress
       } else {
         this.$alert('cancel', 'Pair does not exist')
-
       }
     },
     async getTokenData(tokenAddress) {
@@ -339,7 +339,7 @@ export default {
           }
         } catch  {
 
-          this.$alert('cancel', 'Insuficient liquidity unable to swap ' + token0.symbol + "" + token1.symbol)
+          this.$alert('cancel', 'Insuficient liquidity unable to swap ' + token0.symbol + "/" + token1.symbol)
           this.midPrice1 = 0
           this.midPrice2 = 0
           this.token0 =  {}
