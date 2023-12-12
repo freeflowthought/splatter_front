@@ -8,7 +8,7 @@
 
         <p class="mb-14">Seamless transactions & liquidity management at your fingertips</p>
 
-        <v-btn href=" https://yexlabs.vercel.app/swap" targert="_blank">Test Prototype</v-btn>
+        <v-btn @click="$router.push(basePath2('/swap'))">Test Prototype</v-btn>
       </div>
 
       <img src="@/assets/sources/images/bg-xswap.svg">

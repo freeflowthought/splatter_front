@@ -116,7 +116,7 @@ export default {
       if (item.commingSoon) {
         this.$alert('warning', "comming soon")
       }
-      else { 
+      else {
         this.$router.push(item.to)
       }
     }

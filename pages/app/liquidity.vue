@@ -363,18 +363,11 @@ export default {
 
     async getUserPoolBalance(pairAddress) {
       const pairContract = new web3.eth.Contract(IUniswapV2Pair.abi, pairAddress);
-      /* console.log("await pairContract.methods.getReserves().call()")
-      console.log(await pairContract.methods.getReserves().call())
-      console.log("await pairContract.methods.getReserves().call()") */
       const {reserve0, reserve1} = await pairContract.methods.getReserves().call()
       const totalSupply = await pairContract.methods.totalSupply().call()
       const LPTokenBalance = await this.balanceOf(pairAddress)
       const LPtoken0Balance = reserve0 * LPTokenBalance / totalSupply
       const LPtoken1Balance = reserve1 * LPTokenBalance / totalSupply
-      /* console.log("---------------------")
-      console.log(reserve0, LPTokenBalance,  totalSupply, "reserve0, LPTokenBalance,  totalSupply")
-      console.log("---------------------")
-      console.log(reserve0 * LPTokenBalance / totalSupply, "reserve0 * LPTokenBalance / totalSupply") */
       return {LPtoken0Balance, LPtoken1Balance}
     },
     // we can not get user pools but we can findout in wich pool our user has LPTokens
@@ -417,7 +410,6 @@ export default {
           pair.token1 = token1
           pair.token1Balance = LPtoken1Balance / 10 ** token1.decimals
           pair.poolName = pair.token0.symbol + "-" + pair.token1.symbol
-          console.log(pair.token0Balance, pair.token1Balance)
       }
       return pair
     },

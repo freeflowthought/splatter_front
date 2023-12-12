@@ -125,28 +125,28 @@ export default {
           children: [
             {
               name: "XStarter",
-              desc: "Description of product",
+              // desc: "Description of product",
               icon: require("@/assets/sources/icons/ball-icon.svg"),
               iconSize: "20px",
               to: "/landing/xstarter",
             },
             {
               name: "XDao",
-              desc: "Description of product",
+              // desc: "Description of product",
               icon: require("@/assets/sources/icons/comunity-icon.svg"),
               iconSize: "22px",
               commingSoon: true,
             },
             {
               name: "XSwap",
-              desc: "Description of product",
+              // desc: "Description of product",
               icon: require("@/assets/sources/icons/ticket-icon.svg"),
               iconSize: "18px",
               to: "/landing/xswap",
             },
             {
               name: "XGasplani",
-              desc: "Description of product",
+              // desc: "Description of product",
               icon: require("@/assets/sources/icons/location-icon.svg"),
               iconSize: "14px",
               to: "/landing/gasfi",

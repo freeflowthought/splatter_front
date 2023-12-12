@@ -3,10 +3,10 @@
     <section id="hero">
       <div>
         <h1>
-          GasFi
+          XGasplans
         </h1>
 
-        <!-- <p class="mb-14">Latest news. </p> -->
+        <p class="mb-14">The hassle-free gas solution.</p>
 
         <v-btn href="https://twitter.com/Splatter_Proto" target="_blank"> Latest news</v-btn>
       </div>
