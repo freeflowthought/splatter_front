@@ -36,7 +36,7 @@
 <script>
 export default {
   name: "Xswap",
-  layout:'landing',
+  layout:'app',
   data() {
     return {
       dataFeatures: [
