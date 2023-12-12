@@ -8,7 +8,7 @@
 
         <p class="mb-14">Launch your project any way you want on Splatter Protocol. </p>
 
-        <v-btn>Lorem Impus</v-btn>
+        <v-btn href="https://yexlabs.vercel.app/launching">XStarter Beta Testing</v-btn>
       </div>
 
       <template v-for="n in 3">

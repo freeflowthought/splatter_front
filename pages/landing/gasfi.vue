@@ -6,9 +6,9 @@
           GasFi
         </h1>
 
-        <p class="mb-14">Lorem Impusl. </p>
+        <!-- <p class="mb-14">Latest news. </p> -->
 
-        <v-btn>Lorem Impus</v-btn>
+        <v-btn href="https://twitter.com/Splatter_Proto" target="_blank"> Latest news</v-btn>
       </div>
 
       <template v-for="n in 3">
