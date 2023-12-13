@@ -5,8 +5,8 @@
     <ModalsSwapModal ref="swap" />
     
     <v-main class="parent">
-      <LandingNavbar ref="navbar" />
-
+      <LandingNavbar v-if="$route.path !== '/landing/xswap'" ref="navbar" />
+      <AppNavbar v-else ref="navbar" />
       <!-- floating swap button -->
       <!-- <v-btn
         v-show="!$route.path.includes('/swap')" id="swap-floating-button" class="btn" @click="$refs.swap.modalSwap = true"

@@ -4,7 +4,7 @@
 
     <v-app-bar id="navbar" color="transparent" absolute class="isolate">
       <!-- desktop -->
-      <nuxt-link class="deletemobile" :to="basePath('/landing/xswap')">
+      <nuxt-link class="deletemobile" :to="basePath('/')">
         <img src="~/assets/sources/logos/logo_black.svg" alt="logo" style="--w: 120px">
       </nuxt-link>
       <!-- mobile -->
@@ -86,6 +86,10 @@ export default {
       itemsBlockchain: [{name: 'Mainnet', id: '0x82750'}, {name: 'Testnet', id: '0x8274f'}],
       itemSelected: undefined,
       dataNavbar: [
+        {
+          name: "home",
+          to: "/landing/xswap"
+        },
         {
           name: "Swap",
           to: "/swap"

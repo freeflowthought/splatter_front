@@ -106,20 +106,6 @@ export default {
       itemsBlockchain: [{name: 'Mainnet', id: '0x82750'}, {name: 'Testnet', id: '0x8274f'}],
       itemSelected: undefined,
       dataNavbar: [
-        // {
-        //   name: "swap",
-        //   to: "app/swap"
-        // },
-        // {
-        //   name: "earn",
-        //   to: "app/farm-details"
-        // },
-        // {
-        //   name: "placeholder",
-        // },
-        // {
-        //   name: "placeholder",
-        // },
         {
           name: "Dapps",
           children: [

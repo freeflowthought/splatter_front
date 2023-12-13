@@ -37,7 +37,7 @@
 
               <v-text-field
                 v-model="tokenAmountIn"
-                :rules="rules"
+                :rules="[rules, balanceRule]"
                 class="input-number"
                 :value="0"
                 placeholder="0.00"
@@ -174,7 +174,7 @@ export default {
       ],
       numericFormatConfig: {
         decimalSeparator: ".",
-        fractionDigitsMax: 6,
+        fractionDigitsMax: 4,
         fractionDigitsMin: 2,
         fractionDigitsSeparator: "",
         thousandsDigitsSeparator: ","
@@ -216,6 +216,9 @@ export default {
   },
   methods: {
 
+    balanceRule() {
+      return this.tokenAmountIn <= this.tokenInAmountUser || this.$alert('info', `Insufficient ${this.selectedItem1?.symbol} balance`)
+    },
     submitForm() {
      if (this.$refs.form.validate()){
       this.swapTokensForTokens(

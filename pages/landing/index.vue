@@ -12,8 +12,8 @@
         <p>a community driven Dapps’s Hub On Scroll 📜.  Featuring SocialFi, DeFi, GasFi & more.</p>
 
         <aside class="d-flex flex-wrap justify-center align-center mt-14" style="gap: 16px;">
-          <v-btn href="https://yexlabs.vercel.app/launching" target="_blank">
-            XStarter Beta Testing
+          <v-btn href="https://twitter.com/Splatter_Proto" target="_blank">
+            Latest news
           </v-btn>
 
           <a href="https://yexlabs.gitbook.io/splatterprotocol/">
@@ -45,7 +45,7 @@
         <v-card v-for="(item, i) in dataExplore" :key="i">
           <h3>{{ item.title }}</h3>
           <p>{{ item.desc }}</p>
-          <a class="text-gradient" @click="action(item)">Learn More</a>
+          <a v-if="!item.commingSoon" class="text-gradient" @click="action(item)">Learn More</a>
 
           <img :src="item.img" :alt="`${item.title} icon`">
         </v-card>

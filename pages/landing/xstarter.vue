@@ -38,7 +38,7 @@
           <h6 class="mb-0">{{ item.title }}</h6>
           <p class="mb-0">{{ item.desc }}</p>
 
-          <a class="text-gradient">{{ item.linkText }}</a>
+          <a class="text-gradient" :href="item.link">{{ item.linkText }}</a>
         </v-card>
       </div>
     </section>
@@ -62,6 +62,7 @@ export default {
           title: "Go Beyond Launchpad",
           desc: "FTO algorithm and remove & Burn mechanism sustain token price, after token launching,  it can be directly traded on XSwap liquidity pool",
           linkText: "Test Prototype",
+          link: "https://yexlabs.vercel.app/launching"
         },
         {
           img: require("@/assets/sources/icons/parts-icon.svg"),

@@ -26,11 +26,11 @@ export default ({app}, inject) => {
 
   // alerts =========================================================================================================//
   const alerts = (key, message) => {
-    if (key === "success" || key === "cancel" || key === "warning") {
+    if (key === "success" || key === "cancel" || key === "warning" || key === "info") {
       app.router.app.$children.find(data=>data.$el === document.querySelector(".v-application")).$refs.alerts.
         GenerateAlert(key, message);
     } else {
-      throw new Error('Invalid key, try "success", "cancel", or "warning"')
+      throw new Error('Invalid key, try "success", "cancel", info or "warning"')
     }
   }
   // usage $alert(key, {title, desc})

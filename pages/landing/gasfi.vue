@@ -8,7 +8,7 @@
 
         <p class="mb-14">The hassle-free gas solution.</p>
 
-        <v-btn href="https://twitter.com/Splatter_Proto" target="_blank"> Latest news</v-btn>
+        <v-btn href="https://twitter.com/Splatter_Proto" target="_blank">Coming soon</v-btn>
       </div>
 
       <template v-for="n in 3">

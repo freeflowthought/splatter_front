@@ -216,8 +216,7 @@ let factoryV2Address = "0xa8ef07AEbC64A96Ae264f3Bd5cC37fF5B28B1545"
 let routerV2;
 let factory;
 
-// TODO estimate how much tokens user provided to LP and Show them under each pool.
-// show user LP shares or participation
+// TODO show user LP shares or participation
 
 export default {
   name: "LiquidityPage",

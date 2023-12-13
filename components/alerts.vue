@@ -9,6 +9,7 @@
         --bg-snackbar: ${item.key === 'success' ? '#E1D8D1'
         : item.key === 'warning' ? '#E1D8D1'
         : item.key === 'cancel' ? '#E1D8D1'
+        : item.key === 'info' ? '#E1D8D1'
         : ''}`
       "
     >
@@ -38,7 +39,7 @@ export default {
       const alert = {
         key,
         message,
-        color: `var(--${key === 'cancel' ? 'error' : key})`,
+        color: `var(--${key === 'cancel' ? 'error' : key === 'info' ? 'info' : key})`,
         icon: key === 'success' ? 'mdi-check-circle' : 'mdi-information',
         model: true
       }
