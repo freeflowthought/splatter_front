@@ -7,4 +7,5 @@ export default {
   successMessage: "Transacción completa. Ver tx!",
   warningMessage: "Transacción pendiente",
   cancelMessage: "Transacción fallida. Inténtalo de nuevo",
+  infoMessage: ""
 };

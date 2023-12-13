@@ -17,7 +17,7 @@
         <v-icon :color="item.color" size="1.375em">{{ item.icon }}</v-icon>
         <span class="hspan" style="--fs: 1em; --c: #2D3748">{{$t(item.message)}}</span>
       </div>
-      
+
       <v-btn icon @click="dataAlerts.splice(i, 1)">
         <v-icon color="#2D3748" size="1.1875em">mdi-close</v-icon>
       </v-btn>

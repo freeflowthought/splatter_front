@@ -37,7 +37,7 @@
 
               <v-text-field
                 v-model="tokenAmountIn"
-                :rules="[rules, balanceRule]"
+                :rules="[...rules, balanceRule]"
                 class="input-number"
                 :value="0"
                 placeholder="0.00"
@@ -80,7 +80,7 @@
 
               <v-text-field
                 v-model="tokenAmountOut"
-                :rules="[rules]"
+                :rules="[...rules]"
                 class="input-number"
                 :value="0" placeholder="0.00"
                 @input="calculateTokenAmount(2)"
@@ -217,7 +217,10 @@ export default {
   methods: {
 
     balanceRule() {
-      return this.tokenAmountIn <= this.tokenInAmountUser || this.$alert('info', `Insufficient ${this.selectedItem1?.symbol} balance`)
+      if (this.tokenAmountIn > this.tokenInAmountUser) {
+        this.$alert('info', `Insufficient ${this.selectedItem1?.symbol} balance`)
+      }
+      return this.tokenAmountIn <= this.tokenInAmountUser || ''
     },
     submitForm() {
      if (this.$refs.form.validate()){
@@ -228,9 +231,10 @@ export default {
      }
     },
 
-    setMaxValue() {
+    async setMaxValue() {
       this.tokenAmountIn = (Math.round(this.tokenInAmountUser * 100) / 100).toFixed(2)
       this.getPricing()
+      await this.balanceOf(this.selectedItem1)
       this.calculateTokenAmount(1)
     },
 
@@ -394,7 +398,9 @@ export default {
         const gasLimit = await myMethod.estimateGas({ from: this.$metamask.userAccount }) + 5000
         await myMethod.send({from: this.$metamask.userAccount, gasLimit})
       } catch (error) {
-          this.$alert('cancel', error.toString().split("message:")[1])
+          console.log(error)
+          const errorJSON = JSON.parse(error.toString().split("Internal JSON-RPC error.")[1])
+          this.$alert('cancel', errorJSON.message)
       }
       this.swapInProgress = false
     },
