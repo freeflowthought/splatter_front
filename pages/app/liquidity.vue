@@ -45,7 +45,7 @@
                     solo
                     class="input"
                     placeholder="-.--"
-                    :rules="[rules, balanceRule]"
+                    :rules="[rules, numberRule, requiredRule, balanceRule]"
                     @input="calculateTokenAmount(1)"
                     ></v-text-field>
                     <p class="p light-span">Balance: {{balanceToken1 | numericFormat(numericFormatConfig)}}</p>
@@ -85,7 +85,7 @@
                     solo
                     class="input"
                     placeholder="-.--"
-                    :rules="rules"
+                    :rules="[rules, numberRule, requiredRule]"
                     @input="calculateTokenAmount(2)"
                     ></v-text-field>
                     <p class="p light-span">Balance: {{balanceToken2 | numericFormat(numericFormatConfig)}}</p>
@@ -223,6 +223,7 @@ export default {
   name: "LiquidityPage",
   data() {
     return {
+      firstLoad: true,
       lengthPairs: null,
       windowStep: 1,
       tokens: undefined,
@@ -275,11 +276,6 @@ export default {
         },
       ],
       allPairs: undefined,
-      rules: [
-        v => !!v || 'Field is required',
-        v => /^\d+(\.\d+)?$/.test(v) || 'Invalid numeric input',
-        v => v > 0 || 'Value must be positive',
-      ],
       numericFormatConfig: {
         decimalSeparator: ".",
         fractionDigitsMax: 2,
@@ -317,6 +313,7 @@ export default {
     }
     this.allPairs = await this.getAllPairs()
     this.lengthPairs = this.allPairs.length
+    this.firstLoad = false
   },
   methods: {
     balanceRule() {
@@ -330,7 +327,21 @@ export default {
       }
     },
     requiredRule(value) {
-      return !!value || 'This field is required';
+      if(!value && !this.firstLoad) {
+        this.$alert('info', 'This field is required')
+      }
+      return !!value || ''
+    },
+    numberRule(v) {
+      const regex = /^\d+(\.\d+)?$/
+      if( !regex.test(v)  && !this.firstLoad) {
+        this.$alert('info', 'Invalid numeric input')
+      }
+      if(v < 0) {
+        this.$alert('info', 'Value must be positive')
+
+      }
+      return regex.test(v) || ''
     },
     selectPair(pair) {
       this.selectedItemRemove1 = pair.token0

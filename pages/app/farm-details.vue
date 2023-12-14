@@ -13,7 +13,7 @@
   </div>
 
   <template v-else>
-      <modalLiquidity ref="modalLiquidity" :pair='pairSelected' ></modalLiquidity>
+      <modalLiquidity ref="modalLiquidity" :pair='pairSelected'  ></modalLiquidity>
       <modalCreatePair ref="modalCreatePair">
       </modalCreatePair>
       <!-- layoutcell 1 -->

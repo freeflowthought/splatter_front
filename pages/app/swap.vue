@@ -37,7 +37,7 @@
 
               <v-text-field
                 v-model="tokenAmountIn"
-                :rules="[...rules, balanceRule]"
+                :rules="[requiredRule, numberRule, balanceRule]"
                 class="input-number"
                 :value="0"
                 placeholder="0.00"
@@ -80,7 +80,7 @@
 
               <v-text-field
                 v-model="tokenAmountOut"
-                :rules="[...rules]"
+                :rules="[requiredRule, numberRule]"
                 class="input-number"
                 :value="0" placeholder="0.00"
                 @input="calculateTokenAmount(2)"
@@ -167,11 +167,6 @@ export default {
         name: "btc",
         amount: undefined,
       },
-      rules: [
-        v => !!v || 'Field is required',
-        v => /^\d+(\.\d+)?$/.test(v) || 'Invalid numeric input',
-        v => v > 0 || 'Value must be positive',
-      ],
       numericFormatConfig: {
         decimalSeparator: ".",
         fractionDigitsMax: 4,
@@ -221,6 +216,23 @@ export default {
         this.$alert('info', `Insufficient ${this.selectedItem1?.symbol} balance`)
       }
       return this.tokenAmountIn <= this.tokenInAmountUser || ''
+    },
+    requiredRule(value) {
+      if(!value && !this.firstLoad) {
+        this.$alert('info', 'This field is required')
+      }
+      return !!value || ''
+    },
+    numberRule(v) {
+      const regex = /^\d+(\.\d+)?$/
+      if( !regex.test(v)  && !this.firstLoad) {
+        this.$alert('info', 'Invalid numeric input')
+      }
+      if(v < 0) {
+        this.$alert('info', 'Value must be positive')
+
+      }
+      return regex.test(v) || ''
     },
     submitForm() {
      if (this.$refs.form.validate()){

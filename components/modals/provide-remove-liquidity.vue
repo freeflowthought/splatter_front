@@ -12,7 +12,7 @@
       <v-text-field
       v-model="token0Amount"
       required
-        :rules="rules"
+        :rules="[rules.number, rules.required]"
         class="input"
         :label="`Amount ${ pair.token0.symbol } desired`"
       ></v-text-field>
@@ -20,7 +20,7 @@
       <v-text-field
       v-model="token1Amount"
       required
-        :rules="rules"
+        :rules="[rules.number, rules.required]"
         class="input"
         :label="`Amount ${ pair.token1.symbol } desired`"
       ></v-text-field>
@@ -28,7 +28,7 @@
       <v-text-field
       v-model="token0AmountMin"
       required
-        :rules="rules"
+        :rules="[rules.number, rules.required]"
         class="input"
         :label="`Amount ${ pair.token0.symbol } minimum`"
       ></v-text-field>
@@ -36,7 +36,7 @@
       <v-text-field
       v-model="token1AmountMin"
       required
-        :rules="rules"
+        :rules="[rules.number, rules.required]"
         class="input"
         :label="`Amount ${ pair.token1.symbol } minimum`"
       ></v-text-field>
@@ -88,11 +88,25 @@ export default {
       token1Amount: undefined,
       token0AmountMin: undefined,
       token1AmountMin: undefined,
-      rules: [
-        v => !!v || 'Field is required',
-        v => /^\d+(\.\d+)?$/.test(v) || 'Invalid numeric input',
-        v => v > 0 || 'Value must be positive',
-      ],
+      firstLoad: true,
+      rules: {
+        required: value => {
+          if(!value) {
+            this.$alert('info', 'Field is required')
+          }
+          return !!value || ''
+        },
+        number: value => {
+          const regex = /^\d+(\.\d+)?$/
+          if( !regex.test(value)) {
+            this.$alert('info', 'Invalid numeric input')
+          }
+          if(value < 0) {
+            this.$alert('info', 'Value must be positive')
+          }
+          return regex.test(value) || ''
+        }
+      }
     };
   },
   mounted() {
